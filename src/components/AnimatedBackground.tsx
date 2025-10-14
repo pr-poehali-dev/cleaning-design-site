@@ -10,8 +10,12 @@ const AnimatedBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const updateCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = document.documentElement.scrollHeight;
+    };
+    
+    updateCanvasSize();
 
     const crystals: Array<{
       x: number;
@@ -25,7 +29,7 @@ const AnimatedBackground = () => {
       isGold: boolean;
     }> = [];
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 200; i++) {
       crystals.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -93,8 +97,7 @@ const AnimatedBackground = () => {
     animate();
 
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      updateCanvasSize();
     };
 
     window.addEventListener('resize', handleResize);
@@ -107,10 +110,12 @@ const AnimatedBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
+      className="absolute inset-0 pointer-events-none"
       style={{ 
         background: '#000',
-        zIndex: 1
+        zIndex: 1,
+        width: '100%',
+        height: '100%'
       }}
     />
   );
