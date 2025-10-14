@@ -1,107 +1,130 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
-
-interface Service {
-  id: string;
-  name: string;
-  price: number;
-  icon: string;
-  description: string;
-  includes: string[];
-}
+import { Service } from '@/data/servicesData';
 
 interface HeaderProps {
   serviceType: string;
-  setServiceType: (type: string) => void;
+  setServiceType: (value: string) => void;
   area: string;
-  setArea: (area: string) => void;
+  setArea: (value: string) => void;
   services: Service[];
   calculatePrice: () => number;
   onInfoClick: () => void;
 }
 
-const Header = ({
-  serviceType,
-  setServiceType,
-  area,
-  setArea,
-  services,
-  calculatePrice,
-  onInfoClick,
-}: HeaderProps) => {
+const Header = ({ serviceType, setServiceType, area, setArea, services, calculatePrice, onInfoClick }: HeaderProps) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
   return (
-    <header className="bg-black/80 backdrop-blur-lg border-b-2 border-yellow-400/30 sticky top-0 z-50 py-3 px-4 shadow-xl">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-3 lg:mb-0">
-          <div>
-            <h2 className="font-heading text-2xl lg:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-              Beauty & Clean
-            </h2>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      isScrolled ? 'glass-effect shadow-glow py-3' : 'bg-gradient-to-b from-black/50 to-transparent py-5'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => scrollToSection('hero')}>
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary rounded-full blur-lg opacity-50 group-hover:opacity-100 transition-opacity"></div>
+              <Icon name="Sparkles" size={36} className="text-primary relative z-10 group-hover:rotate-12 transition-transform" />
+            </div>
+            <div>
+              <h1 className="font-heading text-2xl font-bold gradient-text">Beauty & Clean</h1>
+              <p className="text-xs text-muted-foreground">Премиум клининг</p>
+            </div>
           </div>
-          <Button 
-            className="lg:hidden bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-4 rounded-xl"
-            onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Записаться
+
+          <nav className="hidden lg:flex items-center gap-8">
+            <button onClick={() => scrollToSection('services')} className="text-sm font-medium hover:text-primary transition-colors relative group">
+              Услуги
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all"></span>
+            </button>
+            <button onClick={() => scrollToSection('calculator')} className="text-sm font-medium hover:text-primary transition-colors relative group">
+              Калькулятор
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all"></span>
+            </button>
+            <button onClick={() => scrollToSection('booking')} className="text-sm font-medium hover:text-primary transition-colors relative group">
+              Запись
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all"></span>
+            </button>
+            
+            <div className="glass-effect px-6 py-3 rounded-2xl space-y-2 shadow-lg hover:shadow-glow transition-all">
+              <div className="flex items-center gap-4">
+                <Select value={serviceType} onValueChange={setServiceType}>
+                  <SelectTrigger className="w-[200px] border-primary/20 bg-white/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {services.map((service) => (
+                      <SelectItem key={service.id} value={service.id}>
+                        {service.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button variant="ghost" size="icon" onClick={onInfoClick} className="hover:bg-primary/10">
+                  <Icon name="Info" size={18} className="text-primary" />
+                </Button>
+              </div>
+              <div className="flex items-center gap-3">
+                <Icon name="Maximize2" size={16} className="text-primary" />
+                <Slider 
+                  value={[parseInt(area)]} 
+                  onValueChange={(v) => setArea(v[0].toString())}
+                  min={20}
+                  max={200}
+                  step={10}
+                  className="w-[180px]"
+                />
+                <span className="text-sm font-semibold text-primary min-w-[50px]">{area} м²</span>
+              </div>
+              <div className="text-center pt-1 border-t border-primary/20">
+                <p className="text-xs text-muted-foreground">от</p>
+                <p className="text-2xl font-bold gradient-text">{calculatePrice().toLocaleString('ru-RU')} ₽</p>
+              </div>
+            </div>
+
+            <Button onClick={() => scrollToSection('booking')} className="bg-gradient-to-r from-primary to-accent hover:shadow-glow transition-all text-white font-semibold px-6">
+              Заказать
+            </Button>
+          </nav>
+
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
           </Button>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-3 lg:gap-4">
-          <div className="w-full lg:w-auto flex items-center gap-2">
-            <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
-              <Select value={serviceType} onValueChange={setServiceType}>
-                <SelectTrigger className="w-full lg:w-[140px] h-9 border-0 bg-transparent text-white font-medium">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {services.map(service => (
-                    <SelectItem key={service.id} value={service.id}>
-                      {service.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
-                onClick={onInfoClick}
-              >
-                <Icon name="Info" size={18} />
-              </Button>
-            </div>
-            
-            <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
-              <Input
-                type="number"
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                min="20"
-                max="500"
-                className="w-full lg:w-20 h-9 border-0 bg-transparent text-white text-center font-medium"
-              />
-              <span className="text-yellow-400 font-semibold">м²</span>
-            </div>
-          </div>
-          
-          <div className="w-full lg:w-auto flex items-center gap-3">
-            <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400 to-yellow-500 px-6 py-3 rounded-xl shadow-2xl border-2 border-yellow-300">
-              <div className="flex items-center justify-center gap-2">
-                <Icon name="Calculator" size={20} className="text-black" />
-                <span className="text-black font-bold text-xl lg:text-2xl">{calculatePrice()}₽</span>
-              </div>
-            </div>
-            
-            <Button 
-              className="hidden lg:block bg-white text-black hover:bg-gray-100 font-semibold px-8 py-6 rounded-xl shadow-lg"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Записаться
+        {isMenuOpen && (
+          <div className="lg:hidden mt-4 glass-effect rounded-2xl p-4 space-y-4 animate-slide-up">
+            <button onClick={() => scrollToSection('services')} className="block w-full text-left py-2 hover:text-primary transition-colors">
+              Услуги
+            </button>
+            <button onClick={() => scrollToSection('calculator')} className="block w-full text-left py-2 hover:text-primary transition-colors">
+              Калькулятор
+            </button>
+            <button onClick={() => scrollToSection('booking')} className="block w-full text-left py-2 hover:text-primary transition-colors">
+              Запись
+            </button>
+            <Button onClick={() => scrollToSection('booking')} className="w-full bg-gradient-to-r from-primary to-accent text-white">
+              Заказать
             </Button>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );
