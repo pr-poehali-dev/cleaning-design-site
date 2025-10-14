@@ -68,15 +68,6 @@ const Index = () => {
       
       <HeroSection />
       
-      <PriceCalculator
-        serviceType={serviceType}
-        setServiceType={setServiceType}
-        area={area}
-        setArea={setArea}
-        services={services}
-        calculatePrice={calculatePrice}
-      />
-      
       <BookingForm />
       
       <ContactSection />
