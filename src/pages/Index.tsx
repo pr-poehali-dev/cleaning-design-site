@@ -186,7 +186,7 @@ const Index = () => {
             {services.map((service, index) => (
               <Card 
                 key={service.id}
-                className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 border-2 hover:border-yellow-400"
+                className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-yellow-400 flex flex-col"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="bg-yellow-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
@@ -194,7 +194,15 @@ const Index = () => {
                 </div>
                 <h3 className="font-heading text-xl font-semibold mb-2 text-gray-900">{service.name}</h3>
                 <p className="text-3xl font-bold text-yellow-600 mb-2">от {service.price}₽</p>
-                <p className="text-gray-600 text-sm">за 50 м²</p>
+                <p className="text-gray-600 text-sm mb-4">за 50 м²</p>
+                <Button 
+                  variant="outline" 
+                  className="mt-auto w-full border-yellow-400 text-yellow-600 hover:bg-yellow-50 hover:text-yellow-700 font-semibold"
+                  onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Подробнее
+                  <Icon name="ArrowRight" className="ml-2" size={16} />
+                </Button>
               </Card>
             ))}
           </div>
