@@ -115,7 +115,7 @@ const BookingForm = () => {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder="+7 (914) 196-51-72"
                   className="h-12"
                 />
               </div>

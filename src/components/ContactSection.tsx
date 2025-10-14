@@ -10,7 +10,7 @@ const ContactSection = () => {
               <Icon name="Phone" size={32} className="text-yellow-400" />
             </div>
             <h3 className="font-heading text-xl font-semibold mb-2">Телефон</h3>
-            <p className="text-gray-300">+7 (495) 123-45-67</p>
+            <p className="text-gray-300">+7 (914) 196-51-72</p>
           </div>
 
           <div className="animate-scale-in" style={{ animationDelay: '100ms' }}>
