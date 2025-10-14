@@ -4,6 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 import ValueSection from '@/components/ValueSection';
 import ContactSection from '@/components/ContactSection';
+import BookingForm from '@/components/BookingForm';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -73,6 +74,8 @@ const Index = () => {
         <ValueSection />
         
         <HowWeWorkSection />
+        
+        <BookingForm />
         
         <ContactSection />
         
