@@ -61,17 +61,57 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <header className="bg-black/50 backdrop-blur-md border-b border-yellow-400/20 sticky top-0 z-50 py-4 px-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div>
+            <h2 className="font-heading text-3xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+              Beauty & Clean
+            </h2>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3 bg-gray-900/80 px-4 py-2 rounded-full border border-yellow-400/30">
+              <Select value={serviceType} onValueChange={setServiceType}>
+                <SelectTrigger className="w-[160px] border-0 bg-transparent text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {services.map(service => (
+                    <SelectItem key={service.id} value={service.id}>
+                      {service.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                type="number"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                min="20"
+                max="500"
+                className="w-20 border-0 bg-transparent text-white"
+                placeholder="м²"
+              />
+              <div className="text-yellow-400 font-bold text-lg">
+                {calculatePrice()}₽
+              </div>
+            </div>
+            <Button 
+              size="sm"
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold"
+              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Записаться
+            </Button>
+          </div>
+        </div>
+      </header>
+
       <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white py-20 px-4">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
         
         <div className="max-w-6xl mx-auto relative">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left relative z-10 animate-fade-in">
-              <div className="mb-8">
-                <h2 className="font-heading text-5xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-                  Beauty & Clean
-                </h2>
-              </div>
               <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
                 Красота в каждой детали
               </h1>
