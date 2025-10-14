@@ -104,10 +104,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         elif action == 'maids':
             if method == 'GET':
                 cur.execute("""
-                    SELECT id, full_name, email, phone 
-                    FROM users 
-                    WHERE role = 'maid'
-                    ORDER BY full_name
+                    SELECT 
+                        u.id, 
+                        u.full_name, 
+                        u.email, 
+                        u.phone,
+                        COUNT(CASE WHEN ca.status = 'completed' THEN 1 END) as completed_count,
+                        COUNT(CASE WHEN ca.status = 'in_progress' THEN 1 END) as in_progress_count,
+                        COUNT(CASE WHEN ca.status = 'assigned' THEN 1 END) as assigned_count,
+                        COUNT(a.id) as total_assignments
+                    FROM users u
+                    LEFT JOIN assignments a ON u.id = a.maid_id
+                    LEFT JOIN cleaning_addresses ca ON a.address_id = ca.id
+                    WHERE u.role = 'maid'
+                    GROUP BY u.id, u.full_name, u.email, u.phone
+                    ORDER BY u.full_name
                 """)
                 rows = cur.fetchall()
                 maids = []
@@ -116,7 +127,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'id': row[0],
                         'full_name': row[1],
                         'email': row[2],
-                        'phone': row[3]
+                        'phone': row[3],
+                        'completed_count': row[4],
+                        'in_progress_count': row[5],
+                        'assigned_count': row[6],
+                        'total_assignments': row[7]
                     })
                 
                 cur.close()

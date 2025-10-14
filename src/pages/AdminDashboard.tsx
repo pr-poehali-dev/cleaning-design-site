@@ -34,6 +34,11 @@ interface Maid {
   id: number;
   full_name: string;
   phone: string;
+  email?: string;
+  completed_count?: number;
+  in_progress_count?: number;
+  assigned_count?: number;
+  total_assignments?: number;
 }
 
 const AdminDashboard = () => {
@@ -611,6 +616,26 @@ const AdminDashboard = () => {
                       <p className="text-gray-400 text-sm">{maid.phone}</p>
                     </div>
                   </div>
+                  
+                  <div className="bg-gray-700/50 rounded-lg p-3 mb-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Всего заданий:</span>
+                      <span className="text-white font-semibold">{maid.total_assignments || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-green-400">Выполнено:</span>
+                      <span className="text-green-400 font-semibold">{maid.completed_count || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-blue-400">В работе:</span>
+                      <span className="text-blue-400 font-semibold">{maid.in_progress_count || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-yellow-400">Назначено:</span>
+                      <span className="text-yellow-400 font-semibold">{maid.assigned_count || 0}</span>
+                    </div>
+                  </div>
+
                   <div className="flex gap-2">
                     <Button
                       onClick={() => setEditingMaid(maid)}
