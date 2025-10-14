@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -39,7 +39,22 @@ const Header = ({
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [isStarted, setIsStarted] = useState(false);
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isConsultationOpen && !hasShownWelcome) {
+      setHasShownWelcome(true);
+      const timer = setTimeout(() => {
+        toast({
+          title: "👋 Добро пожаловать!",
+          description: "Мы онлайн и готовы ответить на все ваши вопросы о клининге!",
+          duration: 5000,
+        });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isConsultationOpen, hasShownWelcome, toast]);
 
   const handleStart = () => {
     if (!name.trim() || !phone.trim()) {
@@ -183,9 +198,17 @@ const Header = ({
           <div className="p-4 max-h-[400px] overflow-y-auto">
             {!isStarted ? (
               <div className="space-y-4">
-                <p className="text-gray-600 text-sm">
-                  Здравствуйте! 👋 Оставьте свои контакты, и наш консультант свяжется с вами для ответов на все вопросы.
-                </p>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                  <div className="flex items-start gap-2">
+                    <Icon name="Sparkles" size={18} className="text-yellow-600 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-xs text-yellow-600 font-semibold">Beauty & Clean</p>
+                      <p className="text-sm text-gray-700 mt-1">
+                        Здравствуйте! 👋 Мы онлайн и готовы помочь с выбором клининговых услуг. Оставьте контакты, и консультант ответит на все вопросы!
+                      </p>
+                    </div>
+                  </div>
+                </div>
                 
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1 block">
