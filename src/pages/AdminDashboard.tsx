@@ -49,6 +49,7 @@ const AdminDashboard = () => {
   
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [maids, setMaids] = useState<Maid[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [showMaidForm, setShowMaidForm] = useState(false);
@@ -245,6 +246,11 @@ const AdminDashboard = () => {
     cancelled: 'Отменена',
   };
 
+  const filteredAddresses = addresses.filter((address) => {
+    if (statusFilter === 'all') return true;
+    return address.status === statusFilter;
+  });
+
   if (!user) return null;
 
   return (
@@ -288,7 +294,7 @@ const AdminDashboard = () => {
 
         {activeTab === 'addresses' && (
           <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
               <h2 className="text-2xl font-bold text-yellow-400">Адреса уборок</h2>
               <Button
                 onClick={() => setShowAddressForm(!showAddressForm)}
@@ -296,6 +302,51 @@ const AdminDashboard = () => {
               >
                 <Icon name="Plus" size={20} className="mr-2" />
                 Добавить адрес
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Button
+                onClick={() => setStatusFilter('all')}
+                size="sm"
+                className={statusFilter === 'all' ? 'bg-yellow-400 text-black' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                Все ({addresses.length})
+              </Button>
+              <Button
+                onClick={() => setStatusFilter('pending')}
+                size="sm"
+                className={statusFilter === 'pending' ? 'bg-gray-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                Ожидает ({addresses.filter(a => a.status === 'pending').length})
+              </Button>
+              <Button
+                onClick={() => setStatusFilter('assigned')}
+                size="sm"
+                className={statusFilter === 'assigned' ? 'bg-yellow-500 text-black' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                Назначена ({addresses.filter(a => a.status === 'assigned').length})
+              </Button>
+              <Button
+                onClick={() => setStatusFilter('in_progress')}
+                size="sm"
+                className={statusFilter === 'in_progress' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                В работе ({addresses.filter(a => a.status === 'in_progress').length})
+              </Button>
+              <Button
+                onClick={() => setStatusFilter('completed')}
+                size="sm"
+                className={statusFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                Выполнена ({addresses.filter(a => a.status === 'completed').length})
+              </Button>
+              <Button
+                onClick={() => setStatusFilter('cancelled')}
+                size="sm"
+                className={statusFilter === 'cancelled' ? 'bg-red-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+              >
+                Отменена ({addresses.filter(a => a.status === 'cancelled').length})
               </Button>
             </div>
 
@@ -408,7 +459,13 @@ const AdminDashboard = () => {
             )}
 
             <div className="space-y-4">
-              {addresses.map((address) => (
+              {filteredAddresses.length === 0 && (
+                <div className="text-center py-12 text-gray-400">
+                  <Icon name="Search" size={48} className="mx-auto mb-4 opacity-50" />
+                  <p>Нет адресов с выбранным статусом</p>
+                </div>
+              )}
+              {filteredAddresses.map((address) => (
                 <div key={address.id} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
                   <div className="flex justify-between items-start mb-4">
                     <div>
