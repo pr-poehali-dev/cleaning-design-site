@@ -8,7 +8,7 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
 import ScrollToTop from '@/components/ScrollToTop';
-import OnlineConsultation from '@/components/OnlineConsultation';
+
 import { services, additionalServices, Service } from '@/data/servicesData';
 
 const Index = () => {
@@ -101,7 +101,6 @@ const Index = () => {
       />
 
       <ScrollToTop />
-      <OnlineConsultation />
     </div>
   );
 };
