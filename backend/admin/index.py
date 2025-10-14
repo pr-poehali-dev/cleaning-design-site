@@ -19,7 +19,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400'
             },
@@ -125,6 +125,44 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'statusCode': 200,
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                     'body': json.dumps({'maids': maids})
+                }
+            
+            elif method == 'PUT':
+                body_data = json.loads(event.get('body', '{}'))
+                maid_id = body_data.get('id')
+                cur.execute("""
+                    UPDATE users 
+                    SET full_name = %s, email = %s, phone = %s, password_hash = %s
+                    WHERE id = %s AND role = 'maid'
+                """, (
+                    body_data.get('full_name'),
+                    body_data.get('email'),
+                    body_data.get('phone'),
+                    body_data.get('password'),
+                    maid_id
+                ))
+                conn.commit()
+                cur.close()
+                conn.close()
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'message': 'Maid updated'})
+                }
+            
+            elif method == 'DELETE':
+                body_data = json.loads(event.get('body', '{}'))
+                maid_id = body_data.get('id')
+                
+                cur.execute("DELETE FROM assignments WHERE maid_id = %s", (maid_id,))
+                cur.execute("DELETE FROM users WHERE id = %s AND role = 'maid'", (maid_id,))
+                conn.commit()
+                cur.close()
+                conn.close()
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'message': 'Maid deleted'})
                 }
             
             elif method == 'POST':

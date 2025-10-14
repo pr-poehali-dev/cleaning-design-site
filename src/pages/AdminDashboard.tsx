@@ -68,6 +68,8 @@ const AdminDashboard = () => {
     phone: '',
   });
 
+  const [editingMaid, setEditingMaid] = useState<Maid & { password?: string } | null>(null);
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) {
@@ -175,6 +177,46 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       toast({ title: 'Ошибка', description: 'Не удалось назначить горничную', variant: 'destructive' });
+    }
+  };
+
+  const handleUpdateMaid = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMaid) return;
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=maids', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingMaid),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Обновлено', description: 'Данные горничной обновлены' });
+        setEditingMaid(null);
+        loadMaids();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось обновить данные', variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteMaid = async (maidId: number) => {
+    if (!confirm('Вы уверены, что хотите удалить этого сотрудника?')) return;
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=maids', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: maidId }),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Удалено', description: 'Сотрудник удален из системы' });
+        loadMaids();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось удалить сотрудника', variant: 'destructive' });
     }
   };
 
@@ -501,17 +543,92 @@ const AdminDashboard = () => {
               </div>
             )}
 
+            {editingMaid && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-6">
+                <h3 className="text-xl font-bold mb-4">Редактировать горничную</h3>
+                <form onSubmit={handleUpdateMaid} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label>Email</Label>
+                      <Input
+                        type="email"
+                        value={editingMaid.email || ''}
+                        onChange={(e) => setEditingMaid({ ...editingMaid, email: e.target.value })}
+                        className="bg-gray-700 border-gray-600 text-white"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Новый пароль (оставьте пустым, чтобы не менять)</Label>
+                      <Input
+                        type="password"
+                        value={editingMaid.password || ''}
+                        onChange={(e) => setEditingMaid({ ...editingMaid, password: e.target.value })}
+                        className="bg-gray-700 border-gray-600 text-white"
+                        placeholder="Оставьте пустым"
+                      />
+                    </div>
+                    <div>
+                      <Label>ФИО</Label>
+                      <Input
+                        value={editingMaid.full_name}
+                        onChange={(e) => setEditingMaid({ ...editingMaid, full_name: e.target.value })}
+                        className="bg-gray-700 border-gray-600 text-white"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Телефон</Label>
+                      <Input
+                        value={editingMaid.phone}
+                        onChange={(e) => setEditingMaid({ ...editingMaid, phone: e.target.value })}
+                        className="bg-gray-700 border-gray-600 text-white"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button type="submit" className="bg-green-500 hover:bg-green-600">
+                      Сохранить
+                    </Button>
+                    <Button type="button" onClick={() => setEditingMaid(null)} variant="ghost">
+                      Отмена
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            )}
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {maids.map((maid) => (
                 <div key={maid.id} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
                       <Icon name="User" size={24} className="text-black" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="font-bold text-white">{maid.full_name}</h3>
                       <p className="text-gray-400 text-sm">{maid.phone}</p>
                     </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => setEditingMaid(maid)}
+                      size="sm"
+                      className="flex-1 bg-blue-500 hover:bg-blue-600"
+                    >
+                      <Icon name="Edit" size={16} className="mr-1" />
+                      Изменить
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteMaid(maid.id)}
+                      size="sm"
+                      variant="destructive"
+                      className="flex-1"
+                    >
+                      <Icon name="Trash2" size={16} className="mr-1" />
+                      Удалить
+                    </Button>
                   </div>
                 </div>
               ))}
