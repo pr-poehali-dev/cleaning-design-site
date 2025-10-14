@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 import { format } from 'date-fns';
@@ -21,18 +22,58 @@ const Index = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [comment, setComment] = useState('');
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
 
   const services = [
-    { id: 'basic', name: 'Базовая уборка', price: 10000, icon: 'Home' },
-    { id: 'deep', name: 'Генеральная уборка', price: 15000, icon: 'Sparkles' },
-    { id: 'after', name: 'После ремонта', price: 20000, icon: 'Hammer' },
-    { id: 'office', name: 'Офисная уборка', price: 12000, icon: 'Building' },
+    { 
+      id: 'basic', 
+      name: 'Базовая уборка', 
+      price: 10000, 
+      icon: 'Home',
+      description: 'Включает уборку всех помещений, влажную уборку полов, протирку пыли, уборку санузлов и кухни',
+      includes: ['Влажная уборка полов', 'Протирка пыли на всех поверхностях', 'Уборка санузлов', 'Мытье кухни', 'Вынос мусора']
+    },
+    { 
+      id: 'deep', 
+      name: 'Генеральная уборка', 
+      price: 15000, 
+      icon: 'Sparkles',
+      description: 'Глубокая уборка всех помещений с использованием профессиональных средств',
+      includes: ['Всё из базовой уборки', 'Мытьё окон', 'Чистка бытовой техники', 'Уборка труднодоступных мест', 'Мытьё плинтусов и дверей', 'Чистка мебели']
+    },
+    { 
+      id: 'after', 
+      name: 'После ремонта', 
+      price: 20000, 
+      icon: 'Hammer',
+      description: 'Профессиональная уборка после строительных и ремонтных работ',
+      includes: ['Удаление строительной пыли', 'Мытьё окон и рам', 'Очистка всех поверхностей от загрязнений', 'Уборка следов краски и клея', 'Полировка сантехники']
+    },
+    { 
+      id: 'office', 
+      name: 'Офисная уборка', 
+      price: 12000, 
+      icon: 'Building',
+      description: 'Комплексная уборка офисных помещений с учетом рабочего графика',
+      includes: ['Уборка рабочих мест', 'Влажная уборка полов', 'Протирка оргтехники', 'Уборка переговорных', 'Уборка кухонной зоны', 'Вынос мусора']
+    },
   ];
 
   const calculatePrice = () => {
-    const basePrice = services.find(s => s.id === serviceType)?.price || 2000;
+    const basePrice = services.find(s => s.id === serviceType)?.price || 10000;
     const areaMultiplier = parseInt(area) / 50;
     return Math.round(basePrice * areaMultiplier);
+  };
+
+  const openServiceModal = (service: any) => {
+    setSelectedService(service);
+    setIsServiceModalOpen(true);
+  };
+
+  const openServiceModal = (service: any) => {
+    setSelectedService(service);
+    setIsServiceModalOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,9 +120,9 @@ const Index = () => {
 
           <div className="flex flex-col lg:flex-row items-center justify-between gap-3 lg:gap-4">
             <div className="w-full lg:w-auto flex items-center gap-2">
-              <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg">
+              <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
                 <Select value={serviceType} onValueChange={setServiceType}>
-                  <SelectTrigger className="w-full lg:w-[160px] h-9 border-0 bg-transparent text-white font-medium">
+                  <SelectTrigger className="w-full lg:w-[140px] h-9 border-0 bg-transparent text-white font-medium">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -92,6 +133,14 @@ const Index = () => {
                     ))}
                   </SelectContent>
                 </Select>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
+                  onClick={() => openServiceModal(services.find(s => s.id === serviceType))}
+                >
+                  <Icon name="Info" size={18} />
+                </Button>
               </div>
               
               <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
@@ -198,7 +247,7 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   className="mt-auto w-full border-yellow-400 text-yellow-600 hover:bg-yellow-50 hover:text-yellow-700 font-semibold"
-                  onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => openServiceModal(service)}
                 >
                   Подробнее
                   <Icon name="ArrowRight" className="ml-2" size={16} />
@@ -391,6 +440,53 @@ const Index = () => {
           <p>&copy; 2024 Beauty & Clean. Все права защищены</p>
         </div>
       </footer>
+
+      <Dialog open={isServiceModalOpen} onOpenChange={setIsServiceModalOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              <div className="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center">
+                <Icon name={selectedService?.icon as any} size={24} className="text-yellow-600" />
+              </div>
+              {selectedService?.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <p className="text-gray-600 mb-4">{selectedService?.description}</p>
+              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-4 rounded-xl inline-block">
+                <p className="text-sm font-medium mb-1">Стоимость</p>
+                <p className="text-3xl font-bold">{selectedService?.price}₽</p>
+                <p className="text-sm opacity-80">за 50 м²</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                <Icon name="CheckCircle" size={20} className="text-yellow-600" />
+                Что включено:
+              </h4>
+              <ul className="space-y-2">
+                {selectedService?.includes?.map((item: string, index: number) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <Icon name="Check" size={18} className="text-yellow-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <Button 
+              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold py-6"
+              onClick={() => {
+                setIsServiceModalOpen(false);
+                document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Записаться на эту услугу
+              <Icon name="ArrowRight" className="ml-2" size={20} />
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
