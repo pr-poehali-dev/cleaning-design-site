@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Checklist from "./pages/Checklist";
+import InspectionChecklist from "./pages/InspectionChecklist";
 import NotFound from "./pages/NotFound";
 import CursorSparkles from "./components/CursorSparkles";
 
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/checklist" element={<Checklist />} />
+          <Route path="/inspection" element={<InspectionChecklist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
