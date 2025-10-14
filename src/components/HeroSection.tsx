@@ -16,7 +16,7 @@ const HeroSection = () => {
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle">
                 <Icon name="ClipboardCheck" size={28} className="text-black" />
               </div>
-              <p className="text-xl md:text-2xl text-gray-300">
+              <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
                 Проверка на чистоту по чек-листу
               </p>
             </div>
