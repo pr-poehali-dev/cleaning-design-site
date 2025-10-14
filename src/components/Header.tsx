@@ -83,35 +83,17 @@ const Header = ({
   };
 
   return (
-    <header className="bg-black/80 backdrop-blur-lg border-b border-yellow-400/30 sticky top-0 z-50 py-2 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-2 lg:mb-0">
-          <h2 className="font-heading text-xl lg:text-2xl font-bold text-yellow-400">
+    <header className="bg-black border-b border-yellow-400/30 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-heading text-2xl font-bold text-yellow-400 shrink-0">
             p9&clean
           </h2>
-          <div className="flex items-center gap-2 lg:hidden">
-            <Button 
-              size="sm"
-              className="bg-yellow-400 text-black hover:bg-yellow-500"
-              onClick={() => window.location.href = 'tel:+79141965172'}
-            >
-              <Icon name="Phone" size={16} />
-            </Button>
-            <Button 
-              size="sm"
-              className="bg-yellow-400 text-black hover:bg-yellow-500"
-              onClick={() => setIsConsultationOpen(!isConsultationOpen)}
-            >
-              <Icon name="MessageCircle" size={16} />
-            </Button>
-          </div>
-        </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-3">
-          <div className="w-full lg:w-auto flex items-center gap-2">
-            <div className="flex-1 lg:flex-none bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-3 flex-1 justify-center">
+            <div className="bg-white/10 px-4 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
               <Select value={serviceType} onValueChange={setServiceType}>
-                <SelectTrigger className="w-full lg:w-[120px] h-8 border-0 bg-transparent text-white text-sm">
+                <SelectTrigger className="w-[140px] border-0 bg-transparent text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -125,59 +107,97 @@ const Header = ({
               <Button
                 size="sm"
                 variant="ghost"
-                className="h-6 w-6 p-0 text-yellow-400 hover:text-yellow-300"
+                className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-white/10"
                 onClick={onInfoClick}
               >
-                <Icon name="Info" size={14} />
+                <Icon name="Info" size={16} />
               </Button>
             </div>
             
-            <div className="flex-1 lg:flex-none bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+            <div className="bg-white/10 px-4 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
               <Input
                 type="number"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
                 min="20"
                 max="500"
-                className="w-full lg:w-16 h-8 border-0 bg-transparent text-white text-center text-sm"
+                className="w-20 border-0 bg-transparent text-white text-center"
               />
-              <span className="text-yellow-400 text-sm">м²</span>
+              <span className="text-yellow-400">м²</span>
             </div>
-          </div>
-          
-          <div className="w-full lg:w-auto flex items-center gap-2">
-            <div className="flex-1 lg:flex-none bg-yellow-400 px-4 py-2 rounded-lg">
-              <div className="flex items-center justify-center gap-2">
-                <Icon name="Calculator" size={16} className="text-black" />
-                <span className="text-black font-bold text-lg">{calculatePrice()}₽</span>
+
+            <div className="bg-yellow-400 px-5 py-2 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Icon name="Calculator" size={18} className="text-black" />
+                <span className="text-black font-bold text-xl">{calculatePrice()}₽</span>
               </div>
             </div>
-            
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
             <Button 
-              size="sm"
-              className="hidden lg:flex items-center gap-2 bg-yellow-400 text-black hover:bg-yellow-500"
+              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold"
               onClick={() => window.location.href = 'tel:+79141965172'}
             >
-              <Icon name="Phone" size={16} />
-              +7 (914) 196-51-72
+              <Icon name="Phone" size={18} />
+              <span className="hidden xl:inline ml-2">+7 (914) 196-51-72</span>
             </Button>
             
             <Button 
-              size="sm"
-              className="hidden lg:flex items-center gap-2 bg-yellow-400 text-black hover:bg-yellow-500"
+              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold hidden lg:flex"
               onClick={() => setIsConsultationOpen(!isConsultationOpen)}
             >
-              <Icon name="MessageCircle" size={16} />
-              Консультация
+              <Icon name="MessageCircle" size={18} />
+              <span className="ml-2">Консультация</span>
             </Button>
             
             <Button 
-              size="sm"
-              className="hidden lg:block bg-white text-black hover:bg-gray-100"
+              className="bg-white text-black hover:bg-gray-100 font-semibold hidden lg:flex"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
             </Button>
+          </div>
+        </div>
+
+        <div className="lg:hidden mt-3 flex items-center gap-2">
+          <div className="flex-1 bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+            <Select value={serviceType} onValueChange={setServiceType}>
+              <SelectTrigger className="flex-1 border-0 bg-transparent text-white text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {services.map(service => (
+                  <SelectItem key={service.id} value={service.id}>
+                    {service.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 w-6 p-0 text-yellow-400 hover:text-yellow-300"
+              onClick={onInfoClick}
+            >
+              <Icon name="Info" size={14} />
+            </Button>
+          </div>
+          
+          <div className="bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+            <Input
+              type="number"
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
+              min="20"
+              max="500"
+              className="w-14 border-0 bg-transparent text-white text-center text-sm"
+            />
+            <span className="text-yellow-400 text-sm">м²</span>
+          </div>
+
+          <div className="bg-yellow-400 px-3 py-2 rounded-lg">
+            <span className="text-black font-bold">{calculatePrice()}₽</span>
           </div>
         </div>
       </div>
