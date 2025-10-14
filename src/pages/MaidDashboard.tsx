@@ -421,11 +421,15 @@ const MaidDashboard = () => {
                       <h3 className="text-xl font-bold text-white">{assignment.address}</h3>
                       <p className="text-gray-400">Клиент: {assignment.client_name}</p>
                     </div>
-                    <span className="text-gray-400 text-sm">
-                      {assignment.scheduled_date} в {assignment.scheduled_time}
+                    <span className={`px-3 py-1 rounded text-sm ${
+                      assignment.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                      assignment.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
+                      'bg-yellow-500/20 text-yellow-400'
+                    }`}>
+                      {statusNames[assignment.status]}
                     </span>
                   </div>
-                  <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <span className="text-gray-400 text-sm">Тип</span>
                       <p className="text-white">{serviceTypeNames[assignment.service_type]}</p>
@@ -439,6 +443,36 @@ const MaidDashboard = () => {
                       <p className="text-white">{assignment.price} ₽</p>
                     </div>
                   </div>
+                  <p className="text-gray-400 text-sm mb-4">
+                    📅 {assignment.scheduled_date} в {assignment.scheduled_time}
+                  </p>
+                  {assignment.status === 'assigned' && (
+                    <Button
+                      onClick={() => handleUpdateStatus(assignment.id, 'in_progress')}
+                      className="bg-blue-500 hover:bg-blue-600"
+                    >
+                      <Icon name="Play" size={16} className="mr-2" />
+                      Начать работу
+                    </Button>
+                  )}
+                  {assignment.status === 'in_progress' && (
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handleUpdateStatus(assignment.id, 'completed')}
+                        className="bg-green-500 hover:bg-green-600"
+                      >
+                        <Icon name="CheckCircle" size={16} className="mr-2" />
+                        Завершить
+                      </Button>
+                      <Button
+                        onClick={() => setUploadingPhotos(assignment.id)}
+                        className="bg-purple-500 hover:bg-purple-600"
+                      >
+                        <Icon name="Camera" size={16} className="mr-2" />
+                        Загрузить фото
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
