@@ -68,9 +68,9 @@ const Index = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left relative z-10 animate-fade-in">
               <img 
-                src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/672e92c2-1e96-443b-9985-e61709cde874.jpg" 
+                src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/98c3c754-e7a9-43b5-b073-80de2e0c625f.jpg" 
                 alt="Beauty & Clean" 
-                className="h-16 mb-8 mx-auto md:mx-0"
+                className="h-24 mb-8 mx-auto md:mx-0"
               />
               <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
                 Красота в каждой детали
