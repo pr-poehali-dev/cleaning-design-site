@@ -69,35 +69,44 @@ const Index = () => {
             </h2>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-3 bg-gray-900/80 px-4 py-2 rounded-full border border-yellow-400/30">
-              <Select value={serviceType} onValueChange={setServiceType}>
-                <SelectTrigger className="w-[160px] border-0 bg-transparent text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {services.map(service => (
-                    <SelectItem key={service.id} value={service.id}>
-                      {service.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                min="20"
-                max="500"
-                className="w-20 border-0 bg-transparent text-white"
-                placeholder="м²"
-              />
-              <div className="text-yellow-400 font-bold text-lg">
-                {calculatePrice()}₽
+            <div className="hidden lg:flex items-center gap-2">
+              <div className="bg-gradient-to-r from-yellow-400/10 to-yellow-600/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-yellow-400/40">
+                <Select value={serviceType} onValueChange={setServiceType}>
+                  <SelectTrigger className="w-[140px] h-8 border-0 bg-transparent text-white text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {services.map(service => (
+                      <SelectItem key={service.id} value={service.id}>
+                        {service.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="bg-gradient-to-r from-yellow-400/10 to-yellow-600/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-yellow-400/40 flex items-center gap-2">
+                <Input
+                  type="number"
+                  value={area}
+                  onChange={(e) => setArea(e.target.value)}
+                  min="20"
+                  max="500"
+                  className="w-16 h-8 border-0 bg-transparent text-white text-sm text-center"
+                />
+                <span className="text-gray-400 text-sm">м²</span>
+              </div>
+              
+              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 px-6 py-2 rounded-xl">
+                <div className="flex items-center gap-2">
+                  <Icon name="Calculator" size={16} className="text-black" />
+                  <span className="text-black font-bold text-lg">{calculatePrice()}₽</span>
+                </div>
               </div>
             </div>
+            
             <Button 
-              size="sm"
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold"
+              className="bg-white text-black hover:bg-gray-100 font-semibold px-6 rounded-xl"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
