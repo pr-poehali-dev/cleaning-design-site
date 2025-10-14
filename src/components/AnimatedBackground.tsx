@@ -22,6 +22,7 @@ const AnimatedBackground = () => {
       opacity: number;
       twinkleSpeed: number;
       twinklePhase: number;
+      isGold: boolean;
     }> = [];
 
     for (let i = 0; i < 80; i++) {
@@ -32,12 +33,13 @@ const AnimatedBackground = () => {
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.02,
         opacity: Math.random() * 0.4 + 0.2,
-        twinkleSpeed: Math.random() * 0.02 + 0.01,
+        twinkleSpeed: Math.random() * 0.015 + 0.008,
         twinklePhase: Math.random() * Math.PI * 2,
+        isGold: i % 2 === 0,
       });
     }
 
-    const drawCrystal = (x: number, y: number, size: number, rotation: number, opacity: number) => {
+    const drawCrystal = (x: number, y: number, size: number, rotation: number, opacity: number, color: string) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rotation);
@@ -52,11 +54,11 @@ const AnimatedBackground = () => {
       }
       ctx.closePath();
       
-      ctx.strokeStyle = `rgba(250, 204, 21, ${opacity})`;
+      ctx.strokeStyle = color.replace('COLOR', `${opacity}`);
       ctx.lineWidth = 1.5;
       ctx.stroke();
       
-      ctx.fillStyle = `rgba(250, 204, 21, ${opacity * 0.3})`;
+      ctx.fillStyle = color.replace('COLOR', `${opacity * 0.3}`);
       ctx.fill();
       
       ctx.restore();
@@ -70,9 +72,19 @@ const AnimatedBackground = () => {
         crystal.twinklePhase += crystal.twinkleSpeed;
         
         const twinkle = Math.sin(crystal.twinklePhase) * 0.5 + 0.5;
-        const currentOpacity = crystal.opacity * twinkle;
         
-        drawCrystal(crystal.x, crystal.y, crystal.size, crystal.rotation, currentOpacity);
+        let currentOpacity: number;
+        let color: string;
+        
+        if (crystal.isGold) {
+          currentOpacity = crystal.opacity * twinkle;
+          color = 'rgba(250, 204, 21, COLOR)';
+        } else {
+          currentOpacity = crystal.opacity * (1 - twinkle);
+          color = 'rgba(255, 255, 255, COLOR)';
+        }
+        
+        drawCrystal(crystal.x, crystal.y, crystal.size, crystal.rotation, currentOpacity, color);
       });
 
       requestAnimationFrame(animate);
