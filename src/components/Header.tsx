@@ -119,15 +119,15 @@ const Header = ({
             </div>
 
             <Button 
-              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold"
+              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold px-5 py-2 h-auto text-lg"
               onClick={() => setIsChatOpen(!isChatOpen)}
             >
-              <Icon name="MessageCircle" size={18} />
+              <Icon name="MessageCircle" size={20} />
               <span className="ml-2">Онлайн чат</span>
             </Button>
 
             <Button 
-              className="bg-white text-black hover:bg-gray-100 font-semibold"
+              className="bg-white text-black hover:bg-gray-100 font-semibold px-5 py-2 h-auto text-lg"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
