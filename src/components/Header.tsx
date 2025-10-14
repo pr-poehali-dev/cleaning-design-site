@@ -71,7 +71,7 @@ const Header = ({
     <header className="bg-black border-b border-yellow-400/30 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-6">
-          <h2 className="font-heading text-2xl font-bold text-yellow-400 shrink-0">
+          <h2 className="font-heading text-3xl font-bold shrink-0 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
             p9&clean
           </h2>
 
