@@ -71,11 +71,6 @@ const Index = () => {
     setIsServiceModalOpen(true);
   };
 
-  const openServiceModal = (service: any) => {
-    setSelectedService(service);
-    setIsServiceModalOpen(true);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
