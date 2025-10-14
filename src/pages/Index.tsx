@@ -1,67 +1,21 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
-import Icon from '@/components/ui/icon';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import ServicesSection from '@/components/ServicesSection';
+import PriceCalculator from '@/components/PriceCalculator';
+import BookingForm from '@/components/BookingForm';
+import ContactSection from '@/components/ContactSection';
+import Footer from '@/components/Footer';
+import ServiceModal from '@/components/ServiceModal';
+import { services, additionalServices, Service } from '@/data/servicesData';
 
 const Index = () => {
-  const { toast } = useToast();
-  const [selectedDate, setSelectedDate] = useState<Date>();
   const [area, setArea] = useState('50');
   const [serviceType, setServiceType] = useState('basic');
-  const [time, setTime] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [comment, setComment] = useState('');
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [modalArea, setModalArea] = useState('50');
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
-
-  const services = [
-    { 
-      id: 'basic', 
-      name: 'Базовая уборка', 
-      price: 10000, 
-      icon: 'Home',
-      description: 'Включает уборку всех помещений, влажную уборку полов, протирку пыли, уборку санузлов и кухни',
-      includes: ['Влажная уборка полов', 'Протирка пыли на всех поверхностях', 'Уборка санузлов', 'Мытье кухни', 'Вынос мусора']
-    },
-    { 
-      id: 'deep', 
-      name: 'Генеральная уборка', 
-      price: 15000, 
-      icon: 'Sparkles',
-      description: 'Глубокая уборка всех помещений с использованием профессиональных средств',
-      includes: ['Всё из базовой уборки', 'Мытьё окон', 'Чистка бытовой техники', 'Уборка труднодоступных мест', 'Мытьё плинтусов и дверей', 'Чистка мебели']
-    },
-    { 
-      id: 'after', 
-      name: 'После ремонта', 
-      price: 20000, 
-      icon: 'Hammer',
-      description: 'Профессиональная уборка после строительных и ремонтных работ',
-      includes: ['Удаление строительной пыли', 'Мытьё окон и рам', 'Очистка всех поверхностей от загрязнений', 'Уборка следов краски и клея', 'Полировка сантехники']
-    },
-    { 
-      id: 'office', 
-      name: 'Офисная уборка', 
-      price: 12000, 
-      icon: 'Building',
-      description: 'Комплексная уборка офисных помещений с учетом рабочего графика',
-      includes: ['Уборка рабочих мест', 'Влажная уборка полов', 'Протирка оргтехники', 'Уборка переговорных', 'Уборка кухонной зоны', 'Вынос мусора']
-    },
-  ];
 
   const calculatePrice = () => {
     const basePrice = services.find(s => s.id === serviceType)?.price || 10000;
@@ -69,39 +23,7 @@ const Index = () => {
     return Math.round(basePrice * areaMultiplier);
   };
 
-  const additionalServices = [
-    { id: 'windows', name: 'Мойка окон', price: 3000, category: 'Уборка' },
-    { id: 'steam', name: 'Обработка паром помещения', price: 4000, category: 'Обработка' },
-    { id: 'ozone', name: 'Озонирование', price: 2500, category: 'Обработка' },
-    { id: 'furniture', name: 'Химчистка мебели', price: 5000, category: 'Чистка' },
-    { id: 'carpet', name: 'Химчистка ковролина', price: 4500, category: 'Чистка' },
-    { id: 'mold', name: 'Удаление плесени', price: 6000, category: 'Обработка' },
-    { id: 'disinfection', name: 'Дезинфекция', price: 3500, category: 'Обработка' },
-    { id: 'ironing', name: 'Глажка белья', price: 2000, category: 'Уборка' },
-    { id: 'curtains', name: 'Стирка штор', price: 3500, category: 'Уборка' },
-    { id: 'blinds', name: 'Чистка жалюзи', price: 2500, category: 'Чистка' },
-    { id: 'dishes', name: 'Мытье посуды', price: 1500, category: 'Уборка' },
-    { id: 'balcony', name: 'Уборка балкона/лоджии', price: 2000, category: 'Уборка' },
-    { id: 'hood', name: 'Чистка вытяжки', price: 2500, category: 'Чистка' },
-    { id: 'chandelier', name: 'Чистка люстр и светильников', price: 3000, category: 'Чистка' },
-    { id: 'parquet', name: 'Полировка паркета', price: 5000, category: 'Чистка' },
-    { id: 'plants', name: 'Уход за растениями', price: 1500, category: 'Уборка' },
-    { id: 'organize', name: 'Организация пространства', price: 4000, category: 'Уборка' },
-    { id: 'mattress', name: 'Чистка матрасов', price: 4500, category: 'Чистка' },
-    { id: 'stains', name: 'Удаление пятен', price: 3000, category: 'Чистка' },
-    { id: 'antibacterial', name: 'Антибактериальная обработка', price: 3500, category: 'Обработка' },
-    { id: 'odor', name: 'Устранение запахов', price: 3000, category: 'Обработка' },
-    { id: 'insects', name: 'Обработка от насекомых', price: 5000, category: 'Обработка' },
-    { id: 'protection', name: 'Защита поверхностей (нанокерамика)', price: 6000, category: 'Обработка' },
-    { id: 'aroma', name: 'Ароматизация помещения', price: 2000, category: 'Обработка' },
-    { id: 'facade', name: 'Мытье фасадов (снаружи окон)', price: 4500, category: 'Уборка' },
-    { id: 'holiday', name: 'Уборка после праздников', price: 5000, category: 'Уборка' },
-    { id: 'fireplace', name: 'Чистка каминов', price: 4000, category: 'Чистка' },
-    { id: 'yard', name: 'Уборка придомовой территории', price: 3500, category: 'Уборка' },
-    { id: 'garage', name: 'Уборка гаража/подвала', price: 4500, category: 'Уборка' },
-  ];
-
-  const openServiceModal = (service: any) => {
+  const openServiceModal = (service: Service) => {
     setSelectedService(service);
     setModalArea('50');
     setSelectedAddons([]);
@@ -130,486 +52,51 @@ const Index = () => {
     return servicePrice + addonsPrice;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!selectedDate || !time || !name || !phone) {
-      toast({
-        title: 'Заполните все поля',
-        description: 'Пожалуйста, укажите дату, время и контактные данные',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    toast({
-      title: 'Заявка отправлена!',
-      description: `Мы свяжемся с вами в ближайшее время для подтверждения записи на ${format(selectedDate, 'dd MMMM', { locale: ru })} в ${time}`,
-    });
-    
-    setSelectedDate(undefined);
-    setTime('');
-    setName('');
-    setPhone('');
-    setComment('');
-  };
-
   return (
     <div className="min-h-screen">
-      <header className="bg-black/80 backdrop-blur-lg border-b-2 border-yellow-400/30 sticky top-0 z-50 py-3 px-4 shadow-xl">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-3 lg:mb-0">
-            <div>
-              <h2 className="font-heading text-2xl lg:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-                Beauty & Clean
-              </h2>
-            </div>
-            <Button 
-              className="lg:hidden bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-4 rounded-xl"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Записаться
-            </Button>
-          </div>
+      <Header
+        serviceType={serviceType}
+        setServiceType={setServiceType}
+        area={area}
+        setArea={setArea}
+        services={services}
+        calculatePrice={calculatePrice}
+        onInfoClick={() => openServiceModal(services.find(s => s.id === serviceType)!)}
+      />
+      
+      <HeroSection />
+      
+      <ServicesSection
+        services={services}
+        onServiceClick={openServiceModal}
+      />
+      
+      <PriceCalculator
+        serviceType={serviceType}
+        setServiceType={setServiceType}
+        area={area}
+        setArea={setArea}
+        services={services}
+        calculatePrice={calculatePrice}
+      />
+      
+      <BookingForm />
+      
+      <ContactSection />
+      
+      <Footer />
 
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-3 lg:gap-4">
-            <div className="w-full lg:w-auto flex items-center gap-2">
-              <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
-                <Select value={serviceType} onValueChange={setServiceType}>
-                  <SelectTrigger className="w-full lg:w-[140px] h-9 border-0 bg-transparent text-white font-medium">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {services.map(service => (
-                      <SelectItem key={service.id} value={service.id}>
-                        {service.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
-                  onClick={() => openServiceModal(services.find(s => s.id === serviceType))}
-                >
-                  <Icon name="Info" size={18} />
-                </Button>
-              </div>
-              
-              <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 backdrop-blur-sm px-4 py-3 rounded-xl border-2 border-yellow-400/50 shadow-lg flex items-center gap-2">
-                <Input
-                  type="number"
-                  value={area}
-                  onChange={(e) => setArea(e.target.value)}
-                  min="20"
-                  max="500"
-                  className="w-full lg:w-20 h-9 border-0 bg-transparent text-white text-center font-medium"
-                />
-                <span className="text-yellow-400 font-semibold">м²</span>
-              </div>
-            </div>
-            
-            <div className="w-full lg:w-auto flex items-center gap-3">
-              <div className="flex-1 lg:flex-none bg-gradient-to-r from-yellow-400 to-yellow-500 px-6 py-3 rounded-xl shadow-2xl border-2 border-yellow-300">
-                <div className="flex items-center justify-center gap-2">
-                  <Icon name="Calculator" size={20} className="text-black" />
-                  <span className="text-black font-bold text-xl lg:text-2xl">{calculatePrice()}₽</span>
-                </div>
-              </div>
-              
-              <Button 
-                className="hidden lg:block bg-white text-black hover:bg-gray-100 font-semibold px-8 py-6 rounded-xl shadow-lg"
-                onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Записаться
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white py-20 px-4">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
-        
-        <div className="max-w-6xl mx-auto relative">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="text-center md:text-left relative z-10 animate-fade-in">
-              <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
-                Красота в каждой детали
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 text-gray-300">
-                Премиальная уборка квартир с профессиональными клинерами. Красота, качество, безупречность
-              </p>
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Записаться на уборку
-                <Icon name="ArrowRight" className="ml-2" size={20} />
-              </Button>
-            </div>
-
-            <div className="relative h-[400px] hidden md:block">
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-6 animate-slide-up">
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl animate-float" style={{ animationDelay: '0s' }}>
-                  <img 
-                    src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/e15a62af-b3c2-4379-b826-3768274bd664.jpg" 
-                    alt="Клинер" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl ml-12 animate-float" style={{ animationDelay: '1s' }}>
-                  <img 
-                    src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/e3a65918-6ffc-4753-9f5f-d8046f3deeba.jpg" 
-                    alt="Клинер" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl animate-float" style={{ animationDelay: '2s' }}>
-                  <img 
-                    src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/8436bcc9-0d30-4b6d-8656-a572c32d4108.jpg" 
-                    alt="Клинер" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-heading text-4xl font-bold text-center mb-12 text-gray-900">
-            Наши услуги
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Card 
-                key={service.id}
-                className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-yellow-400 flex flex-col"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="bg-yellow-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                  <Icon name={service.icon as any} size={32} className="text-yellow-600" />
-                </div>
-                <h3 className="font-heading text-xl font-semibold mb-2 text-gray-900">{service.name}</h3>
-                <p className="text-3xl font-bold text-yellow-600 mb-2">от {service.price}₽</p>
-                <p className="text-gray-600 text-sm mb-4">за 50 м²</p>
-                <Button 
-                  variant="outline" 
-                  className="mt-auto w-full border-yellow-400 text-yellow-600 hover:bg-yellow-50 hover:text-yellow-700 font-semibold"
-                  onClick={() => openServiceModal(service)}
-                >
-                  Подробнее
-                  <Icon name="ArrowRight" className="ml-2" size={16} />
-                </Button>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="font-heading text-4xl font-bold text-center mb-4 text-gray-900">
-            Калькулятор стоимости
-          </h2>
-          <p className="text-center text-gray-600 mb-12">Рассчитайте стоимость уборки за 30 секунд</p>
-          
-          <Card className="p-8 shadow-xl">
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div>
-                <Label htmlFor="service" className="text-base font-semibold mb-2">Тип уборки</Label>
-                <Select value={serviceType} onValueChange={setServiceType}>
-                  <SelectTrigger id="service" className="h-12">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {services.map(service => (
-                      <SelectItem key={service.id} value={service.id}>
-                        {service.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="area" className="text-base font-semibold mb-2">Площадь (м²)</Label>
-                <Input
-                  id="area"
-                  type="number"
-                  value={area}
-                  onChange={(e) => setArea(e.target.value)}
-                  min="20"
-                  max="500"
-                  className="h-12"
-                />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-6 rounded-2xl text-center">
-              <p className="text-lg mb-2 font-semibold">Стоимость уборки</p>
-              <p className="text-5xl font-bold font-heading">{calculatePrice()}₽</p>
-            </div>
-          </Card>
-        </div>
-      </section>
-
-      <section id="booking" className="py-16 px-4 bg-white">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-heading text-4xl font-bold text-center mb-4 text-gray-900">
-            Онлайн-запись
-          </h2>
-          <p className="text-center text-gray-600 mb-12">Выберите удобное время и мы свяжемся с вами</p>
-          
-          <Card className="p-8 shadow-xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="date" className="text-base font-semibold mb-2">Дата уборки</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full h-12 justify-start text-left font-normal"
-                      >
-                        <Icon name="Calendar" className="mr-2" size={18} />
-                        {selectedDate ? format(selectedDate, 'dd MMMM yyyy', { locale: ru }) : 'Выберите дату'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        locale={ru}
-                        disabled={(date) => date < new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <div>
-                  <Label htmlFor="time" className="text-base font-semibold mb-2">Время</Label>
-                  <Select value={time} onValueChange={setTime}>
-                    <SelectTrigger id="time" className="h-12">
-                      <SelectValue placeholder="Выберите время" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="09:00">09:00</SelectItem>
-                      <SelectItem value="11:00">11:00</SelectItem>
-                      <SelectItem value="13:00">13:00</SelectItem>
-                      <SelectItem value="15:00">15:00</SelectItem>
-                      <SelectItem value="17:00">17:00</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="name" className="text-base font-semibold mb-2">Ваше имя</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Иван Иванов"
-                    className="h-12"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="phone" className="text-base font-semibold mb-2">Телефон</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+7 (999) 123-45-67"
-                    className="h-12"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="comment" className="text-base font-semibold mb-2">Комментарий (необязательно)</Label>
-                <Textarea
-                  id="comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="Особые пожелания или детали..."
-                  className="min-h-[100px]"
-                />
-              </div>
-
-              <Button 
-                type="submit" 
-                size="lg" 
-                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600"
-              >
-                Отправить заявку
-                <Icon name="Send" className="ml-2" size={20} />
-              </Button>
-            </form>
-          </Card>
-        </div>
-      </section>
-
-      <section className="py-16 px-4 bg-gradient-to-br from-gray-900 to-black text-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="animate-scale-in">
-              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Phone" size={32} className="text-yellow-400" />
-              </div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Телефон</h3>
-              <p className="text-gray-300">+7 (495) 123-45-67</p>
-            </div>
-
-            <div className="animate-scale-in" style={{ animationDelay: '100ms' }}>
-              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Mail" size={32} className="text-yellow-400" />
-              </div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Email</h3>
-              <p className="text-gray-300">info@cleaning.ru</p>
-            </div>
-
-            <div className="animate-scale-in" style={{ animationDelay: '200ms' }}>
-              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Clock" size={32} className="text-yellow-400" />
-              </div>
-              <h3 className="font-heading text-xl font-semibold mb-2">Режим работы</h3>
-              <p className="text-gray-300">Ежедневно с 8:00 до 22:00</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-gray-900 text-gray-300 py-8 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <p>&copy; 2024 Beauty & Clean. Все права защищены</p>
-        </div>
-      </footer>
-
-      <Dialog open={isServiceModalOpen} onOpenChange={setIsServiceModalOpen}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-3 text-2xl">
-              <div className="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center">
-                <Icon name={selectedService?.icon as any} size={24} className="text-yellow-600" />
-              </div>
-              {selectedService?.name}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <p className="text-gray-600 mb-4">{selectedService?.description}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                <Icon name="CheckCircle" size={20} className="text-yellow-600" />
-                Что включено:
-              </h4>
-              <ul className="space-y-2">
-                {selectedService?.includes?.map((item: string, index: number) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <Icon name="Check" size={18} className="text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="border-t pt-4">
-              <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                <Icon name="Calculator" size={20} className="text-yellow-600" />
-                Рассчитать стоимость:
-              </h4>
-              
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="modal-area" className="text-sm font-medium mb-2 block">
-                    Площадь помещения (м²)
-                  </Label>
-                  <Input
-                    id="modal-area"
-                    type="number"
-                    value={modalArea}
-                    onChange={(e) => setModalArea(e.target.value)}
-                    min="10"
-                    max="500"
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-sm font-medium mb-3 block">
-                    Дополнительные услуги:
-                  </Label>
-                  <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
-                    {['Уборка', 'Чистка', 'Обработка'].map((category) => (
-                      <div key={category}>
-                        <h5 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-2">
-                          <Icon name={category === 'Уборка' ? 'Home' : category === 'Чистка' ? 'Sparkles' : 'Shield'} size={14} />
-                          {category}
-                        </h5>
-                        <div className="space-y-2">
-                          {additionalServices
-                            .filter((addon) => addon.category === category)
-                            .map((addon) => (
-                              <div key={addon.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100">
-                                <Checkbox
-                                  id={`addon-${addon.id}`}
-                                  checked={selectedAddons.includes(addon.id)}
-                                  onCheckedChange={() => toggleAddon(addon.id)}
-                                  className="mt-0.5"
-                                />
-                                <label
-                                  htmlFor={`addon-${addon.id}`}
-                                  className="flex-1 cursor-pointer"
-                                >
-                                  <div className="flex justify-between items-start gap-2">
-                                    <span className="text-sm font-medium text-gray-900">{addon.name}</span>
-                                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">+{addon.price}₽</span>
-                                  </div>
-                                </label>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-6 rounded-xl">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-sm font-medium mb-1 opacity-80">Итоговая стоимость</p>
-                      <p className="text-4xl font-bold">{calculateModalPrice().toLocaleString()}₽</p>
-                    </div>
-                    <Icon name="Sparkles" size={40} className="opacity-50" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <Button 
-              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold py-6"
-              onClick={() => {
-                setIsServiceModalOpen(false);
-                document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Записаться на эту услугу
-              <Icon name="ArrowRight" className="ml-2" size={20} />
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ServiceModal
+        isOpen={isServiceModalOpen}
+        onOpenChange={setIsServiceModalOpen}
+        selectedService={selectedService}
+        modalArea={modalArea}
+        setModalArea={setModalArea}
+        selectedAddons={selectedAddons}
+        toggleAddon={toggleAddon}
+        additionalServices={additionalServices}
+        calculateModalPrice={calculateModalPrice}
+      />
     </div>
   );
 };
