@@ -8,13 +8,16 @@ interface AddressCardProps {
   address: Address;
   maids: Maid[];
   showAssignForm: boolean;
-  onAssign: (maidId: number) => void;
+  onAssign: (maidId: number, salary: number) => void;
   onShowAssignForm: () => void;
   onCancelAssign: () => void;
+  onVerify: (addressId: number) => void;
 }
 
-const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign }: AddressCardProps) => {
+const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify }: AddressCardProps) => {
   const [showPhotos, setShowPhotos] = useState(false);
+  const [selectedMaidId, setSelectedMaidId] = useState<string>('');
+  const [salary, setSalary] = useState<number>(5000);
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -102,22 +105,67 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
       )}
       
       {showAssignForm ? (
-        <div className="flex gap-2 items-center">
-          <Select onValueChange={(value) => onAssign(parseInt(value))}>
-            <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
-              <SelectValue placeholder="Выберите горничную" />
-            </SelectTrigger>
-            <SelectContent>
-              {maids.map((maid) => (
-                <SelectItem key={maid.id} value={maid.id.toString()}>
-                  {maid.full_name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button onClick={onCancelAssign} variant="ghost">
-            Отмена
+        <div className="space-y-3">
+          <div className="flex gap-2 items-center">
+            <Select onValueChange={(value) => setSelectedMaidId(value)}>
+              <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                <SelectValue placeholder="Выберите горничную" />
+              </SelectTrigger>
+              <SelectContent>
+                {maids.map((maid) => (
+                  <SelectItem key={maid.id} value={maid.id.toString()}>
+                    {maid.full_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex gap-2 items-center">
+            <label className="text-white text-sm">Зарплата:</label>
+            <input
+              type="number"
+              value={salary}
+              onChange={(e) => setSalary(Number(e.target.value))}
+              className="bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded w-32"
+              min="0"
+              step="500"
+            />
+            <span className="text-gray-400">₽</span>
+          </div>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => {
+                if (selectedMaidId) {
+                  onAssign(parseInt(selectedMaidId), salary);
+                }
+              }}
+              disabled={!selectedMaidId}
+              className="bg-green-500 hover:bg-green-600"
+            >
+              Назначить
+            </Button>
+            <Button onClick={onCancelAssign} variant="ghost">
+              Отмена
+            </Button>
+          </div>
+        </div>
+      ) : address.status === 'completed' && !address.verified_at ? (
+        <div className="space-y-2">
+          <div className="p-3 bg-yellow-500/20 border border-yellow-500 rounded">
+            <p className="text-yellow-400 text-sm">⏳ Ожидает проверки администратором</p>
+          </div>
+          <Button
+            onClick={() => onVerify(address.id)}
+            className="bg-green-500 hover:bg-green-600 w-full"
+          >
+            <Icon name="CheckCircle" size={16} className="mr-2" />
+            Проверено - начислить зарплату
           </Button>
+        </div>
+      ) : address.verified_at ? (
+        <div className="p-3 bg-green-500/20 border border-green-500 rounded">
+          <p className="text-green-400 text-sm">✅ Проверено {new Date(address.verified_at).toLocaleString('ru-RU')}</p>
+          {address.salary && <p className="text-white font-semibold mt-1">Начислено: {address.salary} ₽</p>}
         </div>
       ) : (
         <Button

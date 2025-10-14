@@ -53,7 +53,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 SELECT a.id, ca.address, ca.client_name, ca.client_phone, 
                        ca.service_type, ca.area, ca.price, ca.scheduled_date, 
                        ca.scheduled_time, ca.status, ca.notes, a.assigned_at,
-                       a.photo_before, a.photo_after, a.photos_uploaded_at
+                       a.photo_before, a.photo_after, a.photos_uploaded_at,
+                       a.salary, a.verified_at
                 FROM assignments a
                 JOIN cleaning_addresses ca ON a.address_id = ca.id
                 WHERE a.maid_id = %s
@@ -78,7 +79,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'assigned_at': str(row[11]) if row[11] else None,
                     'photo_before': row[12],
                     'photo_after': row[13],
-                    'photos_uploaded_at': str(row[14]) if row[14] else None
+                    'photos_uploaded_at': str(row[14]) if row[14] else None,
+                    'salary': float(row[15]) if row[15] else None,
+                    'verified_at': str(row[16]) if row[16] else None
                 })
             
             cur.close()
@@ -158,6 +161,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 }
             
             address_id = result[0]
+            
+            cur.execute("""
+                UPDATE assignments 
+                SET status = %s
+                WHERE id = %s
+            """, (status, int(assignment_id)))
             
             cur.execute("""
                 UPDATE cleaning_addresses 

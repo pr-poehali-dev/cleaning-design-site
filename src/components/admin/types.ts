@@ -22,6 +22,8 @@ export interface Address {
   photo_after?: string;
   photos_uploaded_at?: string;
   assigned_maid_name?: string;
+  salary?: number;
+  verified_at?: string;
 }
 
 export interface Maid {

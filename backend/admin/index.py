@@ -45,7 +45,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         ca.id, ca.address, ca.client_name, ca.client_phone, ca.service_type, 
                         ca.area, ca.price, ca.scheduled_date, ca.scheduled_time, ca.status, ca.notes, ca.created_at,
                         a.photo_before, a.photo_after, a.photos_uploaded_at,
-                        u.full_name as assigned_maid_name
+                        u.full_name as assigned_maid_name,
+                        a.salary, a.verified_at
                     FROM cleaning_addresses ca
                     LEFT JOIN assignments a ON ca.id = a.address_id
                     LEFT JOIN users u ON a.maid_id = u.id
@@ -70,7 +71,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'photo_before': row[12],
                         'photo_after': row[13],
                         'photos_uploaded_at': str(row[14]) if row[14] else None,
-                        'assigned_maid_name': row[15]
+                        'assigned_maid_name': row[15],
+                        'salary': float(row[16]) if row[16] else None,
+                        'verified_at': str(row[17]) if row[17] else None
                     })
                 
                 cur.close()
@@ -215,13 +218,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             body_data = json.loads(event.get('body', '{}'))
             address_id = body_data.get('address_id')
             maid_id = body_data.get('maid_id')
+            salary = body_data.get('salary', 5000)
             
             cur.execute("""
-                INSERT INTO assignments (address_id, maid_id)
-                VALUES (%s, %s)
-                ON CONFLICT (address_id, maid_id) DO NOTHING
+                INSERT INTO assignments (address_id, maid_id, salary, status)
+                VALUES (%s, %s, %s, 'assigned')
+                ON CONFLICT (address_id, maid_id) DO UPDATE 
+                SET salary = EXCLUDED.salary
                 RETURNING id
-            """, (address_id, maid_id))
+            """, (address_id, maid_id, salary))
             
             result = cur.fetchone()
             if result:
@@ -238,6 +243,30 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({'message': 'Assignment created'})
+            }
+        
+        elif action == 'verify' and method == 'POST':
+            body_data = json.loads(event.get('body', '{}'))
+            address_id = body_data.get('address_id')
+            admin_id = body_data.get('admin_id')
+            
+            cur.execute("""
+                UPDATE assignments 
+                SET verified_at = NOW(), verified_by = %s
+                WHERE address_id = %s AND status = 'completed'
+                RETURNING id
+            """, (admin_id, address_id))
+            
+            result = cur.fetchone()
+            if result:
+                conn.commit()
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'message': 'Verified and salary assigned'})
             }
         
         cur.close()

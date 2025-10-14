@@ -138,21 +138,38 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleAssignMaid = async (addressId: number, maidId: number) => {
+  const handleAssignMaid = async (addressId: number, maidId: number, salary: number) => {
     try {
       const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=assign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address_id: addressId, maid_id: maidId }),
+        body: JSON.stringify({ address_id: addressId, maid_id: maidId, salary }),
       });
 
       if (response.ok) {
-        toast({ title: 'Назначено', description: 'Горничная назначена на адрес' });
+        toast({ title: 'Назначено', description: `Горничная назначена на адрес. Зарплата: ${salary} ₽` });
         setShowAssignForm(null);
         loadAddresses();
       }
     } catch (error) {
       toast({ title: 'Ошибка', description: 'Не удалось назначить горничную', variant: 'destructive' });
+    }
+  };
+
+  const handleVerify = async (addressId: number) => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address_id: addressId, admin_id: user?.id }),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Проверено', description: 'Зарплата начислена горничной' });
+        loadAddresses();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось подтвердить выполнение', variant: 'destructive' });
     }
   };
 
@@ -271,9 +288,10 @@ const AdminDashboard = () => {
                   address={address}
                   maids={maids}
                   showAssignForm={showAssignForm === address.id}
-                  onAssign={(maidId) => handleAssignMaid(address.id, maidId)}
+                  onAssign={(maidId, salary) => handleAssignMaid(address.id, maidId, salary)}
                   onShowAssignForm={() => setShowAssignForm(address.id)}
                   onCancelAssign={() => setShowAssignForm(null)}
+                  onVerify={handleVerify}
                 />
               ))}
             </div>

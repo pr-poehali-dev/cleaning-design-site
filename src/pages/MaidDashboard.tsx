@@ -28,6 +28,8 @@ interface Assignment {
   photo_before?: string;
   photo_after?: string;
   photos_uploaded_at?: string;
+  salary?: number;
+  verified_at?: string;
 }
 
 const MaidDashboard = () => {
@@ -69,6 +71,17 @@ const MaidDashboard = () => {
   };
 
   const handleUpdateStatus = async (assignmentId: number, status: string) => {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    
+    if (status === 'completed' && (!assignment?.photo_before && !assignment?.photo_after)) {
+      toast({ 
+        title: 'Внимание', 
+        description: 'Загрузите фото до завершения работы', 
+        variant: 'destructive' 
+      });
+      return;
+    }
+
     try {
       const response = await fetch('https://functions.poehali.dev/9af65dd4-4184-4636-9cc8-b12aa6b82787?action=update-status', {
         method: 'POST',
@@ -77,9 +90,13 @@ const MaidDashboard = () => {
       });
 
       if (response.ok) {
+        const statusMessages: Record<string, string> = {
+          'in_progress': 'Работа начата',
+          'completed': 'Отправлено на проверку администратору',
+        };
         toast({ 
           title: 'Статус обновлен', 
-          description: `Статус изменен на "${statusNames[status]}"` 
+          description: statusMessages[status] || `Статус изменен на "${statusNames[status]}"` 
         });
         if (user) {
           loadAssignments(user.id);
