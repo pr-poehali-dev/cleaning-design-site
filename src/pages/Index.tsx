@@ -7,6 +7,7 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
 import ScrollToTop from '@/components/ScrollToTop';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 import { services, additionalServices, Service } from '@/data/servicesData';
 
@@ -54,26 +55,29 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <Header
-        serviceType={serviceType}
-        setServiceType={setServiceType}
-        area={area}
-        setArea={setArea}
-        services={services}
-        calculatePrice={calculatePrice}
-        onInfoClick={() => openServiceModal(services.find(s => s.id === serviceType)!)}
-      />
-      
-      <HeroSection />
-      
-      <ValueSection />
-      
-      <HowWeWorkSection />
-      
-      <ContactSection />
-      
-      <Footer />
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <Header
+          serviceType={serviceType}
+          setServiceType={setServiceType}
+          area={area}
+          setArea={setArea}
+          services={services}
+          calculatePrice={calculatePrice}
+          onInfoClick={() => openServiceModal(services.find(s => s.id === serviceType)!)}
+        />
+        
+        <HeroSection />
+        
+        <ValueSection />
+        
+        <HowWeWorkSection />
+        
+        <ContactSection />
+        
+        <Footer />
+      </div>
 
       <ServiceModal
         isOpen={isServiceModalOpen}
