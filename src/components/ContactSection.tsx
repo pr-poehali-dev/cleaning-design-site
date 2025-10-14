@@ -18,7 +18,7 @@ const ContactSection = () => {
               <Icon name="Mail" size={32} className="text-yellow-400" />
             </div>
             <h3 className="font-heading text-xl font-semibold mb-2">Email</h3>
-            <p className="text-gray-300">info@cleaning.ru</p>
+            <p className="text-gray-300">hab-agent@mail.ru</p>
           </div>
 
           <div className="animate-scale-in" style={{ animationDelay: '200ms' }}>
