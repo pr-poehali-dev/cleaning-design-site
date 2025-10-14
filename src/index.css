@@ -377,4 +377,19 @@ body {
   .btn-shine:hover::before {
     left: 100%;
   }
+
+  @keyframes sparkle {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0) rotate(180deg);
+    }
+  }
+
+  .animate-sparkle {
+    animation: sparkle 1s ease-out forwards;
+  }
 }
