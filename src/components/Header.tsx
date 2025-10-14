@@ -119,7 +119,7 @@ const Header = ({
             </div>
 
             <Button 
-              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold px-5 py-2 h-auto text-lg"
+              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold px-5 py-2 h-auto text-lg uppercase"
               onClick={() => setIsChatOpen(!isChatOpen)}
             >
               <Icon name="MessageCircle" size={20} />
