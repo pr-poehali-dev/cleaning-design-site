@@ -7,6 +7,7 @@ import BookingForm from '@/components/BookingForm';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
+import ScrollToTop from '@/components/ScrollToTop';
 import { services, additionalServices, Service } from '@/data/servicesData';
 
 const Index = () => {
@@ -97,6 +98,8 @@ const Index = () => {
         additionalServices={additionalServices}
         calculateModalPrice={calculateModalPrice}
       />
+
+      <ScrollToTop />
     </div>
   );
 };
