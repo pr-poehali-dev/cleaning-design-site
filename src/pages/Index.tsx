@@ -4,7 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 import ValueSection from '@/components/ValueSection';
 import ContactSection from '@/components/ContactSection';
-import BookingForm from '@/components/BookingForm';
+import BookingModal from '@/components/BookingModal';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -19,6 +19,7 @@ const Index = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [modalArea, setModalArea] = useState('50');
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const calculatePrice = () => {
     const basePrice = services.find(s => s.id === serviceType)?.price || 10000;
@@ -67,6 +68,7 @@ const Index = () => {
           services={services}
           calculatePrice={calculatePrice}
           onInfoClick={() => openServiceModal(services.find(s => s.id === serviceType)!)}
+          onBookingClick={() => setIsBookingModalOpen(true)}
         />
         
         <HeroSection />
@@ -74,8 +76,6 @@ const Index = () => {
         <ValueSection />
         
         <HowWeWorkSection />
-        
-        <BookingForm />
         
         <ContactSection />
         
@@ -92,6 +92,11 @@ const Index = () => {
         toggleAddon={toggleAddon}
         additionalServices={additionalServices}
         calculateModalPrice={calculateModalPrice}
+      />
+
+      <BookingModal
+        isOpen={isBookingModalOpen}
+        onOpenChange={setIsBookingModalOpen}
       />
 
       <ScrollToTop />

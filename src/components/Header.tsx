@@ -23,6 +23,7 @@ interface HeaderProps {
   services: Service[];
   calculatePrice: () => number;
   onInfoClick: () => void;
+  onBookingClick: () => void;
 }
 
 const Header = ({
@@ -33,6 +34,7 @@ const Header = ({
   services,
   calculatePrice,
   onInfoClick,
+  onBookingClick,
 }: HeaderProps) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [name, setName] = useState('');
@@ -128,7 +130,7 @@ const Header = ({
 
             <Button 
               className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-8 py-3 h-auto text-lg uppercase"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={onBookingClick}
             >
               Записаться
             </Button>
@@ -144,7 +146,7 @@ const Header = ({
             
             <Button 
               className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold text-sm px-4 uppercase"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={onBookingClick}
             >
               Записаться
             </Button>
