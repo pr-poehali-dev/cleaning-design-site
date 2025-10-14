@@ -22,19 +22,19 @@ const AnimatedBackground = () => {
       opacity: number;
     }> = [];
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 120; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        size: Math.random() * 3 + 1.5,
+        opacity: Math.random() * 0.6 + 0.4,
       });
     }
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle) => {
@@ -56,12 +56,12 @@ const AnimatedBackground = () => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          if (distance < 200) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(250, 204, 21, ${0.1 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(250, 204, 21, ${0.3 * (1 - distance / 200)})`;
+            ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
