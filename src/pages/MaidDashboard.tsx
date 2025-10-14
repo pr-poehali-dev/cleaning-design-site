@@ -25,6 +25,9 @@ interface Assignment {
   status: string;
   notes?: string;
   assigned_at: string;
+  photo_before?: string;
+  photo_after?: string;
+  photos_uploaded_at?: string;
 }
 
 const MaidDashboard = () => {
@@ -32,6 +35,9 @@ const MaidDashboard = () => {
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [uploadingPhotos, setUploadingPhotos] = useState<number | null>(null);
+  const [photoBefore, setPhotoBefore] = useState<string>('');
+  const [photoAfter, setPhotoAfter] = useState<string>('');
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -85,6 +91,67 @@ const MaidDashboard = () => {
         description: 'Не удалось обновить статус', 
         variant: 'destructive' 
       });
+    }
+  };
+
+  const handlePhotoUpload = async (assignmentId: number) => {
+    if (!photoBefore && !photoAfter) {
+      toast({ title: 'Ошибка', description: 'Загрузите хотя бы одно фото', variant: 'destructive' });
+      return;
+    }
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/9af65dd4-4184-4636-9cc8-b12aa6b82787?action=upload-photos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          assignment_id: assignmentId,
+          photo_before: photoBefore || null,
+          photo_after: photoAfter || null,
+        }),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Успех', description: 'Фото успешно загружены' });
+        setUploadingPhotos(null);
+        setPhotoBefore('');
+        setPhotoAfter('');
+        if (user) {
+          loadAssignments(user.id);
+        }
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось загрузить фото', variant: 'destructive' });
+    }
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'before' | 'after') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: 'Ошибка', description: 'Размер файла не должен превышать 5МБ', variant: 'destructive' });
+      return;
+    }
+
+    try {
+      const base64 = await convertToBase64(file);
+      if (type === 'before') {
+        setPhotoBefore(base64);
+      } else {
+        setPhotoAfter(base64);
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось обработать файл', variant: 'destructive' });
     }
   };
 
@@ -210,33 +277,109 @@ const MaidDashboard = () => {
                       <p className="text-white">{assignment.notes}</p>
                     </div>
                   )}
-                  <div className="flex gap-2">
-                    {assignment.status === 'assigned' && (
-                      <Button
-                        onClick={() => handleUpdateStatus(assignment.id, 'in_progress')}
-                        className="bg-blue-500 hover:bg-blue-600"
-                      >
-                        <Icon name="Play" size={16} className="mr-2" />
-                        Начать работу
-                      </Button>
-                    )}
-                    {assignment.status === 'in_progress' && (
-                      <Button
-                        onClick={() => handleUpdateStatus(assignment.id, 'completed')}
-                        className="bg-green-500 hover:bg-green-600"
-                      >
-                        <Icon name="CheckCircle" size={16} className="mr-2" />
-                        Завершить
-                      </Button>
-                    )}
-                    <Button
-                      onClick={() => navigate('/checklist')}
-                      className="btn-shine bg-transparent text-white hover:bg-transparent"
-                    >
-                      <Icon name="ClipboardCheck" size={16} className="mr-2" />
-                      Чек-лист
-                    </Button>
-                  </div>
+                  {uploadingPhotos === assignment.id ? (
+                    <div className="space-y-4 mt-4 p-4 bg-gray-700 rounded-lg">
+                      <h4 className="font-bold text-yellow-400">Загрузка фото</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm text-gray-300 mb-2">Фото ДО уборки</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, 'before')}
+                            className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-yellow-400 file:text-black hover:file:bg-yellow-500"
+                          />
+                          {photoBefore && (
+                            <img src={photoBefore} alt="До уборки" className="mt-2 w-full h-32 object-cover rounded" />
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm text-gray-300 mb-2">Фото ПОСЛЕ уборки</label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, 'after')}
+                            className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-yellow-400 file:text-black hover:file:bg-yellow-500"
+                          />
+                          {photoAfter && (
+                            <img src={photoAfter} alt="После уборки" className="mt-2 w-full h-32 object-cover rounded" />
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => handlePhotoUpload(assignment.id)}
+                          className="bg-green-500 hover:bg-green-600"
+                        >
+                          <Icon name="Upload" size={16} className="mr-2" />
+                          Сохранить фото
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setUploadingPhotos(null);
+                            setPhotoBefore('');
+                            setPhotoAfter('');
+                          }}
+                          variant="ghost"
+                        >
+                          Отмена
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {(assignment.photo_before || assignment.photo_after) && (
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                          {assignment.photo_before && (
+                            <div>
+                              <p className="text-gray-400 text-sm mb-2">Фото ДО уборки</p>
+                              <img src={assignment.photo_before} alt="До уборки" className="w-full h-48 object-cover rounded-lg" />
+                            </div>
+                          )}
+                          {assignment.photo_after && (
+                            <div>
+                              <p className="text-gray-400 text-sm mb-2">Фото ПОСЛЕ уборки</p>
+                              <img src={assignment.photo_after} alt="После уборки" className="w-full h-48 object-cover rounded-lg" />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {assignment.status === 'assigned' && (
+                          <Button
+                            onClick={() => handleUpdateStatus(assignment.id, 'in_progress')}
+                            className="bg-blue-500 hover:bg-blue-600"
+                          >
+                            <Icon name="Play" size={16} className="mr-2" />
+                            Начать работу
+                          </Button>
+                        )}
+                        {assignment.status === 'in_progress' && (
+                          <Button
+                            onClick={() => handleUpdateStatus(assignment.id, 'completed')}
+                            className="bg-green-500 hover:bg-green-600"
+                          >
+                            <Icon name="CheckCircle" size={16} className="mr-2" />
+                            Завершить
+                          </Button>
+                        )}
+                        <Button
+                          onClick={() => setUploadingPhotos(assignment.id)}
+                          className="bg-purple-500 hover:bg-purple-600"
+                        >
+                          <Icon name="Camera" size={16} className="mr-2" />
+                          Загрузить фото
+                        </Button>
+                        <Button
+                          onClick={() => navigate('/checklist')}
+                          className="btn-shine bg-transparent text-white hover:bg-transparent"
+                        >
+                          <Icon name="ClipboardCheck" size={16} className="mr-2" />
+                          Чек-лист
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>

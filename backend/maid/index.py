@@ -19,7 +19,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400'
             },
@@ -52,7 +52,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             cur.execute("""
                 SELECT a.id, ca.address, ca.client_name, ca.client_phone, 
                        ca.service_type, ca.area, ca.price, ca.scheduled_date, 
-                       ca.scheduled_time, ca.status, ca.notes, a.assigned_at
+                       ca.scheduled_time, ca.status, ca.notes, a.assigned_at,
+                       a.photo_before, a.photo_after, a.photos_uploaded_at
                 FROM assignments a
                 JOIN cleaning_addresses ca ON a.address_id = ca.id
                 WHERE a.maid_id = %s
@@ -74,7 +75,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'scheduled_time': str(row[8]),
                     'status': row[9],
                     'notes': row[10],
-                    'assigned_at': str(row[11]) if row[11] else None
+                    'assigned_at': str(row[11]) if row[11] else None,
+                    'photo_before': row[12],
+                    'photo_after': row[13],
+                    'photos_uploaded_at': str(row[14]) if row[14] else None
                 })
             
             cur.close()
@@ -83,6 +87,50 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({'assignments': assignments})
+            }
+        
+        elif action == 'upload-photos' and method == 'POST':
+            body_data = json.loads(event.get('body', '{}'))
+            assignment_id = body_data.get('assignment_id')
+            photo_before = body_data.get('photo_before')
+            photo_after = body_data.get('photo_after')
+            
+            if not assignment_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'assignment_id required'})
+                }
+            
+            update_parts = []
+            params = []
+            
+            if photo_before:
+                update_parts.append('photo_before = %s')
+                params.append(photo_before)
+            
+            if photo_after:
+                update_parts.append('photo_after = %s')
+                params.append(photo_after)
+            
+            if update_parts:
+                update_parts.append('photos_uploaded_at = CURRENT_TIMESTAMP')
+                params.append(int(assignment_id))
+                
+                cur.execute(f"""
+                    UPDATE assignments 
+                    SET {', '.join(update_parts)}
+                    WHERE id = %s
+                """, tuple(params))
+                
+                conn.commit()
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'message': 'Photos uploaded'})
             }
         
         elif action == 'update-status' and method == 'POST':
