@@ -23,10 +23,10 @@ const Index = () => {
   const [comment, setComment] = useState('');
 
   const services = [
-    { id: 'basic', name: 'Базовая уборка', price: 2000, icon: 'Home' },
-    { id: 'deep', name: 'Генеральная уборка', price: 4000, icon: 'Sparkles' },
-    { id: 'after', name: 'После ремонта', price: 5000, icon: 'Hammer' },
-    { id: 'office', name: 'Офисная уборка', price: 3500, icon: 'Building' },
+    { id: 'basic', name: 'Базовая уборка', price: 10000, icon: 'Home' },
+    { id: 'deep', name: 'Генеральная уборка', price: 15000, icon: 'Sparkles' },
+    { id: 'after', name: 'После ремонта', price: 20000, icon: 'Hammer' },
+    { id: 'office', name: 'Офисная уборка', price: 12000, icon: 'Building' },
   ];
 
   const calculatePrice = () => {
