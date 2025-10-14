@@ -10,6 +10,7 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import ServiceModal from '@/components/ServiceModal';
 import ScrollToTop from '@/components/ScrollToTop';
+import FallingIcons from '@/components/FallingIcons';
 
 import { services, additionalServices, Service } from '@/data/servicesData';
 
@@ -58,6 +59,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <FallingIcons />
+      
       <Header
         serviceType={serviceType}
         setServiceType={setServiceType}
