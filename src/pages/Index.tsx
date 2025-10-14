@@ -75,7 +75,23 @@ const Index = () => {
       
       <ValueSection />
       
+      <ServicesSection 
+        services={services} 
+        onServiceClick={openServiceModal} 
+      />
+      
+      <PriceCalculator
+        area={area}
+        setArea={setArea}
+        serviceType={serviceType}
+        setServiceType={setServiceType}
+        services={services}
+        calculatePrice={calculatePrice}
+      />
+      
       <HowWeWorkSection />
+      
+      <BookingForm />
       
       <ContactSection />
       
