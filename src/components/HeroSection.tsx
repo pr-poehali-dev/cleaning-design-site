@@ -31,14 +31,6 @@ const HeroSection = () => {
                 </p>
               </div>
             </div>
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Записаться на уборку
-              <Icon name="ArrowRight" className="ml-2" size={20} />
-            </Button>
           </div>
 
           <div className="relative h-[400px] hidden md:block">
