@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative overflow-hidden text-white py-20 px-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
@@ -30,6 +33,23 @@ const HeroSection = () => {
                   Не устроила уборка — Не возьмем деньги
                 </p>
               </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+              <Button
+                onClick={() => navigate('/checklist')}
+                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-6 py-3 uppercase"
+              >
+                <Icon name="ClipboardCheck" size={20} />
+                <span className="ml-2">Чек-лист уборки</span>
+              </Button>
+              <Button
+                onClick={() => navigate('/inspection')}
+                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-6 py-3 uppercase"
+              >
+                <Icon name="Search" size={20} />
+                <span className="ml-2">Чек-лист проверки</span>
+              </Button>
             </div>
           </div>
 
