@@ -112,6 +112,67 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                     'body': json.dumps({'id': new_id, 'message': 'Address created'})
                 }
+            
+            elif method == 'PUT':
+                params = event.get('queryStringParameters', {})
+                address_id = params.get('id')
+                
+                if not address_id:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'id required'})
+                    }
+                
+                body_data = json.loads(event.get('body', '{}'))
+                cur.execute("""
+                    UPDATE cleaning_addresses 
+                    SET address = %s, client_name = %s, client_phone = %s, 
+                        service_type = %s, area = %s, price = %s, 
+                        scheduled_date = %s, scheduled_time = %s, notes = %s
+                    WHERE id = %s
+                """, (
+                    body_data.get('address'),
+                    body_data.get('client_name'),
+                    body_data.get('client_phone'),
+                    body_data.get('service_type'),
+                    body_data.get('area'),
+                    body_data.get('price'),
+                    body_data.get('scheduled_date'),
+                    body_data.get('scheduled_time'),
+                    body_data.get('notes', ''),
+                    int(address_id)
+                ))
+                conn.commit()
+                cur.close()
+                conn.close()
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'message': 'Address updated'})
+                }
+            
+            elif method == 'DELETE':
+                params = event.get('queryStringParameters', {})
+                address_id = params.get('id')
+                
+                if not address_id:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'id required'})
+                    }
+                
+                cur.execute("DELETE FROM assignments WHERE address_id = %s", (int(address_id),))
+                cur.execute("DELETE FROM cleaning_addresses WHERE id = %s", (int(address_id),))
+                conn.commit()
+                cur.close()
+                conn.close()
+                return {
+                    'statusCode': 200,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'message': 'Address deleted'})
+                }
         
         elif action == 'maids':
             if method == 'GET':

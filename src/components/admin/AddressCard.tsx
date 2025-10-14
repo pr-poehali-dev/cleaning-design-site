@@ -12,29 +12,77 @@ interface AddressCardProps {
   onShowAssignForm: () => void;
   onCancelAssign: () => void;
   onVerify: (addressId: number) => void;
+  onEdit: (address: Address) => void;
+  onDelete: (addressId: number) => void;
 }
 
-const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify }: AddressCardProps) => {
+const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete }: AddressCardProps) => {
   const [showPhotos, setShowPhotos] = useState(false);
   const [selectedMaidId, setSelectedMaidId] = useState<string>('');
   const [salary, setSalary] = useState<number>(5000);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <div className="flex justify-between items-start mb-4">
-        <div>
+        <div className="flex-1">
           <h3 className="text-xl font-bold text-yellow-400">{address.address}</h3>
           <p className="text-gray-400">Клиент: {address.client_name} • {address.client_phone}</p>
         </div>
-        <span className={`px-3 py-1 rounded text-sm ${
-          address.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-          address.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
-          address.status === 'assigned' ? 'bg-yellow-500/20 text-yellow-400' :
-          'bg-gray-500/20 text-gray-400'
-        }`}>
-          {statusNames[address.status]}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`px-3 py-1 rounded text-sm ${
+            address.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+            address.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
+            address.status === 'assigned' ? 'bg-yellow-500/20 text-yellow-400' :
+            'bg-gray-500/20 text-gray-400'
+          }`}>
+            {statusNames[address.status]}
+          </span>
+          {!address.verified_at && (
+            <div className="flex gap-1">
+              <Button
+                onClick={() => onEdit(address)}
+                variant="ghost"
+                size="sm"
+                className="text-blue-400 hover:text-blue-300"
+              >
+                <Icon name="Edit" size={16} />
+              </Button>
+              <Button
+                onClick={() => setShowDeleteConfirm(true)}
+                variant="ghost"
+                size="sm"
+                className="text-red-400 hover:text-red-300"
+              >
+                <Icon name="Trash2" size={16} />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
+
+      {showDeleteConfirm && (
+        <div className="mb-4 p-4 bg-red-500/20 border border-red-500 rounded">
+          <p className="text-red-400 mb-3">Удалить этот адрес? Это действие нельзя отменить.</p>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => {
+                onDelete(address.id);
+                setShowDeleteConfirm(false);
+              }}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              Да, удалить
+            </Button>
+            <Button
+              onClick={() => setShowDeleteConfirm(false)}
+              variant="ghost"
+            >
+              Отмена
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="grid md:grid-cols-4 gap-4 mb-4">
         <div>
           <span className="text-gray-400 text-sm">Тип уборки</span>

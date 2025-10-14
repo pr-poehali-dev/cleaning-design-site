@@ -45,6 +45,7 @@ const AdminDashboard = () => {
   });
 
   const [editingMaid, setEditingMaid] = useState<Maid & { password?: string } | null>(null);
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -173,6 +174,70 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleEditAddress = (address: Address) => {
+    setEditingAddress(address);
+    setNewAddress({
+      address: address.address,
+      client_name: address.client_name,
+      client_phone: address.client_phone,
+      service_type: address.service_type,
+      area: address.area,
+      price: address.price,
+      scheduled_date: address.scheduled_date,
+      scheduled_time: address.scheduled_time,
+      notes: address.notes || '',
+    });
+    setShowAddressForm(true);
+  };
+
+  const handleUpdateAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAddress) return;
+
+    try {
+      const response = await fetch(`https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=addresses&id=${editingAddress.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newAddress),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Обновлено', description: 'Адрес успешно обновлён' });
+        setShowAddressForm(false);
+        setEditingAddress(null);
+        setNewAddress({
+          address: '',
+          client_name: '',
+          client_phone: '',
+          service_type: 'basic',
+          area: 50,
+          price: 10000,
+          scheduled_date: '',
+          scheduled_time: '12:00',
+          notes: '',
+        });
+        loadAddresses();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось обновить адрес', variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteAddress = async (addressId: number) => {
+    try {
+      const response = await fetch(`https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=addresses&id=${addressId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast({ title: 'Удалено', description: 'Адрес успешно удалён' });
+        loadAddresses();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось удалить адрес', variant: 'destructive' });
+    }
+  };
+
   const handleUpdateMaid = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingMaid) return;
@@ -267,12 +332,31 @@ const AdminDashboard = () => {
             />
 
             {showAddressForm && (
-              <AddressForm
-                newAddress={newAddress}
-                onAddressChange={setNewAddress}
-                onSubmit={handleAddAddress}
-                onCancel={() => setShowAddressForm(false)}
-              />
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-yellow-400 mb-4">
+                  {editingAddress ? 'Редактировать адрес' : 'Добавить новый адрес'}
+                </h3>
+                <AddressForm
+                  newAddress={newAddress}
+                  onAddressChange={setNewAddress}
+                  onSubmit={editingAddress ? handleUpdateAddress : handleAddAddress}
+                  onCancel={() => {
+                    setShowAddressForm(false);
+                    setEditingAddress(null);
+                    setNewAddress({
+                      address: '',
+                      client_name: '',
+                      client_phone: '',
+                      service_type: 'basic',
+                      area: 50,
+                      price: 10000,
+                      scheduled_date: '',
+                      scheduled_time: '12:00',
+                      notes: '',
+                    });
+                  }}
+                />
+              </div>
             )}
 
             <div className="space-y-4">
@@ -292,6 +376,8 @@ const AdminDashboard = () => {
                   onShowAssignForm={() => setShowAssignForm(address.id)}
                   onCancelAssign={() => setShowAssignForm(null)}
                   onVerify={handleVerify}
+                  onEdit={handleEditAddress}
+                  onDelete={handleDeleteAddress}
                 />
               ))}
             </div>
