@@ -29,8 +29,8 @@ const HowWeWorkSection = () => {
   ];
 
   return (
-    <section className="relative py-16 px-4 bg-black overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-black to-yellow-500/5"></div>
+    <section className="relative py-16 px-4 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-transparent to-yellow-500/5"></div>
       
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-12">
