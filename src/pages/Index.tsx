@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import ServicesSection from '@/components/ServicesSection';
 import PriceCalculator from '@/components/PriceCalculator';
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 import ValueSection from '@/components/ValueSection';
@@ -74,11 +73,6 @@ const Index = () => {
       <HeroSection />
       
       <ValueSection />
-      
-      <ServicesSection 
-        services={services} 
-        onServiceClick={openServiceModal} 
-      />
       
       <PriceCalculator
         area={area}
