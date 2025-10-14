@@ -76,12 +76,20 @@ const Header = ({
               Beauty & Clean
             </h2>
           </div>
-          <Button 
-            className="lg:hidden bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-4 rounded-xl"
-            onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Записаться
-          </Button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <Button 
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-3 py-2 rounded-xl"
+              onClick={() => setIsConsultationOpen(!isConsultationOpen)}
+            >
+              <Icon name="MessageCircle" size={18} />
+            </Button>
+            <Button 
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-4 rounded-xl"
+              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Записаться
+            </Button>
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row items-center justify-between gap-3 lg:gap-4">
