@@ -18,6 +18,10 @@ export interface Address {
   scheduled_time: string;
   status: string;
   notes?: string;
+  photo_before?: string;
+  photo_after?: string;
+  photos_uploaded_at?: string;
+  assigned_maid_name?: string;
 }
 
 export interface Maid {

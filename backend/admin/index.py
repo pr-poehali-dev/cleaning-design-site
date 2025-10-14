@@ -41,10 +41,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if action == 'addresses':
             if method == 'GET':
                 cur.execute("""
-                    SELECT id, address, client_name, client_phone, service_type, 
-                           area, price, scheduled_date, scheduled_time, status, notes, created_at
-                    FROM cleaning_addresses 
-                    ORDER BY scheduled_date DESC, scheduled_time DESC
+                    SELECT 
+                        ca.id, ca.address, ca.client_name, ca.client_phone, ca.service_type, 
+                        ca.area, ca.price, ca.scheduled_date, ca.scheduled_time, ca.status, ca.notes, ca.created_at,
+                        a.photo_before, a.photo_after, a.photos_uploaded_at,
+                        u.full_name as assigned_maid_name
+                    FROM cleaning_addresses ca
+                    LEFT JOIN assignments a ON ca.id = a.address_id
+                    LEFT JOIN users u ON a.maid_id = u.id
+                    ORDER BY ca.scheduled_date DESC, ca.scheduled_time DESC
                 """)
                 rows = cur.fetchall()
                 addresses = []
@@ -61,7 +66,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'scheduled_time': str(row[8]),
                         'status': row[9],
                         'notes': row[10],
-                        'created_at': str(row[11]) if row[11] else None
+                        'created_at': str(row[11]) if row[11] else None,
+                        'photo_before': row[12],
+                        'photo_after': row[13],
+                        'photos_uploaded_at': str(row[14]) if row[14] else None,
+                        'assigned_maid_name': row[15]
                     })
                 
                 cur.close()
