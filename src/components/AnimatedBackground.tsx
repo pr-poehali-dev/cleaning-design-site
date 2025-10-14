@@ -29,7 +29,7 @@ const AnimatedBackground = () => {
         vx: (Math.random() - 0.5) * 0.8,
         vy: (Math.random() - 0.5) * 0.8,
         size: Math.random() * 3 + 1.5,
-        opacity: Math.random() * 0.6 + 0.4,
+        opacity: Math.random() * 0.3 + 0.2,
       });
     }
 
@@ -60,7 +60,7 @@ const AnimatedBackground = () => {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(250, 204, 21, ${0.3 * (1 - distance / 200)})`;
+            ctx.strokeStyle = `rgba(250, 204, 21, ${0.15 * (1 - distance / 200)})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
