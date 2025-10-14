@@ -6,95 +6,91 @@ const HowWeWorkSection = () => {
       number: '01',
       icon: 'Phone',
       title: 'Заявка',
-      description: 'Оставьте заявку через сайт или позвоните. Консультант уточнит детали и рассчитает стоимость'
+      description: 'Оставьте заявку и получите расчёт'
     },
     {
       number: '02',
       icon: 'User',
       title: 'Выезд',
-      description: 'Клинеры приезжают в удобное время с профессиональным оборудованием и средствами'
+      description: 'Приезжаем с оборудованием'
     },
     {
       number: '03',
       icon: 'Sparkles',
       title: 'Уборка',
-      description: 'Выполняем уборку строго по чек-листу. Не пропускаем ни одной детали'
+      description: 'Работаем по чек-листу'
     },
     {
       number: '04',
       icon: 'ClipboardCheck',
       title: 'Проверка',
-      description: 'Вы проверяете качество по чек-листу. Не устроила уборка — не возьмём деньги'
+      description: 'Проверяете качество'
     }
   ];
 
   return (
-    <section className="relative py-32 px-4 bg-black overflow-hidden">
+    <section className="relative py-16 px-4 bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-black to-yellow-500/5"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmFjYzE1IiBzdHJva2Utb3BhY2l0eT0iLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-30"></div>
       
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <div className="inline-block mb-4">
-            <span className="px-4 py-2 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-yellow-400 text-sm font-semibold tracking-wider uppercase">
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-12">
+          <div className="inline-block mb-3">
+            <span className="px-3 py-1 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-yellow-400 text-xs font-semibold tracking-wider uppercase">
               Прозрачный процесс
             </span>
           </div>
-          <h2 className="font-heading text-5xl md:text-6xl font-bold mb-6 text-white">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-3 text-white">
             Как мы работаем
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Премиальный сервис с гарантией качества на каждом этапе
+          <p className="text-gray-400">
+            Премиальный сервис с гарантией качества
           </p>
         </div>
 
         <div className="relative">
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent transform -translate-y-1/2"></div>
+          <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent"></div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {steps.map((step, index) => (
               <div
                 key={index}
                 className="relative group"
-                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="relative bg-gradient-to-br from-gray-900 to-black border border-yellow-400/20 rounded-3xl p-8 hover:border-yellow-400/60 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 h-full">
-                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-yellow-400/50 group-hover:scale-110 transition-transform duration-300 rotate-45">
-                    <span className="text-2xl font-bold text-black -rotate-45">{step.number}</span>
+                <div className="relative bg-gradient-to-br from-gray-900 to-black border border-yellow-400/20 rounded-2xl p-5 hover:border-yellow-400/60 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 rotate-45">
+                    <span className="text-sm font-bold text-black -rotate-45">{step.number}</span>
                   </div>
 
-                  <div className="mt-8 mb-6 flex justify-center">
-                    <div className="w-20 h-20 bg-gradient-to-br from-yellow-400/10 to-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-400/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                      <Icon name={step.icon as any} size={40} className="text-yellow-400" />
+                  <div className="mt-4 mb-3 flex justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-yellow-400/10 to-yellow-500/10 rounded-xl flex items-center justify-center border border-yellow-400/30 group-hover:scale-110 transition-all duration-300">
+                      <Icon name={step.icon as any} size={24} className="text-yellow-400" />
                     </div>
                   </div>
 
-                  <h3 className="font-heading text-2xl font-bold mb-4 text-white text-center">
+                  <h3 className="font-heading text-lg font-bold mb-2 text-white text-center">
                     {step.title}
                   </h3>
                   
-                  <p className="text-gray-400 text-center leading-relaxed">
+                  <p className="text-gray-400 text-center text-sm leading-snug">
                     {step.description}
                   </p>
-
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-yellow-400/0 to-yellow-500/0 group-hover:from-yellow-400/5 group-hover:to-yellow-500/5 transition-all duration-500 pointer-events-none"></div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="mt-20 text-center">
+        <div className="mt-12 text-center">
           <div className="inline-block relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-3xl blur-xl opacity-30"></div>
-            <div className="relative bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-3xl p-10 shadow-2xl">
-              <div className="flex items-center gap-6 flex-wrap justify-center">
-                <div className="w-16 h-16 bg-black/20 rounded-2xl flex items-center justify-center">
-                  <Icon name="Clock" size={36} className="text-black" />
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl blur-lg opacity-20"></div>
+            <div className="relative bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl p-6 shadow-xl">
+              <div className="flex items-center gap-4 flex-wrap justify-center">
+                <div className="w-12 h-12 bg-black/20 rounded-xl flex items-center justify-center">
+                  <Icon name="Clock" size={24} className="text-black" />
                 </div>
                 <div className="text-left">
-                  <p className="text-black font-bold text-3xl mb-1">Средняя уборка — 2-3 часа</p>
-                  <p className="text-black/70 text-lg">Точное время зависит от площади и типа уборки</p>
+                  <p className="text-black font-bold text-xl">Средняя уборка — 2-3 часа</p>
+                  <p className="text-black/70 text-sm">Точное время зависит от площади</p>
                 </div>
               </div>
             </div>
