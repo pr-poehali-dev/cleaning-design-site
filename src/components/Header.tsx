@@ -93,7 +93,7 @@ const Header = ({
           </div>
           <div className="flex items-center gap-2 lg:hidden">
             <Button 
-              className="bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 font-semibold px-3 py-2 rounded-xl"
+              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-3 py-2 rounded-xl"
               onClick={() => window.location.href = 'tel:+79141965172'}
             >
               <Icon name="Phone" size={18} />
@@ -160,7 +160,7 @@ const Header = ({
             </div>
             
             <Button 
-              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 font-semibold px-6 py-6 rounded-xl shadow-lg"
+              className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-6 py-6 rounded-xl shadow-lg"
               onClick={() => window.location.href = 'tel:+79141965172'}
             >
               <Icon name="Phone" size={20} />
