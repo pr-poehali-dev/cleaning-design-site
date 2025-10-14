@@ -29,59 +29,73 @@ const HowWeWorkSection = () => {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+    <section className="relative py-32 px-4 bg-black overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-black to-yellow-500/5"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmFjYzE1IiBzdHJva2Utb3BhY2l0eT0iLjA1Ii8+PC9nPjwvc3ZnPg==')] opacity-30"></div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-20">
+          <div className="inline-block mb-4">
+            <span className="px-4 py-2 bg-yellow-400/10 border border-yellow-400/30 rounded-full text-yellow-400 text-sm font-semibold tracking-wider uppercase">
+              Прозрачный процесс
+            </span>
+          </div>
+          <h2 className="font-heading text-5xl md:text-6xl font-bold mb-6 text-white">
             Как мы работаем
           </h2>
-          <p className="text-xl text-gray-600">
-            Простой и понятный процесс от заявки до идеальной чистоты
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Премиальный сервис с гарантией качества на каждом этапе
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className="relative group"
-            >
-              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-yellow-400">
-                <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-2xl font-bold text-black">{step.number}</span>
-                </div>
-
-                <div className="mt-4 mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-yellow-500/20 rounded-xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
-                    <Icon name={step.icon as any} size={32} className="text-yellow-600" />
+        <div className="relative">
+          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent transform -translate-y-1/2"></div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+            {steps.map((step, index) => (
+              <div
+                key={index}
+                className="relative group"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="relative bg-gradient-to-br from-gray-900 to-black border border-yellow-400/20 rounded-3xl p-8 hover:border-yellow-400/60 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-400/10 h-full">
+                  <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-yellow-400/50 group-hover:scale-110 transition-transform duration-300 rotate-45">
+                    <span className="text-2xl font-bold text-black -rotate-45">{step.number}</span>
                   </div>
-                </div>
 
-                <h3 className="font-heading text-xl font-bold mb-3 text-gray-900 text-center">
-                  {step.title}
-                </h3>
-                
-                <p className="text-gray-600 text-center leading-relaxed">
-                  {step.description}
-                </p>
+                  <div className="mt-8 mb-6 flex justify-center">
+                    <div className="w-20 h-20 bg-gradient-to-br from-yellow-400/10 to-yellow-500/10 rounded-2xl flex items-center justify-center border border-yellow-400/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                      <Icon name={step.icon as any} size={40} className="text-yellow-400" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-heading text-2xl font-bold mb-4 text-white text-center">
+                    {step.title}
+                  </h3>
+                  
+                  <p className="text-gray-400 text-center leading-relaxed">
+                    {step.description}
+                  </p>
+
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-yellow-400/0 to-yellow-500/0 group-hover:from-yellow-400/5 group-hover:to-yellow-500/5 transition-all duration-500 pointer-events-none"></div>
+                </div>
               </div>
-
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <Icon name="ArrowRight" size={24} className="text-yellow-400" />
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <div className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl p-8 shadow-2xl">
-            <div className="flex items-center gap-4 flex-wrap justify-center">
-              <Icon name="Clock" size={32} className="text-black" />
-              <div className="text-left">
-                <p className="text-black font-bold text-2xl">Средняя уборка — 2-3 часа</p>
-                <p className="text-black/80">Точное время зависит от площади и типа уборки</p>
+        <div className="mt-20 text-center">
+          <div className="inline-block relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-3xl blur-xl opacity-30"></div>
+            <div className="relative bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-3xl p-10 shadow-2xl">
+              <div className="flex items-center gap-6 flex-wrap justify-center">
+                <div className="w-16 h-16 bg-black/20 rounded-2xl flex items-center justify-center">
+                  <Icon name="Clock" size={36} className="text-black" />
+                </div>
+                <div className="text-left">
+                  <p className="text-black font-bold text-3xl mb-1">Средняя уборка — 2-3 часа</p>
+                  <p className="text-black/70 text-lg">Точное время зависит от площади и типа уборки</p>
+                </div>
               </div>
             </div>
           </div>
