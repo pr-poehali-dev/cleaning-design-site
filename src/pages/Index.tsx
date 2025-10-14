@@ -70,13 +70,35 @@ const Index = () => {
   };
 
   const additionalServices = [
-    { id: 'windows', name: 'Мойка окон', price: 3000 },
-    { id: 'steam', name: 'Обработка паром помещения', price: 4000 },
-    { id: 'ozone', name: 'Озонирование', price: 2500 },
-    { id: 'furniture', name: 'Химчистка мебели', price: 5000 },
-    { id: 'carpet', name: 'Химчистка ковролина', price: 4500 },
-    { id: 'mold', name: 'Удаление плесени', price: 6000 },
-    { id: 'disinfection', name: 'Дезинфекция', price: 3500 },
+    { id: 'windows', name: 'Мойка окон', price: 3000, category: 'Уборка' },
+    { id: 'steam', name: 'Обработка паром помещения', price: 4000, category: 'Обработка' },
+    { id: 'ozone', name: 'Озонирование', price: 2500, category: 'Обработка' },
+    { id: 'furniture', name: 'Химчистка мебели', price: 5000, category: 'Чистка' },
+    { id: 'carpet', name: 'Химчистка ковролина', price: 4500, category: 'Чистка' },
+    { id: 'mold', name: 'Удаление плесени', price: 6000, category: 'Обработка' },
+    { id: 'disinfection', name: 'Дезинфекция', price: 3500, category: 'Обработка' },
+    { id: 'ironing', name: 'Глажка белья', price: 2000, category: 'Уборка' },
+    { id: 'curtains', name: 'Стирка штор', price: 3500, category: 'Уборка' },
+    { id: 'blinds', name: 'Чистка жалюзи', price: 2500, category: 'Чистка' },
+    { id: 'dishes', name: 'Мытье посуды', price: 1500, category: 'Уборка' },
+    { id: 'balcony', name: 'Уборка балкона/лоджии', price: 2000, category: 'Уборка' },
+    { id: 'hood', name: 'Чистка вытяжки', price: 2500, category: 'Чистка' },
+    { id: 'chandelier', name: 'Чистка люстр и светильников', price: 3000, category: 'Чистка' },
+    { id: 'parquet', name: 'Полировка паркета', price: 5000, category: 'Чистка' },
+    { id: 'plants', name: 'Уход за растениями', price: 1500, category: 'Уборка' },
+    { id: 'organize', name: 'Организация пространства', price: 4000, category: 'Уборка' },
+    { id: 'mattress', name: 'Чистка матрасов', price: 4500, category: 'Чистка' },
+    { id: 'stains', name: 'Удаление пятен', price: 3000, category: 'Чистка' },
+    { id: 'antibacterial', name: 'Антибактериальная обработка', price: 3500, category: 'Обработка' },
+    { id: 'odor', name: 'Устранение запахов', price: 3000, category: 'Обработка' },
+    { id: 'insects', name: 'Обработка от насекомых', price: 5000, category: 'Обработка' },
+    { id: 'protection', name: 'Защита поверхностей (нанокерамика)', price: 6000, category: 'Обработка' },
+    { id: 'aroma', name: 'Ароматизация помещения', price: 2000, category: 'Обработка' },
+    { id: 'facade', name: 'Мытье фасадов (снаружи окон)', price: 4500, category: 'Уборка' },
+    { id: 'holiday', name: 'Уборка после праздников', price: 5000, category: 'Уборка' },
+    { id: 'fireplace', name: 'Чистка каминов', price: 4000, category: 'Чистка' },
+    { id: 'yard', name: 'Уборка придомовой территории', price: 3500, category: 'Уборка' },
+    { id: 'garage', name: 'Уборка гаража/подвала', price: 4500, category: 'Уборка' },
   ];
 
   const openServiceModal = (service: any) => {
@@ -528,24 +550,36 @@ const Index = () => {
                   <Label className="text-sm font-medium mb-3 block">
                     Дополнительные услуги:
                   </Label>
-                  <div className="space-y-3">
-                    {additionalServices.map((addon) => (
-                      <div key={addon.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                        <Checkbox
-                          id={`addon-${addon.id}`}
-                          checked={selectedAddons.includes(addon.id)}
-                          onCheckedChange={() => toggleAddon(addon.id)}
-                          className="mt-0.5"
-                        />
-                        <label
-                          htmlFor={`addon-${addon.id}`}
-                          className="flex-1 cursor-pointer"
-                        >
-                          <div className="flex justify-between items-start">
-                            <span className="text-sm font-medium text-gray-900">{addon.name}</span>
-                            <span className="text-sm font-semibold text-yellow-600">+{addon.price}₽</span>
-                          </div>
-                        </label>
+                  <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
+                    {['Уборка', 'Чистка', 'Обработка'].map((category) => (
+                      <div key={category}>
+                        <h5 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-2">
+                          <Icon name={category === 'Уборка' ? 'Home' : category === 'Чистка' ? 'Sparkles' : 'Shield'} size={14} />
+                          {category}
+                        </h5>
+                        <div className="space-y-2">
+                          {additionalServices
+                            .filter((addon) => addon.category === category)
+                            .map((addon) => (
+                              <div key={addon.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100">
+                                <Checkbox
+                                  id={`addon-${addon.id}`}
+                                  checked={selectedAddons.includes(addon.id)}
+                                  onCheckedChange={() => toggleAddon(addon.id)}
+                                  className="mt-0.5"
+                                />
+                                <label
+                                  htmlFor={`addon-${addon.id}`}
+                                  className="flex-1 cursor-pointer"
+                                >
+                                  <div className="flex justify-between items-start gap-2">
+                                    <span className="text-sm font-medium text-gray-900">{addon.name}</span>
+                                    <span className="text-sm font-semibold text-yellow-600 whitespace-nowrap">+{addon.price}₽</span>
+                                  </div>
+                                </label>
+                              </div>
+                            ))}
+                        </div>
                       </div>
                     ))}
                   </div>
