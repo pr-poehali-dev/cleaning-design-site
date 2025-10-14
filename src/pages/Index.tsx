@@ -57,7 +57,7 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <AnimatedBackground />
-      <div className="relative z-10">
+      <div className="relative z-20">
         <Header
           serviceType={serviceType}
           setServiceType={setServiceType}
