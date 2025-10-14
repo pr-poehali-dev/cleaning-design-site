@@ -12,13 +12,24 @@ const HeroSection = () => {
             <h1 className="font-heading text-3xl md:text-4xl font-bold mb-6 hero-title-gradient leading-tight">
               ГАРАНТИРУЕМ КАЧЕСТВЕННУЮ УБОРКУ
             </h1>
-            <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
-              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle">
-                <Icon name="ClipboardCheck" size={28} className="text-black" />
+            <div className="space-y-4 mb-8">
+              <div className="flex items-center justify-center md:justify-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle">
+                  <Icon name="ClipboardCheck" size={28} className="text-black" />
+                </div>
+                <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
+                  Проверка на чистоту по чек-листу
+                </p>
               </div>
-              <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
-                Проверка на чистоту по чек-листу
-              </p>
+              
+              <div className="flex items-center justify-center md:justify-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle" style={{ animationDelay: '0.2s' }}>
+                  <Icon name="ShieldCheck" size={28} className="text-black" />
+                </div>
+                <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
+                  Не устроила уборка — Не возьмем деньги
+                </p>
+              </div>
             </div>
             <Button 
               size="lg" 
