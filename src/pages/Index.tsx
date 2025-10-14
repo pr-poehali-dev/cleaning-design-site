@@ -8,6 +8,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 import { format } from 'date-fns';
@@ -24,6 +25,8 @@ const Index = () => {
   const [comment, setComment] = useState('');
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<any>(null);
+  const [modalArea, setModalArea] = useState('50');
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
   const services = [
     { 
@@ -66,9 +69,43 @@ const Index = () => {
     return Math.round(basePrice * areaMultiplier);
   };
 
+  const additionalServices = [
+    { id: 'windows', name: 'Мойка окон', price: 3000 },
+    { id: 'steam', name: 'Обработка паром помещения', price: 4000 },
+    { id: 'ozone', name: 'Озонирование', price: 2500 },
+    { id: 'furniture', name: 'Химчистка мебели', price: 5000 },
+    { id: 'carpet', name: 'Химчистка ковролина', price: 4500 },
+    { id: 'mold', name: 'Удаление плесени', price: 6000 },
+    { id: 'disinfection', name: 'Дезинфекция', price: 3500 },
+  ];
+
   const openServiceModal = (service: any) => {
     setSelectedService(service);
+    setModalArea('50');
+    setSelectedAddons([]);
     setIsServiceModalOpen(true);
+  };
+
+  const toggleAddon = (addonId: string) => {
+    setSelectedAddons(prev => 
+      prev.includes(addonId) 
+        ? prev.filter(id => id !== addonId)
+        : [...prev, addonId]
+    );
+  };
+
+  const calculateModalPrice = () => {
+    if (!selectedService) return 0;
+    const basePrice = selectedService.price;
+    const areaMultiplier = parseInt(modalArea) / 50;
+    const servicePrice = Math.round(basePrice * areaMultiplier);
+    
+    const addonsPrice = selectedAddons.reduce((sum, addonId) => {
+      const addon = additionalServices.find(a => a.id === addonId);
+      return sum + (addon ? addon.price : 0);
+    }, 0);
+    
+    return servicePrice + addonsPrice;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -449,11 +486,6 @@ const Index = () => {
           <div className="space-y-4">
             <div>
               <p className="text-gray-600 mb-4">{selectedService?.description}</p>
-              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-4 rounded-xl inline-block">
-                <p className="text-sm font-medium mb-1">Стоимость</p>
-                <p className="text-3xl font-bold">{selectedService?.price}₽</p>
-                <p className="text-sm opacity-80">за 50 м²</p>
-              </div>
             </div>
             <div>
               <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
@@ -469,6 +501,68 @@ const Index = () => {
                 ))}
               </ul>
             </div>
+
+            <div className="border-t pt-4">
+              <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                <Icon name="Calculator" size={20} className="text-yellow-600" />
+                Рассчитать стоимость:
+              </h4>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="modal-area" className="text-sm font-medium mb-2 block">
+                    Площадь помещения (м²)
+                  </Label>
+                  <Input
+                    id="modal-area"
+                    type="number"
+                    value={modalArea}
+                    onChange={(e) => setModalArea(e.target.value)}
+                    min="10"
+                    max="500"
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium mb-3 block">
+                    Дополнительные услуги:
+                  </Label>
+                  <div className="space-y-3">
+                    {additionalServices.map((addon) => (
+                      <div key={addon.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <Checkbox
+                          id={`addon-${addon.id}`}
+                          checked={selectedAddons.includes(addon.id)}
+                          onCheckedChange={() => toggleAddon(addon.id)}
+                          className="mt-0.5"
+                        />
+                        <label
+                          htmlFor={`addon-${addon.id}`}
+                          className="flex-1 cursor-pointer"
+                        >
+                          <div className="flex justify-between items-start">
+                            <span className="text-sm font-medium text-gray-900">{addon.name}</span>
+                            <span className="text-sm font-semibold text-yellow-600">+{addon.price}₽</span>
+                          </div>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-6 rounded-xl">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-sm font-medium mb-1 opacity-80">Итоговая стоимость</p>
+                      <p className="text-4xl font-bold">{calculateModalPrice().toLocaleString()}₽</p>
+                    </div>
+                    <Icon name="Sparkles" size={40} className="opacity-50" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <Button 
               className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold py-6"
               onClick={() => {
