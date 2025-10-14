@@ -121,7 +121,7 @@ const Header = ({
             </div>
 
             <Button 
-              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold px-5 py-2 h-auto text-lg uppercase"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-8 py-3 h-auto text-lg uppercase"
               onClick={() => setIsChatOpen(!isChatOpen)}
             >
               <Icon name="MessageCircle" size={20} />
@@ -138,7 +138,7 @@ const Header = ({
 
           <div className="flex items-center gap-2 lg:hidden">
             <Button 
-              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-4 py-2 uppercase"
               onClick={() => setIsChatOpen(!isChatOpen)}
             >
               <Icon name="MessageCircle" size={18} />
