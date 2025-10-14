@@ -174,6 +174,10 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleReassign = (addressId: number) => {
+    setShowAssignForm(addressId);
+  };
+
   const handleEditAddress = (address: Address) => {
     setEditingAddress(address);
     setNewAddress({
@@ -378,6 +382,7 @@ const AdminDashboard = () => {
                   onVerify={handleVerify}
                   onEdit={handleEditAddress}
                   onDelete={handleDeleteAddress}
+                  onReassign={handleReassign}
                 />
               ))}
             </div>

@@ -330,6 +330,54 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'message': 'Verified and salary assigned'})
             }
         
+        elif action == 'salary-stats' and method == 'GET':
+            cur.execute("""
+                SELECT 
+                    u.id as maid_id,
+                    u.full_name as maid_name,
+                    COALESCE(SUM(a.salary), 0) as total_earned,
+                    COUNT(CASE WHEN a.verified_at IS NOT NULL THEN 1 END) as completed_count,
+                    COALESCE(SUM(CASE 
+                        WHEN EXTRACT(MONTH FROM a.verified_at) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM a.verified_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+                        THEN a.salary ELSE 0 END), 0) as current_month_earned,
+                    COUNT(CASE 
+                        WHEN EXTRACT(MONTH FROM a.verified_at) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM a.verified_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+                        THEN 1 END) as current_month_count
+                FROM users u
+                LEFT JOIN assignments a ON u.id = a.maid_id
+                WHERE u.role = 'maid'
+                GROUP BY u.id, u.full_name
+                ORDER BY total_earned DESC
+            """)
+            
+            rows = cur.fetchall()
+            stats = []
+            total_paid = 0
+            
+            for row in rows:
+                total_earned = float(row[2]) if row[2] else 0
+                current_month_earned = float(row[4]) if row[4] else 0
+                total_paid += total_earned
+                
+                stats.append({
+                    'maid_id': row[0],
+                    'maid_name': row[1],
+                    'total_earned': total_earned,
+                    'completed_count': row[3],
+                    'current_month_earned': current_month_earned,
+                    'current_month_count': row[5]
+                })
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'stats': stats, 'total_paid': total_paid})
+            }
+        
         cur.close()
         conn.close()
         return {

@@ -14,12 +14,13 @@ interface AddressCardProps {
   onVerify: (addressId: number) => void;
   onEdit: (address: Address) => void;
   onDelete: (addressId: number) => void;
+  onReassign: (addressId: number) => void;
 }
 
-const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete }: AddressCardProps) => {
+const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete, onReassign }: AddressCardProps) => {
   const [showPhotos, setShowPhotos] = useState(false);
   const [selectedMaidId, setSelectedMaidId] = useState<string>('');
-  const [salary, setSalary] = useState<number>(5000);
+  const [salary, setSalary] = useState<number>(address.salary || 5000);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   return (
@@ -107,8 +108,24 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
 
       {address.assigned_maid_name && (
         <div className="mb-4 p-3 bg-gray-700 rounded">
-          <span className="text-gray-400 text-sm">Назначена горничная:</span>
-          <p className="text-white font-semibold">{address.assigned_maid_name}</p>
+          <div className="flex justify-between items-center">
+            <div>
+              <span className="text-gray-400 text-sm">Назначена горничная:</span>
+              <p className="text-white font-semibold">{address.assigned_maid_name}</p>
+              {address.salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.salary} ₽</p>}
+            </div>
+            {!address.verified_at && (
+              <Button
+                onClick={() => onReassign(address.id)}
+                variant="ghost"
+                size="sm"
+                className="text-blue-400 hover:text-blue-300"
+              >
+                <Icon name="UserCog" size={16} className="mr-1" />
+                Изменить
+              </Button>
+            )}
+          </div>
         </div>
       )}
 
