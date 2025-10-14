@@ -89,14 +89,30 @@ const Header = ({
               <Icon name="Phone" size={18} />
               <span className="ml-2">+7 (914) 196-51-72</span>
             </Button>
+
+            <Button 
+              className="bg-white text-black hover:bg-gray-100 font-semibold"
+              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Записаться
+            </Button>
           </div>
 
-          <Button 
-            className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold lg:hidden"
-            onClick={() => window.location.href = 'tel:+79141965172'}
-          >
-            <Icon name="Phone" size={18} />
-          </Button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <Button 
+              className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold"
+              onClick={() => window.location.href = 'tel:+79141965172'}
+            >
+              <Icon name="Phone" size={18} />
+            </Button>
+            
+            <Button 
+              className="bg-white text-black hover:bg-gray-100 font-semibold text-sm px-3"
+              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Записаться
+            </Button>
+          </div>
         </div>
 
         <div className="lg:hidden mt-3 flex flex-wrap items-center gap-2">
