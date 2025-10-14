@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Checklist from "./pages/Checklist";
 import InspectionChecklist from "./pages/InspectionChecklist";
+import Login from "./pages/Login";
+import AdminDashboard from "./pages/AdminDashboard";
+import MaidDashboard from "./pages/MaidDashboard";
 import NotFound from "./pages/NotFound";
 import CursorSparkles from "./components/CursorSparkles";
 
@@ -23,6 +26,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/checklist" element={<Checklist />} />
           <Route path="/inspection" element={<InspectionChecklist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/maid" element={<MaidDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

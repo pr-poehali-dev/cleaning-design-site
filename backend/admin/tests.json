@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Get all addresses",
+      "method": "GET",
+      "path": "/?action=addresses",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "addresses": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get all maids",
+      "method": "GET",
+      "path": "/?action=maids",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "maids": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

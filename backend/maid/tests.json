@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Get assignments with maid_id",
+      "method": "GET",
+      "path": "/?action=assignments&maid_id=1",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "assignments": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get assignments without maid_id",
+      "method": "GET",
+      "path": "/?action=assignments",
+      "expectedStatus": 400,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
