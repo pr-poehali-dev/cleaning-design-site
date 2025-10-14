@@ -12,9 +12,14 @@ const HeroSection = () => {
             <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
               ГАРАНТИРУЕМ КАЧЕСТВЕННУЮ УБОРКУ
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-300">
-              Проверка на чистоту по чек-листу
-            </p>
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle">
+                <Icon name="ClipboardCheck" size={28} className="text-black" />
+              </div>
+              <p className="text-xl md:text-2xl text-gray-300">
+                Проверка на чистоту по чек-листу
+              </p>
+            </div>
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
