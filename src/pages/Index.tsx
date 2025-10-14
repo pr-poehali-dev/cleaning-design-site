@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import PriceCalculator from '@/components/PriceCalculator';
 import HowWeWorkSection from '@/components/HowWeWorkSection';
 import ValueSection from '@/components/ValueSection';
 import BookingForm from '@/components/BookingForm';
@@ -73,15 +72,6 @@ const Index = () => {
       <HeroSection />
       
       <ValueSection />
-      
-      <PriceCalculator
-        area={area}
-        setArea={setArea}
-        serviceType={serviceType}
-        setServiceType={setServiceType}
-        services={services}
-        calculatePrice={calculatePrice}
-      />
       
       <HowWeWorkSection />
       
