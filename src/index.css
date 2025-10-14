@@ -110,6 +110,9 @@ body {
     @apply text-foreground;
     background: #000;
     font-family: "Inter", sans-serif;
+    cursor:
+      url("https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/c2c2c809-8629-402e-99fa-3cc4d1f27168.jpg"),
+      auto;
   }
 
   h1,
