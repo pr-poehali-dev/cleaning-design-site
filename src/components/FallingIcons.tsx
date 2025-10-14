@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import Icon from '@/components/ui/icon';
 
 interface FallingIcon {
   id: number;
-  icon: string;
+  emoji: string;
   left: number;
   duration: number;
   delay: number;
@@ -13,19 +12,19 @@ interface FallingIcon {
 const FallingIcons = () => {
   const [icons, setIcons] = useState<FallingIcon[]>([]);
 
-  const cleaningIcons = ['Sparkles', 'Droplet', 'Wind', 'Star', 'Zap', 'Circle'];
+  const cleaningEmojis = ['🧹', '🧽', '🪣', '🧴', '💧', '✨', '🧼', '🪥'];
 
   useEffect(() => {
     const generateIcons = () => {
       const newIcons: FallingIcon[] = [];
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
         newIcons.push({
           id: i,
-          icon: cleaningIcons[Math.floor(Math.random() * cleaningIcons.length)],
+          emoji: cleaningEmojis[Math.floor(Math.random() * cleaningEmojis.length)],
           left: Math.random() * 100,
-          duration: 8 + Math.random() * 7,
-          delay: Math.random() * 5,
-          size: 20 + Math.random() * 20,
+          duration: 10 + Math.random() * 10,
+          delay: Math.random() * 8,
+          size: 30 + Math.random() * 30,
         });
       }
       setIcons(newIcons);
@@ -39,19 +38,17 @@ const FallingIcons = () => {
       {icons.map((item) => (
         <div
           key={item.id}
-          className="absolute animate-fall opacity-20"
+          className="absolute animate-fall"
           style={{
             left: `${item.left}%`,
-            top: '-50px',
+            top: '-100px',
             animationDuration: `${item.duration}s`,
             animationDelay: `${item.delay}s`,
+            fontSize: `${item.size}px`,
+            opacity: 0.3,
           }}
         >
-          <Icon 
-            name={item.icon as any} 
-            size={item.size} 
-            className="text-yellow-400"
-          />
+          {item.emoji}
         </div>
       ))}
     </div>
