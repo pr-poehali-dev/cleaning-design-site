@@ -46,8 +46,8 @@ const ServiceModal = ({
 }: ServiceModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-3 text-2xl">
             <div className="bg-yellow-50 w-12 h-12 rounded-full flex items-center justify-center">
               <Icon name={selectedService?.icon as any} size={24} className="text-yellow-600" />
@@ -55,7 +55,7 @@ const ServiceModal = ({
             {selectedService?.name}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto pr-2">
           <div>
             <p className="text-gray-600 mb-4">{selectedService?.description}</p>
           </div>
@@ -100,7 +100,7 @@ const ServiceModal = ({
                 <Label className="text-sm font-medium mb-3 block">
                   Дополнительные услуги:
                 </Label>
-                <div className="max-h-[400px] overflow-y-auto space-y-4 pr-2">
+                <div className="space-y-4">
                   {['Уборка', 'Чистка', 'Обработка'].map((category) => (
                     <div key={category}>
                       <h5 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-2">
@@ -147,6 +147,9 @@ const ServiceModal = ({
             </div>
           </div>
 
+        </div>
+        
+        <div className="flex-shrink-0 pt-4 border-t">
           <Button 
             className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold py-6"
             onClick={() => {
