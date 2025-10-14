@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ServicesSection from '@/components/ServicesSection';
 import PriceCalculator from '@/components/PriceCalculator';
+import HowWeWorkSection from '@/components/HowWeWorkSection';
 import BookingForm from '@/components/BookingForm';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
@@ -68,7 +69,7 @@ const Index = () => {
       
       <HeroSection />
       
-      <BookingForm />
+      <HowWeWorkSection />
       
       <ContactSection />
       
