@@ -45,30 +45,23 @@ const BookingForm = () => {
   };
 
   return (
-    <section id="booking" className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-5xl md:text-6xl font-bold mb-4 gradient-text">
-            Онлайн-запись
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Выберите удобное время, и мы свяжемся с вами для подтверждения
-          </p>
-        </div>
+    <section id="booking" className="py-16 px-4 bg-white">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="font-heading text-4xl font-bold text-center mb-4 text-gray-900">
+          Онлайн-запись
+        </h2>
+        <p className="text-center text-gray-600 mb-12">Выберите удобное время и мы свяжемся с вами</p>
         
-        <Card className="p-10 shadow-glow border-2 border-primary/20 backdrop-blur-xl">
-          <form onSubmit={handleSubmit} className="space-y-8">
+        <Card className="p-8 shadow-xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="date" className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Icon name="Calendar" size={20} className="text-primary" />
-                  Дата уборки
-                </Label>
+                <Label htmlFor="date" className="text-base font-semibold mb-2">Дата уборки</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-14 justify-start text-left font-normal border-2 border-gray-200 hover:border-primary/50 text-base"
+                      className="w-full h-12 justify-start text-left font-normal"
                     >
                       <Icon name="Calendar" className="mr-2" size={18} />
                       {selectedDate ? format(selectedDate, 'dd MMMM yyyy', { locale: ru }) : 'Выберите дату'}
@@ -87,12 +80,9 @@ const BookingForm = () => {
               </div>
 
               <div>
-                <Label htmlFor="time" className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Icon name="Clock" size={20} className="text-primary" />
-                  Время
-                </Label>
+                <Label htmlFor="time" className="text-base font-semibold mb-2">Время</Label>
                 <Select value={time} onValueChange={setTime}>
-                  <SelectTrigger id="time" className="h-14 border-2 border-gray-200 hover:border-primary/50 text-base">
+                  <SelectTrigger id="time" className="h-12">
                     <SelectValue placeholder="Выберите время" />
                   </SelectTrigger>
                   <SelectContent>
@@ -108,56 +98,47 @@ const BookingForm = () => {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="name" className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Icon name="User" size={20} className="text-primary" />
-                  Ваше имя
-                </Label>
+                <Label htmlFor="name" className="text-base font-semibold mb-2">Ваше имя</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Иван Иванов"
-                  className="h-14 border-2 border-gray-200 hover:border-primary/50 text-base"
+                  className="h-12"
                 />
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Icon name="Phone" size={20} className="text-primary" />
-                  Телефон
-                </Label>
+                <Label htmlFor="phone" className="text-base font-semibold mb-2">Телефон</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+7 (999) 123-45-67"
-                  className="h-14 border-2 border-gray-200 hover:border-primary/50 text-base"
+                  className="h-12"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="comment" className="text-lg font-semibold mb-3 flex items-center gap-2">
-                <Icon name="MessageSquare" size={20} className="text-primary" />
-                Комментарий (необязательно)
-              </Label>
+              <Label htmlFor="comment" className="text-base font-semibold mb-2">Комментарий (необязательно)</Label>
               <Textarea
                 id="comment"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Особые пожелания или детали..."
-                className="min-h-[120px] border-2 border-gray-200 hover:border-primary/50 text-base"
+                className="min-h-[100px]"
               />
             </div>
 
             <Button 
               type="submit" 
               size="lg" 
-              className="w-full h-16 text-lg font-bold bg-gradient-to-r from-primary to-accent hover:shadow-glow transition-all text-white group"
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600"
             >
               Отправить заявку
-              <Icon name="Send" className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+              <Icon name="Send" className="ml-2" size={20} />
             </Button>
           </form>
         </Card>

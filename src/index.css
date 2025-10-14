@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -15,8 +15,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
-    --primary: 178 78% 57%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 45 100% 51%;
+    --primary-foreground: 0 0% 10%;
 
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 10%;
@@ -24,7 +24,7 @@
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 267 84% 81%;
+    --accent: 45 100% 51%;
     --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84.2% 60.2%;
@@ -32,7 +32,7 @@
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 178 78% 57%;
+    --ring: 45 100% 51%;
 
     --radius: 0.75rem;
 
@@ -99,7 +99,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Poppins", sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
   h1,
@@ -108,18 +108,6 @@
   h4,
   h5,
   h6 {
-    font-family: "Playfair Display", serif;
-  }
-
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
-  }
-
-  .glass-effect {
-    @apply backdrop-blur-xl bg-white/80 border border-white/20;
-  }
-
-  .shadow-glow {
-    box-shadow: 0 0 40px rgba(77, 209, 194, 0.3);
+    font-family: "Montserrat", sans-serif;
   }
 }
