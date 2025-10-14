@@ -67,11 +67,16 @@ const Index = () => {
         <div className="max-w-6xl mx-auto relative">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left relative z-10 animate-fade-in">
+              <img 
+                src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/672e92c2-1e96-443b-9985-e61709cde874.jpg" 
+                alt="Beauty & Clean" 
+                className="h-16 mb-8 mx-auto md:mx-0"
+              />
               <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
-                Чистота, которая вас вдохновляет
+                Красота в каждой детали
               </h1>
               <p className="text-xl md:text-2xl mb-8 text-gray-300">
-                Профессиональная уборка квартир, домов и офисов. Гарантия качества и прозрачные цены
+                Премиальная уборка квартир с профессиональными клинерами. Красота, качество, безупречность
               </p>
               <Button 
                 size="lg" 
@@ -315,7 +320,7 @@ const Index = () => {
 
       <footer className="bg-gray-900 text-gray-300 py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <p>&copy; 2024 CleaningPro. Все права защищены</p>
+          <p>&copy; 2024 Beauty & Clean. Все права защищены</p>
         </div>
       </footer>
     </div>
