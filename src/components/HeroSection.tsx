@@ -10,10 +10,10 @@ const HeroSection = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left relative z-10 animate-fade-in">
             <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
-              Красота в каждой детали
+              ГАРАНТИРУЕМ КАЧЕСТВЕННУЮ УБОРКУ
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-300">
-              Премиальная уборка квартир с профессиональными клинерами. Красота, качество, безупречность
+              Проверка на чистоту по чек-листу. Профессиональные клинеры, качество, безупречность
             </p>
             <Button 
               size="lg" 
