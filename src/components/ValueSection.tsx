@@ -1,4 +1,10 @@
+import Icon from '@/components/ui/icon';
+
 const ValueSection = () => {
+  const handleEventClick = () => {
+    window.open('https://www.afisha.ru/msk/', '_blank');
+  };
+
   return (
     <section className="relative py-24 px-4 bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-black to-yellow-500/5"></div>
@@ -9,9 +15,18 @@ const ValueSection = () => {
             Время с семьей — самое ценное
           </h2>
 
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
             Пока мы наводим порядок вы можете создавать воспоминания
           </p>
+
+          <button
+            onClick={handleEventClick}
+            className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl hover:shadow-yellow-400/30 transition-all duration-300 hover:scale-105"
+          >
+            <Icon name="Calendar" size={24} className="group-hover:scale-110 transition-transform" />
+            <span>Куда сходить с семьёй</span>
+            <Icon name="ExternalLink" size={20} className="group-hover:translate-x-1 transition-transform" />
+          </button>
 
           <div className="mt-12 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
