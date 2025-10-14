@@ -14,7 +14,7 @@ const CursorSparkles = () => {
 
   useEffect(() => {
     let sparkleId = 0;
-    const colors = ['#fbbf24', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#10b981'];
+    const colors = ['#facc15', '#fbbf24', '#fef08a', '#fde047', '#f59e0b', '#fcd34d'];
 
     const handleMouseMove = (e: MouseEvent) => {
       const newSparkle: Sparkle = {
