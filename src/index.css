@@ -232,4 +232,29 @@
     background-position: right center;
     animation: button-shine 2s linear infinite;
   }
+
+  @keyframes hero-title-shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  .hero-title-gradient {
+    background: linear-gradient(
+      90deg,
+      #ffffff 0%,
+      #fef08a 25%,
+      #facc15 50%,
+      #fef08a 75%,
+      #ffffff 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hero-title-shimmer 4s linear infinite;
+  }
 }
