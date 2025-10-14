@@ -5,7 +5,7 @@ const ValueSection = () => {
       
       <div className="max-w-5xl mx-auto relative z-10">
         <div className="text-center">
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-8">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-8">
             Время с семьей — самое ценное
           </h2>
 
