@@ -28,10 +28,10 @@ const AnimatedBackground = () => {
       crystals.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 4 + 2,
+        size: Math.random() * 8 + 5,
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.02,
-        opacity: Math.random() * 0.15 + 0.05,
+        opacity: Math.random() * 0.4 + 0.2,
         twinkleSpeed: Math.random() * 0.02 + 0.01,
         twinklePhase: Math.random() * Math.PI * 2,
       });
@@ -53,7 +53,7 @@ const AnimatedBackground = () => {
       ctx.closePath();
       
       ctx.strokeStyle = `rgba(250, 204, 21, ${opacity})`;
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.5;
       ctx.stroke();
       
       ctx.fillStyle = `rgba(250, 204, 21, ${opacity * 0.3})`;
