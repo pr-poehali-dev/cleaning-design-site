@@ -68,11 +68,6 @@ const Index = () => {
       
       <HeroSection />
       
-      <ServicesSection
-        services={services}
-        onServiceClick={openServiceModal}
-      />
-      
       <PriceCalculator
         serviceType={serviceType}
         setServiceType={setServiceType}
