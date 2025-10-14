@@ -26,7 +26,7 @@ const ContactSection = () => {
               <Icon name="Clock" size={32} className="text-yellow-400" />
             </div>
             <h3 className="font-heading text-xl font-semibold mb-2">Режим работы</h3>
-            <p className="text-gray-300">Ежедневно с 8:00 до 22:00</p>
+            <p className="text-gray-300">Ежедневно с 12:00 до 22:00</p>
           </div>
         </div>
       </div>
