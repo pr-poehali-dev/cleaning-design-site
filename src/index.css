@@ -347,12 +347,12 @@ body {
   .btn-shine {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgb(146, 148, 248);
+    border: 1px solid rgb(250, 204, 21);
     transition: box-shadow 0.3s ease;
   }
 
   .btn-shine:hover {
-    box-shadow: 1px 1px 25px 10px rgba(146, 148, 248, 0.4);
+    box-shadow: 1px 1px 25px 10px rgba(250, 204, 21, 0.4);
   }
 
   .btn-shine::before {
@@ -365,7 +365,7 @@ body {
     background: linear-gradient(
       120deg,
       transparent,
-      rgba(146, 148, 248, 0.4),
+      rgba(250, 204, 21, 0.4),
       transparent
     );
     transition: all 650ms;
