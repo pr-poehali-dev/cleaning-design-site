@@ -36,7 +36,7 @@ const Header = ({
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-3 lg:mb-0">
           <div>
-            <h2 className="font-heading text-2xl lg:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 bg-clip-text text-transparent">
+            <h2 className="font-heading text-2xl lg:text-3xl font-bold logo-shimmer">
               Beauty & Clean
             </h2>
           </div>

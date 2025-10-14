@@ -110,4 +110,29 @@
   h6 {
     font-family: "Montserrat", sans-serif;
   }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  .logo-shimmer {
+    background: linear-gradient(
+      90deg,
+      #facc15 0%,
+      #fef08a 25%,
+      #fde047 50%,
+      #fef08a 75%,
+      #facc15 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
 }
