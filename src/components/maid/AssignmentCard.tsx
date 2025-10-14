@@ -165,18 +165,18 @@ const AssignmentCard = ({
             </div>
           )}
 
-          {assignment.status === 'assigned' && (
-            <Button
-              onClick={() => onUpdateStatus(assignment.id, 'in_progress')}
-              className="bg-blue-500 hover:bg-blue-600"
-            >
-              <Icon name="Play" size={16} className="mr-2" />
-              Начать работу
-            </Button>
-          )}
+          <div className="flex flex-wrap gap-2">
+            {assignment.status === 'assigned' && (
+              <Button
+                onClick={() => onUpdateStatus(assignment.id, 'in_progress')}
+                className="bg-blue-500 hover:bg-blue-600"
+              >
+                <Icon name="Play" size={16} className="mr-2" />
+                Начать работу
+              </Button>
+            )}
 
-          {assignment.status === 'in_progress' && (
-            <div className="flex flex-wrap gap-2">
+            {assignment.status === 'in_progress' && (
               <Button
                 onClick={() => onUpdateStatus(assignment.id, 'completed')}
                 className="bg-green-500 hover:bg-green-600"
@@ -184,27 +184,9 @@ const AssignmentCard = ({
                 <Icon name="CheckCircle" size={16} className="mr-2" />
                 Завершить
               </Button>
-              <Button
-                onClick={onStartUpload}
-                className="bg-purple-500 hover:bg-purple-600"
-              >
-                <Icon name="Camera" size={16} className="mr-2" />
-                Загрузить фото
-              </Button>
-              {variant === 'today' && (
-                <Button
-                  onClick={onNavigateToChecklist}
-                  className="btn-shine bg-transparent text-white hover:bg-transparent"
-                >
-                  <Icon name="ClipboardCheck" size={16} className="mr-2" />
-                  Чек-лист
-                </Button>
-              )}
-            </div>
-          )}
+            )}
 
-          {assignment.status === 'assigned' && variant === 'today' && (
-            <div className="flex flex-wrap gap-2 mt-2">
+            {(assignment.status === 'assigned' || assignment.status === 'in_progress') && (
               <Button
                 onClick={onStartUpload}
                 className="bg-purple-500 hover:bg-purple-600"
@@ -212,6 +194,9 @@ const AssignmentCard = ({
                 <Icon name="Camera" size={16} className="mr-2" />
                 Загрузить фото
               </Button>
+            )}
+
+            {variant === 'today' && (assignment.status === 'assigned' || assignment.status === 'in_progress') && (
               <Button
                 onClick={onNavigateToChecklist}
                 className="btn-shine bg-transparent text-white hover:bg-transparent"
@@ -219,8 +204,8 @@ const AssignmentCard = ({
                 <Icon name="ClipboardCheck" size={16} className="mr-2" />
                 Чек-лист
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </>
       )}
     </div>
