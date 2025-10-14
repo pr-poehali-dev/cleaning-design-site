@@ -70,7 +70,6 @@ const AssignmentCard = ({
             <p className="text-gray-400 text-sm">{assignment.scheduled_date}</p>
           </div>
           <div className="text-right">
-            <p className="text-green-400 font-semibold">{assignment.price} ₽</p>
             <span className="text-green-400 text-sm">✓ Выполнено</span>
           </div>
         </div>
@@ -98,7 +97,7 @@ const AssignmentCard = ({
         </span>
       </div>
 
-      <div className={`grid ${variant === 'today' ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-4 mb-4`}>
+      <div className={`grid ${variant === 'today' ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 mb-4`}>
         <div>
           <span className="text-gray-400 text-sm">{variant === 'today' ? 'Тип уборки' : 'Тип'}</span>
           <p className={`${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
@@ -117,12 +116,6 @@ const AssignmentCard = ({
             <p className="text-white font-semibold">{assignment.scheduled_time}</p>
           </div>
         )}
-        <div>
-          <span className="text-gray-400 text-sm">Оплата</span>
-          <p className={`${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
-            {assignment.price} ₽
-          </p>
-        </div>
       </div>
 
       {variant === 'upcoming' && (
