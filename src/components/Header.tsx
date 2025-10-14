@@ -88,7 +88,7 @@ const Header = ({
         <div className="flex items-center justify-between mb-3 lg:mb-0">
           <div>
             <h2 className="font-heading text-2xl lg:text-3xl font-bold logo-shimmer">
-              Beauty & Clean
+              p9@Clean
             </h2>
           </div>
           <div className="flex items-center gap-2 lg:hidden">
@@ -202,7 +202,7 @@ const Header = ({
                   <div className="flex items-start gap-2">
                     <Icon name="Sparkles" size={18} className="text-yellow-600 mt-0.5" />
                     <div className="flex-1">
-                      <p className="text-xs text-yellow-600 font-semibold">Beauty & Clean</p>
+                      <p className="text-xs text-yellow-600 font-semibold">p9@Clean</p>
                       <p className="text-sm text-gray-700 mt-1">
                         Здравствуйте! 👋 Мы онлайн и готовы помочь с выбором клининговых услуг. Оставьте контакты, и консультант ответит на все вопросы!
                       </p>
