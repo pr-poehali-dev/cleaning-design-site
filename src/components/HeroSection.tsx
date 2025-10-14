@@ -39,44 +39,6 @@ const HeroSection = () => {
               Записаться на уборку
               <Icon name="ArrowRight" className="ml-2" size={20} />
             </Button>
-            
-            <div className="mt-10 relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-yellow-400/50 aspect-video bg-gradient-to-br from-gray-800 to-gray-900">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <div className="w-20 h-20 mx-auto bg-yellow-400/20 rounded-full flex items-center justify-center animate-pulse">
-                      <Icon name="Play" size={40} className="text-yellow-400 ml-1" />
-                    </div>
-                    <p className="text-gray-400 text-sm">Видео о качестве нашей работы</p>
-                  </div>
-                </div>
-                
-                <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
-                  <span className="text-yellow-400 text-xs font-semibold">▶ Процесс уборки</span>
-                </div>
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
-                
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Icon name="Sparkles" size={24} className="text-yellow-400" />
-                    <p className="text-white font-semibold">Профессиональная уборка за 2 часа</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="bg-yellow-400/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                      <span className="text-yellow-400 text-xs font-semibold">До и После</span>
-                    </div>
-                    <div className="bg-yellow-400/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                      <span className="text-yellow-400 text-xs font-semibold">Таймлапс</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <p className="text-center text-gray-400 text-sm mt-4">
-                💡 Загрузите своё видео через редактор, чтобы заменить этот плейсхолдер
-              </p>
-            </div>
           </div>
 
           <div className="relative h-[400px] hidden md:block">
