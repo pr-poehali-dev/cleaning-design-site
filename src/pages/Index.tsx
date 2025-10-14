@@ -61,7 +61,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 text-white py-20 px-4">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white py-20 px-4">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
         
         <div className="max-w-6xl mx-auto relative">
@@ -70,12 +70,12 @@ const Index = () => {
               <h1 className="font-heading text-5xl md:text-6xl font-bold mb-6">
                 Чистота, которая вас вдохновляет
               </h1>
-              <p className="text-xl md:text-2xl mb-8 text-blue-50">
+              <p className="text-xl md:text-2xl mb-8 text-gray-300">
                 Профессиональная уборка квартир, домов и офисов. Гарантия качества и прозрачные цены
               </p>
               <Button 
                 size="lg" 
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Записаться на уборку
@@ -85,21 +85,21 @@ const Index = () => {
 
             <div className="relative h-[400px] hidden md:block">
               <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-6 animate-slide-up">
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl animate-float" style={{ animationDelay: '0s' }}>
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl animate-float" style={{ animationDelay: '0s' }}>
                   <img 
                     src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/e15a62af-b3c2-4379-b826-3768274bd664.jpg" 
                     alt="Клинер" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl ml-12 animate-float" style={{ animationDelay: '1s' }}>
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl ml-12 animate-float" style={{ animationDelay: '1s' }}>
                   <img 
                     src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/e3a65918-6ffc-4753-9f5f-d8046f3deeba.jpg" 
                     alt="Клинер" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl animate-float" style={{ animationDelay: '2s' }}>
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400/50 shadow-2xl animate-float" style={{ animationDelay: '2s' }}>
                   <img 
                     src="https://cdn.poehali.dev/projects/59f838a9-7d70-436b-9b50-e9dc6652d8b4/files/8436bcc9-0d30-4b6d-8656-a572c32d4108.jpg" 
                     alt="Клинер" 
@@ -121,14 +121,14 @@ const Index = () => {
             {services.map((service, index) => (
               <Card 
                 key={service.id}
-                className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 border-2 hover:border-blue-500"
+                className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 border-2 hover:border-yellow-400"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                  <Icon name={service.icon as any} size={32} className="text-blue-600" />
+                <div className="bg-yellow-50 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                  <Icon name={service.icon as any} size={32} className="text-yellow-600" />
                 </div>
                 <h3 className="font-heading text-xl font-semibold mb-2 text-gray-900">{service.name}</h3>
-                <p className="text-3xl font-bold text-blue-600 mb-2">от {service.price}₽</p>
+                <p className="text-3xl font-bold text-yellow-600 mb-2">от {service.price}₽</p>
                 <p className="text-gray-600 text-sm">за 50 м²</p>
               </Card>
             ))}
@@ -136,7 +136,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-heading text-4xl font-bold text-center mb-4 text-gray-900">
             Калькулятор стоимости
@@ -175,8 +175,8 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-2xl text-center">
-              <p className="text-lg mb-2">Стоимость уборки</p>
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-6 rounded-2xl text-center">
+              <p className="text-lg mb-2 font-semibold">Стоимость уборки</p>
               <p className="text-5xl font-bold font-heading">{calculatePrice()}₽</p>
             </div>
           </Card>
@@ -273,7 +273,7 @@ const Index = () => {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600"
               >
                 Отправить заявку
                 <Icon name="Send" className="ml-2" size={20} />
@@ -283,31 +283,31 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-gradient-to-br from-blue-900 to-blue-800 text-white">
+      <section className="py-16 px-4 bg-gradient-to-br from-gray-900 to-black text-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div className="animate-scale-in">
-              <div className="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Phone" size={32} />
+              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Phone" size={32} className="text-yellow-400" />
               </div>
               <h3 className="font-heading text-xl font-semibold mb-2">Телефон</h3>
-              <p className="text-blue-100">+7 (495) 123-45-67</p>
+              <p className="text-gray-300">+7 (495) 123-45-67</p>
             </div>
 
             <div className="animate-scale-in" style={{ animationDelay: '100ms' }}>
-              <div className="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Mail" size={32} />
+              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Mail" size={32} className="text-yellow-400" />
               </div>
               <h3 className="font-heading text-xl font-semibold mb-2">Email</h3>
-              <p className="text-blue-100">info@cleaning.ru</p>
+              <p className="text-gray-300">info@cleaning.ru</p>
             </div>
 
             <div className="animate-scale-in" style={{ animationDelay: '200ms' }}>
-              <div className="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Clock" size={32} />
+              <div className="bg-yellow-400/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Clock" size={32} className="text-yellow-400" />
               </div>
               <h3 className="font-heading text-xl font-semibold mb-2">Режим работы</h3>
-              <p className="text-blue-100">Ежедневно с 8:00 до 22:00</p>
+              <p className="text-gray-300">Ежедневно с 8:00 до 22:00</p>
             </div>
           </div>
         </div>
