@@ -9,7 +9,7 @@ const HeroSection = () => {
       <div className="max-w-6xl mx-auto relative">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left relative z-10 animate-fade-in">
-            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 hero-title-gradient leading-tight">
+            <h1 className="font-heading text-3xl md:text-4xl font-bold mb-6 hero-title-gradient leading-tight">
               ГАРАНТИРУЕМ КАЧЕСТВЕННУЮ УБОРКУ
             </h1>
             <div className="flex items-center justify-center md:justify-start gap-3 mb-8">
