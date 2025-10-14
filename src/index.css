@@ -120,6 +120,32 @@
     }
   }
 
+  @keyframes glow {
+    0%,
+    100% {
+      text-shadow:
+        0 0 10px rgba(250, 204, 21, 0.5),
+        0 0 20px rgba(250, 204, 21, 0.3),
+        0 0 30px rgba(250, 204, 21, 0.2);
+    }
+    50% {
+      text-shadow:
+        0 0 20px rgba(250, 204, 21, 0.8),
+        0 0 30px rgba(250, 204, 21, 0.5),
+        0 0 40px rgba(250, 204, 21, 0.3);
+    }
+  }
+
+  @keyframes pulse-scale {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
   .logo-shimmer {
     background: linear-gradient(
       90deg,
@@ -133,6 +159,19 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 3s linear infinite;
+    animation:
+      shimmer 3s linear infinite,
+      glow 2s ease-in-out infinite,
+      pulse-scale 2s ease-in-out infinite;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+  }
+
+  .logo-shimmer:hover {
+    letter-spacing: 0.1em;
+    animation:
+      shimmer 1.5s linear infinite,
+      glow 1s ease-in-out infinite,
+      pulse-scale 1s ease-in-out infinite;
   }
 }
