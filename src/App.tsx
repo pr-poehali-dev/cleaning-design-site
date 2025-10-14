@@ -10,6 +10,7 @@ import InspectionChecklist from "./pages/InspectionChecklist";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import MaidDashboard from "./pages/MaidDashboard";
+import SalaryHistory from "./pages/SalaryHistory";
 import NotFound from "./pages/NotFound";
 import CursorSparkles from "./components/CursorSparkles";
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/maid" element={<MaidDashboard />} />
+          <Route path="/salary" element={<SalaryHistory />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

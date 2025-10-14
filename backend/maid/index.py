@@ -191,6 +191,61 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'message': 'Status updated'})
             }
         
+        elif action == 'salary-history' and method == 'GET':
+            params = event.get('queryStringParameters', {})
+            maid_id = params.get('maid_id')
+            
+            if not maid_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'maid_id required'})
+                }
+            
+            cur.execute("""
+                SELECT 
+                    a.id,
+                    ca.address,
+                    ca.client_name,
+                    ca.scheduled_date,
+                    a.completed_at,
+                    a.verified_at,
+                    a.salary,
+                    ca.service_type,
+                    ca.area
+                FROM assignments a
+                JOIN cleaning_addresses ca ON a.address_id = ca.id
+                WHERE a.maid_id = %s AND a.verified_at IS NOT NULL
+                ORDER BY a.verified_at DESC
+            """, (int(maid_id),))
+            
+            rows = cur.fetchall()
+            records = []
+            total_earned = 0
+            
+            for row in rows:
+                salary = float(row[6]) if row[6] else 0
+                total_earned += salary
+                records.append({
+                    'id': row[0],
+                    'address': row[1],
+                    'client_name': row[2],
+                    'scheduled_date': str(row[3]),
+                    'completed_at': str(row[4]) if row[4] else None,
+                    'verified_at': str(row[5]) if row[5] else None,
+                    'salary': salary,
+                    'service_type': row[7],
+                    'area': row[8]
+                })
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'records': records, 'total_earned': total_earned})
+            }
+        
         cur.close()
         conn.close()
         return {

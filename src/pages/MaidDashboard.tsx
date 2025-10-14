@@ -219,6 +219,13 @@ const MaidDashboard = () => {
           <div className="flex items-center gap-4">
             <span className="text-gray-300">Привет, {user.full_name}</span>
             <Button
+              onClick={() => navigate('/salary')}
+              className="bg-green-500 hover:bg-green-600"
+            >
+              <Icon name="Wallet" size={20} className="mr-2" />
+              Зарплата
+            </Button>
+            <Button
               variant="ghost"
               onClick={handleLogout}
               className="text-white hover:text-yellow-400"
