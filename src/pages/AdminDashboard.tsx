@@ -178,6 +178,23 @@ const AdminDashboard = () => {
     setShowAssignForm(addressId);
   };
 
+  const handleCancelAssignment = async (addressId: number) => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=cancel-assignment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address_id: addressId }),
+      });
+
+      if (response.ok) {
+        toast({ title: 'Отменено', description: 'Задание отменено' });
+        loadAddresses();
+      }
+    } catch (error) {
+      toast({ title: 'Ошибка', description: 'Не удалось отменить задание', variant: 'destructive' });
+    }
+  };
+
   const handleEditAddress = (address: Address) => {
     setEditingAddress(address);
     setNewAddress({
@@ -383,6 +400,7 @@ const AdminDashboard = () => {
                   onEdit={handleEditAddress}
                   onDelete={handleDeleteAddress}
                   onReassign={handleReassign}
+                  onCancel={handleCancelAssignment}
                 />
               ))}
             </div>

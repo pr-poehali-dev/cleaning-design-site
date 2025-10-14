@@ -15,13 +15,15 @@ interface AddressCardProps {
   onEdit: (address: Address) => void;
   onDelete: (addressId: number) => void;
   onReassign: (addressId: number) => void;
+  onCancel: (addressId: number) => void;
 }
 
-const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete, onReassign }: AddressCardProps) => {
+const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete, onReassign, onCancel }: AddressCardProps) => {
   const [showPhotos, setShowPhotos] = useState(false);
   const [selectedMaidId, setSelectedMaidId] = useState<string>('');
   const [salary, setSalary] = useState<number>(address.salary || 5000);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -214,18 +216,55 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
             </Button>
           </div>
         </div>
+      ) : address.status === 'cancelled' ? (
+        <div className="p-3 bg-red-500/20 border border-red-500 rounded">
+          <p className="text-red-400 text-sm">❌ Задание отменено</p>
+        </div>
       ) : address.status === 'completed' && !address.verified_at ? (
         <div className="space-y-2">
           <div className="p-3 bg-yellow-500/20 border border-yellow-500 rounded">
             <p className="text-yellow-400 text-sm">⏳ Ожидает проверки администратором</p>
           </div>
-          <Button
-            onClick={() => onVerify(address.id)}
-            className="bg-green-500 hover:bg-green-600 w-full"
-          >
-            <Icon name="CheckCircle" size={16} className="mr-2" />
-            Проверено - начислить зарплату
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => onVerify(address.id)}
+              className="bg-green-500 hover:bg-green-600 flex-1"
+            >
+              <Icon name="CheckCircle" size={16} className="mr-2" />
+              Проверено
+            </Button>
+            <Button
+              onClick={() => setShowCancelConfirm(true)}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              <Icon name="XCircle" size={16} className="mr-2" />
+              Отменить
+            </Button>
+          </div>
+          {showCancelConfirm && (
+            <div className="p-3 bg-red-500/20 border border-red-500 rounded">
+              <p className="text-red-400 mb-2 text-sm">Отменить это задание?</p>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    onCancel(address.id);
+                    setShowCancelConfirm(false);
+                  }}
+                  className="bg-red-500 hover:bg-red-600"
+                  size="sm"
+                >
+                  Да, отменить
+                </Button>
+                <Button
+                  onClick={() => setShowCancelConfirm(false)}
+                  variant="ghost"
+                  size="sm"
+                >
+                  Нет
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       ) : address.verified_at ? (
         <div className="p-3 bg-green-500/20 border border-green-500 rounded">
@@ -233,13 +272,48 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
           {address.salary && <p className="text-white font-semibold mt-1">Начислено: {address.salary} ₽</p>}
         </div>
       ) : (
-        <Button
-          onClick={onShowAssignForm}
-          className="bg-blue-500 hover:bg-blue-600"
-        >
-          <Icon name="UserPlus" size={16} className="mr-2" />
-          Назначить горничную
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={onShowAssignForm}
+            className="bg-blue-500 hover:bg-blue-600 flex-1"
+          >
+            <Icon name="UserPlus" size={16} className="mr-2" />
+            Назначить горничную
+          </Button>
+          {(address.status === 'assigned' || address.status === 'in_progress') && (
+            <Button
+              onClick={() => setShowCancelConfirm(true)}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              <Icon name="XCircle" size={16} className="mr-2" />
+              Отменить
+            </Button>
+          )}
+          {showCancelConfirm && (
+            <div className="absolute z-10 mt-12 p-3 bg-gray-900 border border-red-500 rounded shadow-lg">
+              <p className="text-red-400 mb-2 text-sm">Отменить это задание?</p>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    onCancel(address.id);
+                    setShowCancelConfirm(false);
+                  }}
+                  className="bg-red-500 hover:bg-red-600"
+                  size="sm"
+                >
+                  Да
+                </Button>
+                <Button
+                  onClick={() => setShowCancelConfirm(false)}
+                  variant="ghost"
+                  size="sm"
+                >
+                  Нет
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

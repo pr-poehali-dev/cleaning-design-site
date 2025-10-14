@@ -330,6 +330,38 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'message': 'Verified and salary assigned'})
             }
         
+        elif action == 'cancel-assignment' and method == 'POST':
+            body_data = json.loads(event.get('body', '{}'))
+            address_id = body_data.get('address_id')
+            
+            if not address_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'address_id required'})
+                }
+            
+            cur.execute("""
+                UPDATE cleaning_addresses 
+                SET status = 'cancelled' 
+                WHERE id = %s
+            """, (address_id,))
+            
+            cur.execute("""
+                UPDATE assignments 
+                SET status = 'cancelled' 
+                WHERE address_id = %s
+            """, (address_id,))
+            
+            conn.commit()
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'message': 'Assignment cancelled'})
+            }
+        
         elif action == 'salary-stats' and method == 'GET':
             cur.execute("""
                 SELECT 
