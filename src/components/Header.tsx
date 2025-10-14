@@ -83,44 +83,35 @@ const Header = ({
   };
 
   return (
-    <header className="bg-gradient-to-r from-black via-gray-900 to-black border-b-4 border-yellow-400 sticky top-0 z-50 py-4 px-4 shadow-2xl">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-4 lg:mb-0">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
-              <Icon name="Sparkles" size={24} className="text-black" />
-            </div>
-            <h2 className="font-heading text-3xl lg:text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-              p9&clean
-            </h2>
-          </div>
+    <header className="bg-black/80 backdrop-blur-lg border-b border-yellow-400/30 sticky top-0 z-50 py-2 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-2 lg:mb-0">
+          <h2 className="font-heading text-xl lg:text-2xl font-bold text-yellow-400">
+            p9&clean
+          </h2>
           <div className="flex items-center gap-2 lg:hidden">
             <Button 
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-3 py-2 rounded-xl"
+              size="sm"
+              className="bg-yellow-400 text-black hover:bg-yellow-500"
               onClick={() => window.location.href = 'tel:+79141965172'}
             >
-              <Icon name="Phone" size={18} />
+              <Icon name="Phone" size={16} />
             </Button>
             <Button 
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-3 py-2 rounded-xl"
+              size="sm"
+              className="bg-yellow-400 text-black hover:bg-yellow-500"
               onClick={() => setIsConsultationOpen(!isConsultationOpen)}
             >
-              <Icon name="MessageCircle" size={18} />
-            </Button>
-            <Button 
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold px-4 rounded-xl"
-              onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Записаться
+              <Icon name="MessageCircle" size={16} />
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-6">
-          <div className="w-full lg:w-auto flex items-center gap-3">
-            <div className="flex-1 lg:flex-none bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 backdrop-blur-md px-5 py-4 rounded-2xl border-2 border-yellow-400 shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-3">
+          <div className="w-full lg:w-auto flex items-center gap-2">
+            <div className="flex-1 lg:flex-none bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
               <Select value={serviceType} onValueChange={setServiceType}>
-                <SelectTrigger className="w-full lg:w-[140px] h-9 border-0 bg-transparent text-white font-medium">
+                <SelectTrigger className="w-full lg:w-[120px] h-8 border-0 bg-transparent text-white text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,52 +125,55 @@ const Header = ({
               <Button
                 size="sm"
                 variant="ghost"
-                className="h-8 w-8 p-0 text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
+                className="h-6 w-6 p-0 text-yellow-400 hover:text-yellow-300"
                 onClick={onInfoClick}
               >
-                <Icon name="Info" size={18} />
+                <Icon name="Info" size={14} />
               </Button>
             </div>
             
-            <div className="flex-1 lg:flex-none bg-gradient-to-br from-yellow-400/30 to-yellow-600/30 backdrop-blur-md px-5 py-4 rounded-2xl border-2 border-yellow-400 shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform">
+            <div className="flex-1 lg:flex-none bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
               <Input
                 type="number"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
                 min="20"
                 max="500"
-                className="w-full lg:w-24 h-10 border-0 bg-transparent text-white text-center font-bold text-lg"
+                className="w-full lg:w-16 h-8 border-0 bg-transparent text-white text-center text-sm"
               />
-              <span className="text-yellow-400 font-bold text-lg">м²</span>
+              <span className="text-yellow-400 text-sm">м²</span>
             </div>
           </div>
           
-          <div className="w-full lg:w-auto flex items-center gap-4">
-            <div className="flex-1 lg:flex-none bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 px-8 py-4 rounded-2xl shadow-2xl border-2 border-yellow-300 hover:scale-105 transition-transform">
-              <div className="flex items-center justify-center gap-3">
-                <Icon name="Calculator" size={24} className="text-black" />
-                <span className="text-black font-bold text-2xl lg:text-3xl">{calculatePrice()}₽</span>
+          <div className="w-full lg:w-auto flex items-center gap-2">
+            <div className="flex-1 lg:flex-none bg-yellow-400 px-4 py-2 rounded-lg">
+              <div className="flex items-center justify-center gap-2">
+                <Icon name="Calculator" size={16} className="text-black" />
+                <span className="text-black font-bold text-lg">{calculatePrice()}₽</span>
               </div>
             </div>
             
             <Button 
-              className="hidden lg:flex items-center gap-3 bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 text-black hover:scale-105 transition-transform font-bold px-8 py-6 rounded-2xl shadow-2xl border-2 border-yellow-300"
+              size="sm"
+              className="hidden lg:flex items-center gap-2 bg-yellow-400 text-black hover:bg-yellow-500"
               onClick={() => window.location.href = 'tel:+79141965172'}
             >
-              <Icon name="Phone" size={22} />
+              <Icon name="Phone" size={16} />
               +7 (914) 196-51-72
             </Button>
             
             <Button 
-              className="hidden lg:flex items-center gap-3 bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 text-black hover:scale-105 transition-transform font-bold px-8 py-6 rounded-2xl shadow-2xl border-2 border-yellow-300"
+              size="sm"
+              className="hidden lg:flex items-center gap-2 bg-yellow-400 text-black hover:bg-yellow-500"
               onClick={() => setIsConsultationOpen(!isConsultationOpen)}
             >
-              <Icon name="MessageCircle" size={22} />
+              <Icon name="MessageCircle" size={16} />
               Консультация
             </Button>
             
             <Button 
-              className="hidden lg:block bg-gradient-to-br from-white to-gray-100 text-black hover:scale-105 transition-transform font-bold px-10 py-6 rounded-2xl shadow-2xl border-2 border-gray-300"
+              size="sm"
+              className="hidden lg:block bg-white text-black hover:bg-gray-100"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
