@@ -257,4 +257,49 @@
     -webkit-text-fill-color: transparent;
     animation: hero-title-shimmer 4s linear infinite;
   }
+
+  @keyframes shimmer-bg {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .shimmer-background {
+    background: linear-gradient(
+      -45deg,
+      #000000,
+      #1a1a1a,
+      #0a0a0a,
+      #262626,
+      #000000,
+      #1a1a1a
+    );
+    background-size: 400% 400%;
+    animation: shimmer-bg 15s ease infinite;
+  }
+
+  @keyframes text-glow {
+    0%,
+    100% {
+      text-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+    }
+    50% {
+      text-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
+    }
+  }
+
+  .shimmer-background h1,
+  .shimmer-background h2,
+  .shimmer-background h3,
+  .shimmer-background p,
+  .shimmer-background span,
+  .shimmer-background div {
+    animation: text-glow 3s ease-in-out infinite;
+  }
 }
