@@ -2,7 +2,7 @@ import Icon from '@/components/ui/icon';
 
 const ContactSection = () => {
   return (
-    <section className="py-16 px-4 text-white">
+    <section className="py-16 px-4 bg-gradient-to-br from-gray-900 to-black text-white">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 text-center">
           <div className="animate-scale-in">

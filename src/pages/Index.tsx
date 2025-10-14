@@ -68,17 +68,15 @@ const Index = () => {
         onInfoClick={() => openServiceModal(services.find(s => s.id === serviceType)!)}
       />
       
-      <div className="shimmer-background">
-        <HeroSection />
-        
-        <ValueSection />
-        
-        <HowWeWorkSection />
-        
-        <ContactSection />
-        
-        <Footer />
-      </div>
+      <HeroSection />
+      
+      <ValueSection />
+      
+      <HowWeWorkSection />
+      
+      <ContactSection />
+      
+      <Footer />
 
       <ServiceModal
         isOpen={isServiceModalOpen}
