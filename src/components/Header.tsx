@@ -127,7 +127,7 @@ const Header = ({
             </Button>
 
             <Button 
-              className="bg-white text-black hover:bg-gray-100 font-semibold px-5 py-2 h-auto text-lg"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-8 py-3 h-auto text-lg uppercase"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
@@ -143,7 +143,7 @@ const Header = ({
             </Button>
             
             <Button 
-              className="bg-white text-black hover:bg-gray-100 font-semibold text-sm px-3"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold text-sm px-4 uppercase"
               onClick={() => document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Записаться
