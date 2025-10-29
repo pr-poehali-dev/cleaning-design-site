@@ -41,9 +41,16 @@ const StatusFilter = ({ statusFilter, addresses, onFilterChange }: StatusFilterP
       <Button
         onClick={() => onFilterChange('completed')}
         size="sm"
-        className={statusFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+        className={statusFilter === 'completed' ? 'bg-orange-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
       >
-        Выполнена ({addresses.filter(a => a.status === 'completed').length})
+        На проверке ({addresses.filter(a => a.status === 'completed').length})
+      </Button>
+      <Button
+        onClick={() => onFilterChange('verified')}
+        size="sm"
+        className={statusFilter === 'verified' ? 'bg-green-500 text-white' : 'bg-gray-700 text-white hover:bg-gray-600'}
+      >
+        Проверено ({addresses.filter(a => a.status === 'verified').length})
       </Button>
       <Button
         onClick={() => onFilterChange('cancelled')}
