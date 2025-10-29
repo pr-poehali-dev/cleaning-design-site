@@ -136,13 +136,38 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
               )}
             </div>
           </div>
-          {address.senior_cleaner_name && (
+          {address.senior_cleaner_name ? (
             <div className="p-3 bg-gray-700 rounded">
-              <div>
-                <span className="text-gray-400 text-sm">Старший клинер:</span>
-                <p className="text-white font-semibold">{address.senior_cleaner_name}</p>
-                {address.senior_cleaner_salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.senior_cleaner_salary} ₽</p>}
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="text-gray-400 text-sm">Старший клинер:</span>
+                  <p className="text-white font-semibold">{address.senior_cleaner_name}</p>
+                  {address.senior_cleaner_salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.senior_cleaner_salary} ₽</p>}
+                </div>
+                {!address.verified_at && (
+                  <Button
+                    onClick={() => onReassign(address.id)}
+                    variant="ghost"
+                    size="sm"
+                    className="text-blue-400 hover:text-blue-300"
+                  >
+                    <Icon name="UserCog" size={16} className="mr-1" />
+                    Изменить
+                  </Button>
+                )}
               </div>
+            </div>
+          ) : !address.verified_at && (
+            <div className="p-3 bg-gray-700/50 rounded border border-dashed border-gray-600">
+              <Button
+                onClick={() => onShowAssignForm()}
+                variant="ghost"
+                size="sm"
+                className="text-yellow-400 hover:text-yellow-300 w-full"
+              >
+                <Icon name="UserPlus" size={16} className="mr-2" />
+                Добавить старшего клинера
+              </Button>
             </div>
           )}
         </div>
