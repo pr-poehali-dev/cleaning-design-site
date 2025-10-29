@@ -6,6 +6,13 @@ export interface User {
   phone: string;
 }
 
+export interface ChecklistItem {
+  id: string;
+  text: string;
+  category: string;
+  checked: boolean;
+}
+
 export interface Address {
   id: number;
   address: string;
@@ -24,6 +31,8 @@ export interface Address {
   assigned_maid_name?: string;
   salary?: number;
   verified_at?: string;
+  checklist_data?: ChecklistItem[];
+  checklist_started_at?: string;
 }
 
 export interface Maid {

@@ -14,6 +14,13 @@ interface User {
   phone: string;
 }
 
+interface ChecklistItem {
+  id: string;
+  text: string;
+  category: string;
+  checked: boolean;
+}
+
 interface Assignment {
   id: number;
   address: string;
@@ -32,6 +39,8 @@ interface Assignment {
   photos_uploaded_at?: string;
   salary?: number;
   verified_at?: string;
+  checklist_data?: ChecklistItem[];
+  checklist_started_at?: string;
 }
 
 const MaidDashboard = () => {
@@ -75,13 +84,26 @@ const MaidDashboard = () => {
   const handleUpdateStatus = async (assignmentId: number, status: string) => {
     const assignment = assignments.find(a => a.id === assignmentId);
     
-    if (status === 'completed' && (!assignment?.photo_before && !assignment?.photo_after)) {
-      toast({ 
-        title: 'Внимание', 
-        description: 'Загрузите фото до завершения работы', 
-        variant: 'destructive' 
-      });
-      return;
+    if (status === 'completed') {
+      if (!assignment?.photo_before && !assignment?.photo_after) {
+        toast({ 
+          title: 'Внимание', 
+          description: 'Загрузите фото до завершения работы', 
+          variant: 'destructive' 
+        });
+        return;
+      }
+      
+      const checklist = assignment?.checklist_data || [];
+      const allChecked = checklist.length > 0 && checklist.every(item => item.checked);
+      if (!allChecked) {
+        toast({ 
+          title: 'Внимание', 
+          description: 'Завершите все пункты чек-листа перед завершением уборки', 
+          variant: 'destructive' 
+        });
+        return;
+      }
     }
 
     try {
@@ -174,6 +196,27 @@ const MaidDashboard = () => {
     }
   };
 
+  const handleChecklistUpdate = async (assignmentId: number, checklist: ChecklistItem[]) => {
+    try {
+      const response = await fetch('https://functions.poehali.dev/9af65dd4-4184-4636-9cc8-b12aa6b82787?action=update-checklist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          assignment_id: assignmentId,
+          checklist_data: checklist,
+        }),
+      });
+
+      if (response.ok) {
+        if (user) {
+          loadAssignments(user.id);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update checklist:', error);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     navigate('/login');
@@ -249,7 +292,7 @@ const MaidDashboard = () => {
                     setPhotoBefore('');
                     setPhotoAfter('');
                   }}
-                  onNavigateToChecklist={() => navigate('/checklist')}
+                  onChecklistUpdate={handleChecklistUpdate}
                 />
               ))}
             </div>
@@ -279,7 +322,7 @@ const MaidDashboard = () => {
                     setPhotoBefore('');
                     setPhotoAfter('');
                   }}
-                  onNavigateToChecklist={() => navigate('/checklist')}
+                  onChecklistUpdate={handleChecklistUpdate}
                 />
               ))}
             </div>

@@ -1,6 +1,15 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import Icon from '@/components/ui/icon';
 import PhotoUploadForm from './PhotoUploadForm';
+import { useState, useEffect } from 'react';
+
+interface ChecklistItem {
+  id: string;
+  text: string;
+  category: string;
+  checked: boolean;
+}
 
 interface Assignment {
   id: number;
@@ -20,6 +29,8 @@ interface Assignment {
   photos_uploaded_at?: string;
   salary?: number;
   verified_at?: string;
+  checklist_data?: ChecklistItem[];
+  checklist_started_at?: string;
 }
 
 interface AssignmentCardProps {
@@ -35,7 +46,7 @@ interface AssignmentCardProps {
   onPhotoUpload: (assignmentId: number) => void;
   onStartUpload: () => void;
   onCancelUpload: () => void;
-  onNavigateToChecklist: () => void;
+  onChecklistUpdate: (assignmentId: number, checklist: ChecklistItem[]) => void;
 }
 
 const AssignmentCard = ({
@@ -51,8 +62,26 @@ const AssignmentCard = ({
   onPhotoUpload,
   onStartUpload,
   onCancelUpload,
-  onNavigateToChecklist,
+  onChecklistUpdate,
 }: AssignmentCardProps) => {
+  const [checklist, setChecklist] = useState<ChecklistItem[]>(assignment.checklist_data || []);
+  const [showChecklist, setShowChecklist] = useState(false);
+
+  useEffect(() => {
+    setChecklist(assignment.checklist_data || []);
+  }, [assignment.checklist_data]);
+
+  const toggleChecklistItem = (itemId: string) => {
+    const updatedChecklist = checklist.map(item =>
+      item.id === itemId ? { ...item, checked: !item.checked } : item
+    );
+    setChecklist(updatedChecklist);
+    onChecklistUpdate(assignment.id, updatedChecklist);
+  };
+
+  const allChecked = checklist.length > 0 && checklist.every(item => item.checked);
+  const progress = checklist.length > 0 ? Math.round((checklist.filter(i => i.checked).length / checklist.length) * 100) : 0;
+  const categories = Array.from(new Set(checklist.map(item => item.category)));
   const borderClass = variant === 'today' 
     ? 'border-2 border-yellow-400' 
     : variant === 'upcoming' 
@@ -169,13 +198,23 @@ const AssignmentCard = ({
               </Button>
             )}
 
-            {assignment.status === 'in_progress' && (
+            {assignment.status === 'in_progress' && checklist.length > 0 && (
+              <Button
+                onClick={() => setShowChecklist(!showChecklist)}
+                className="bg-yellow-500 hover:bg-yellow-600"
+              >
+                <Icon name="ClipboardCheck" size={16} className="mr-2" />
+                {showChecklist ? 'Скрыть чек-лист' : `Чек-лист (${progress}%)`}
+              </Button>
+            )}
+
+            {assignment.status === 'in_progress' && allChecked && (
               <Button
                 onClick={() => onUpdateStatus(assignment.id, 'completed')}
                 className="bg-green-500 hover:bg-green-600"
               >
                 <Icon name="CheckCircle" size={16} className="mr-2" />
-                Завершить
+                Завершить уборку
               </Button>
             )}
 
@@ -189,16 +228,65 @@ const AssignmentCard = ({
               </Button>
             )}
 
-            {variant === 'today' && (assignment.status === 'assigned' || assignment.status === 'in_progress') && (
-              <Button
-                onClick={onNavigateToChecklist}
-                className="btn-shine bg-transparent text-white hover:bg-transparent"
-              >
-                <Icon name="ClipboardCheck" size={16} className="mr-2" />
-                Чек-лист
-              </Button>
-            )}
           </div>
+
+          {showChecklist && checklist.length > 0 && assignment.status === 'in_progress' && (
+            <div className="mt-6 bg-gray-700 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-lg font-semibold text-white">Прогресс выполнения</span>
+                <span className="text-2xl font-bold text-yellow-400">{progress}%</span>
+              </div>
+              <div className="w-full h-3 bg-gray-600 rounded-full overflow-hidden mb-4">
+                <div
+                  className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="text-sm text-gray-400 mb-4">
+                Выполнено: {checklist.filter(i => i.checked).length} из {checklist.length}
+              </div>
+
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {categories.map(category => {
+                  const categoryItems = checklist.filter(item => item.category === category);
+                  const categoryChecked = categoryItems.filter(item => item.checked).length;
+
+                  return (
+                    <div key={category} className="bg-gray-800 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-yellow-400">{category}</h4>
+                        <span className="text-sm text-gray-400">
+                          {categoryChecked}/{categoryItems.length}
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        {categoryItems.map(item => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors"
+                          >
+                            <Checkbox
+                              checked={item.checked}
+                              onCheckedChange={() => toggleChecklistItem(item.id)}
+                              id={`item-${item.id}`}
+                            />
+                            <label
+                              htmlFor={`item-${item.id}`}
+                              className={`flex-1 cursor-pointer text-sm ${
+                                item.checked ? 'line-through text-gray-500' : 'text-white'
+                              }`}
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
