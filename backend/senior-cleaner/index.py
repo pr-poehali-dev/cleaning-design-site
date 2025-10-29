@@ -256,9 +256,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             address_id = result[0]
             
+            # Обновляем статус проверки и адреса
             cur.execute("""
                 UPDATE assignments 
-                SET inspection_completed_at = CURRENT_TIMESTAMP
+                SET inspection_completed_at = CURRENT_TIMESTAMP, verified_at = CURRENT_TIMESTAMP
                 WHERE id = %s
             """, (int(assignment_id),))
             
@@ -275,7 +276,62 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             return {
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps({'message': 'Inspection completed and verified'})
+                'body': json.dumps({'message': 'Inspection completed, verified, and salaries assigned'})
+            }
+        
+        elif action == 'salary-history' and method == 'GET':
+            params = event.get('queryStringParameters', {})
+            senior_cleaner_id = params.get('senior_cleaner_id')
+            
+            if not senior_cleaner_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'senior_cleaner_id required'})
+                }
+            
+            cur.execute("""
+                SELECT 
+                    a.id,
+                    ca.address,
+                    ca.client_name,
+                    ca.scheduled_date,
+                    a.inspection_started_at,
+                    a.inspection_completed_at,
+                    a.senior_cleaner_salary,
+                    ca.service_type,
+                    ca.area
+                FROM assignments a
+                JOIN cleaning_addresses ca ON a.address_id = ca.id
+                WHERE a.senior_cleaner_id = %s AND a.inspection_completed_at IS NOT NULL
+                ORDER BY a.inspection_completed_at DESC
+            """, (int(senior_cleaner_id),))
+            
+            rows = cur.fetchall()
+            records = []
+            total_earned = 0
+            
+            for row in rows:
+                salary = float(row[6]) if row[6] else 0
+                total_earned += salary
+                records.append({
+                    'id': row[0],
+                    'address': row[1],
+                    'client_name': row[2],
+                    'scheduled_date': str(row[3]),
+                    'inspection_started_at': str(row[4]) if row[4] else None,
+                    'inspection_completed_at': str(row[5]) if row[5] else None,
+                    'salary': salary,
+                    'service_type': row[7],
+                    'area': row[8]
+                })
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'records': records, 'total_earned': total_earned})
             }
         
         cur.close()

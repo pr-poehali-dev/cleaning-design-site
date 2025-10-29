@@ -168,10 +168,16 @@ const SeniorCleanerDashboard = () => {
             </h1>
             <p className="text-gray-400">{user.full_name}</p>
           </div>
-          <Button onClick={handleLogout} variant="outline">
-            <Icon name="LogOut" size={16} className="mr-2" />
-            Выйти
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => navigate('/salary')} variant="outline">
+              <Icon name="Wallet" size={16} className="mr-2" />
+              История зарплат
+            </Button>
+            <Button onClick={handleLogout} variant="outline">
+              <Icon name="LogOut" size={16} className="mr-2" />
+              Выйти
+            </Button>
+          </div>
         </div>
       </header>
 

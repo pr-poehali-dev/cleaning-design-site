@@ -17,8 +17,10 @@ interface SalaryRecord {
   address: string;
   client_name: string;
   scheduled_date: string;
-  completed_at: string;
-  verified_at: string;
+  completed_at?: string;
+  verified_at?: string;
+  inspection_started_at?: string;
+  inspection_completed_at?: string;
   salary: number;
   service_type: string;
   area: number;
@@ -40,20 +42,27 @@ const SalaryHistory = () => {
 
     try {
       const parsedUser = JSON.parse(storedUser);
-      if (parsedUser.role !== 'maid') {
+      if (parsedUser.role !== 'maid' && parsedUser.role !== 'senior_cleaner') {
         navigate('/admin');
         return;
       }
       setUser(parsedUser);
-      loadSalaryHistory(parsedUser.id);
+      loadSalaryHistory(parsedUser.id, parsedUser.role);
     } catch {
       navigate('/login');
     }
   }, [navigate]);
 
-  const loadSalaryHistory = async (maidId: number) => {
+  const loadSalaryHistory = async (userId: number, role: string) => {
     try {
-      const response = await fetch(`https://functions.poehali.dev/9af65dd4-4184-4636-9cc8-b12aa6b82787?action=salary-history&maid_id=${maidId}`);
+      let url = '';
+      if (role === 'maid') {
+        url = `https://functions.poehali.dev/9af65dd4-4184-4636-9cc8-b12aa6b82787?action=salary-history&maid_id=${userId}`;
+      } else {
+        url = `https://functions.poehali.dev/8e4bbd17-1246-4e91-9377-b1a02010a354?action=salary-history&senior_cleaner_id=${userId}`;
+      }
+      
+      const response = await fetch(url);
       const data = await response.json();
       if (response.ok) {
         setSalaryRecords(data.records);
@@ -78,7 +87,9 @@ const SalaryHistory = () => {
   if (!user) return null;
 
   const currentMonth = salaryRecords.filter(r => {
-    const recordDate = new Date(r.verified_at);
+    const dateField = r.verified_at || r.inspection_completed_at;
+    if (!dateField) return false;
+    const recordDate = new Date(dateField);
     const now = new Date();
     return recordDate.getMonth() === now.getMonth() && recordDate.getFullYear() === now.getFullYear();
   });
@@ -92,7 +103,7 @@ const SalaryHistory = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <Button
-                onClick={() => navigate('/maid')}
+                onClick={() => navigate(user.role === 'senior_cleaner' ? '/senior-cleaner' : '/maid')}
                 variant="ghost"
                 className="text-yellow-400 hover:text-yellow-300"
               >

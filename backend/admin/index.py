@@ -374,10 +374,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         elif action == 'salary-stats' and method == 'GET':
+            # Статистика для горничных
             cur.execute("""
                 SELECT 
                     u.id as maid_id,
                     u.full_name as maid_name,
+                    u.role,
                     COALESCE(SUM(a.salary), 0) as total_earned,
                     COUNT(CASE WHEN a.verified_at IS NOT NULL THEN 1 END) as completed_count,
                     COALESCE(SUM(CASE 
@@ -391,27 +393,72 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 FROM users u
                 LEFT JOIN assignments a ON u.id = a.maid_id
                 WHERE u.role = 'maid'
-                GROUP BY u.id, u.full_name
-                ORDER BY total_earned DESC
+                GROUP BY u.id, u.full_name, u.role
             """)
             
-            rows = cur.fetchall()
+            maid_stats = cur.fetchall()
+            
+            # Статистика для старших клинеров
+            cur.execute("""
+                SELECT 
+                    u.id as senior_id,
+                    u.full_name as senior_name,
+                    u.role,
+                    COALESCE(SUM(a.senior_cleaner_salary), 0) as total_earned,
+                    COUNT(CASE WHEN a.inspection_completed_at IS NOT NULL THEN 1 END) as completed_count,
+                    COALESCE(SUM(CASE 
+                        WHEN EXTRACT(MONTH FROM a.inspection_completed_at) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM a.inspection_completed_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+                        THEN a.senior_cleaner_salary ELSE 0 END), 0) as current_month_earned,
+                    COUNT(CASE 
+                        WHEN EXTRACT(MONTH FROM a.inspection_completed_at) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM a.inspection_completed_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+                        THEN 1 END) as current_month_count
+                FROM users u
+                LEFT JOIN assignments a ON u.id = a.senior_cleaner_id
+                WHERE u.role = 'senior_cleaner'
+                GROUP BY u.id, u.full_name, u.role
+            """)
+            
+            senior_stats = cur.fetchall()
+            
             stats = []
             total_paid = 0
             
-            for row in rows:
-                total_earned = float(row[2]) if row[2] else 0
-                current_month_earned = float(row[4]) if row[4] else 0
+            # Обрабатываем статистику горничных
+            for row in maid_stats:
+                total_earned = float(row[3]) if row[3] else 0
+                current_month_earned = float(row[5]) if row[5] else 0
                 total_paid += total_earned
                 
                 stats.append({
                     'maid_id': row[0],
                     'maid_name': row[1],
+                    'role': row[2],
                     'total_earned': total_earned,
-                    'completed_count': row[3],
+                    'completed_count': row[4],
                     'current_month_earned': current_month_earned,
-                    'current_month_count': row[5]
+                    'current_month_count': row[6]
                 })
+            
+            # Обрабатываем статистику старших клинеров
+            for row in senior_stats:
+                total_earned = float(row[3]) if row[3] else 0
+                current_month_earned = float(row[5]) if row[5] else 0
+                total_paid += total_earned
+                
+                stats.append({
+                    'maid_id': row[0],
+                    'maid_name': row[1],
+                    'role': row[2],
+                    'total_earned': total_earned,
+                    'completed_count': row[4],
+                    'current_month_earned': current_month_earned,
+                    'current_month_count': row[6]
+                })
+            
+            # Сортируем по общему заработку
+            stats.sort(key=lambda x: x['total_earned'], reverse=True)
             
             cur.close()
             conn.close()

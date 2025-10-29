@@ -14,6 +14,7 @@ interface User {
 interface MaidStats {
   maid_id: number;
   maid_name: string;
+  role: string;
   total_earned: number;
   completed_count: number;
   current_month_earned: number;
@@ -131,7 +132,16 @@ const AdminSalaryStats = () => {
                 <tbody className="divide-y divide-gray-700">
                   {stats.map((stat) => (
                     <tr key={stat.maid_id} className="hover:bg-gray-750 transition-colors">
-                      <td className="px-4 py-3 text-sm text-white font-semibold">{stat.maid_name}</td>
+                      <td className="px-4 py-3 text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="text-white font-semibold">{stat.maid_name}</span>
+                          <span className={`text-xs px-2 py-1 rounded ${
+                            stat.role === 'senior_cleaner' ? 'bg-purple-500/20 text-purple-400' : 'bg-yellow-500/20 text-yellow-400'
+                          }`}>
+                            {stat.role === 'senior_cleaner' ? 'Ст. клинер' : 'Горничная'}
+                          </span>
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-sm text-right">
                         <span className="text-yellow-400 font-bold">{stat.current_month_earned.toLocaleString('ru-RU')} ₽</span>
                       </td>
