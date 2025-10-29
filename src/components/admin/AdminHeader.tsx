@@ -27,6 +27,13 @@ const AdminHeader = ({ user, onLogout }: AdminHeaderProps) => {
             <span className="ml-2">Статистика зарплат</span>
           </Button>
           <Button
+            onClick={() => navigate('/admin/payments')}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black"
+          >
+            <Icon name="Wallet" size={20} />
+            <span className="ml-2">Управление выплатами</span>
+          </Button>
+          <Button
             variant="ghost"
             onClick={onLogout}
             className="text-white hover:text-yellow-400"

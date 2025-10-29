@@ -373,6 +373,32 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'message': 'Assignment cancelled'})
             }
         
+        elif action == 'mark-paid' and method == 'POST':
+            body_data = json.loads(event.get('body', '{}'))
+            assignment_id = body_data.get('assignment_id')
+            
+            if not assignment_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'assignment_id required'})
+                }
+            
+            cur.execute("""
+                UPDATE assignments 
+                SET paid = TRUE
+                WHERE id = %s
+            """, (int(assignment_id),))
+            conn.commit()
+            cur.close()
+            conn.close()
+            
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'message': 'Payment marked'})
+            }
+        
         elif action == 'salary-stats' and method == 'GET':
             # Статистика для горничных
             cur.execute("""
@@ -466,6 +492,69 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'statusCode': 200,
                 'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({'stats': stats, 'total_paid': total_paid})
+            }
+        
+        elif action == 'payments' and method == 'GET':
+            paid_filter = params.get('paid')
+            
+            query = """
+                SELECT 
+                    a.id,
+                    ca.address,
+                    ca.client_name,
+                    ca.scheduled_date,
+                    u.full_name as maid_name,
+                    u.role as maid_role,
+                    a.salary,
+                    a.verified_at,
+                    a.inspection_completed_at,
+                    a.paid,
+                    ca.service_type,
+                    ca.area,
+                    sc.full_name as senior_cleaner_name,
+                    a.senior_cleaner_salary
+                FROM assignments a
+                JOIN cleaning_addresses ca ON a.address_id = ca.id
+                JOIN users u ON a.maid_id = u.id
+                LEFT JOIN users sc ON a.senior_cleaner_id = sc.id
+                WHERE a.verified_at IS NOT NULL OR a.inspection_completed_at IS NOT NULL
+            """
+            
+            if paid_filter == 'true':
+                query += " AND a.paid = TRUE"
+            elif paid_filter == 'false':
+                query += " AND a.paid = FALSE"
+            
+            query += " ORDER BY COALESCE(a.verified_at, a.inspection_completed_at) DESC"
+            
+            cur.execute(query)
+            rows = cur.fetchall()
+            
+            payments = []
+            for row in rows:
+                payments.append({
+                    'id': row[0],
+                    'address': row[1],
+                    'client_name': row[2],
+                    'scheduled_date': str(row[3]),
+                    'maid_name': row[4],
+                    'maid_role': row[5],
+                    'salary': float(row[6]) if row[6] else 0,
+                    'verified_at': str(row[7]) if row[7] else None,
+                    'inspection_completed_at': str(row[8]) if row[8] else None,
+                    'paid': row[9],
+                    'service_type': row[10],
+                    'area': row[11],
+                    'senior_cleaner_name': row[12],
+                    'senior_cleaner_salary': float(row[13]) if row[13] else 0
+                })
+            
+            cur.close()
+            conn.close()
+            return {
+                'statusCode': 200,
+                'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'payments': payments})
             }
         
         cur.close()

@@ -24,6 +24,7 @@ interface SalaryRecord {
   salary: number;
   service_type: string;
   area: number;
+  paid: boolean;
 }
 
 const SalaryHistory = () => {
@@ -157,13 +158,16 @@ const SalaryHistory = () => {
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Тип уборки</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Площадь</th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-gray-300">Начислено</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Статус</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
-                  {salaryRecords.map((record) => (
+                  {salaryRecords.map((record) => {
+                    const displayDate = record.verified_at || record.inspection_completed_at;
+                    return (
                     <tr key={record.id} className="hover:bg-gray-750 transition-colors">
                       <td className="px-4 py-3 text-sm text-white">
-                        {new Date(record.verified_at).toLocaleDateString('ru-RU')}
+                        {displayDate ? new Date(displayDate).toLocaleDateString('ru-RU') : '—'}
                       </td>
                       <td className="px-4 py-3 text-sm text-white">{record.address}</td>
                       <td className="px-4 py-3 text-sm text-gray-300">{record.client_name}</td>
@@ -174,8 +178,21 @@ const SalaryHistory = () => {
                       <td className="px-4 py-3 text-sm text-right">
                         <span className="text-green-400 font-bold">{record.salary.toLocaleString('ru-RU')} ₽</span>
                       </td>
+                      <td className="px-4 py-3 text-center">
+                        {record.paid ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                            <Icon name="CheckCircle" size={14} className="mr-1" />
+                            Выплачено
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400">
+                            <Icon name="Clock" size={14} className="mr-1" />
+                            Ожидает
+                          </span>
+                        )}
+                      </td>
                     </tr>
-                  ))}
+                  )})}
                 </tbody>
               </table>
             </div>

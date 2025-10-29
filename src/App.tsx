@@ -13,6 +13,7 @@ import MaidDashboard from "./pages/MaidDashboard";
 import SeniorCleanerDashboard from "./pages/SeniorCleanerDashboard";
 import SalaryHistory from "./pages/SalaryHistory";
 import AdminSalaryStats from "./pages/AdminSalaryStats";
+import AdminPayments from "./pages/AdminPayments";
 import NotFound from "./pages/NotFound";
 import CursorSparkles from "./components/CursorSparkles";
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/salary-stats" element={<AdminSalaryStats />} />
+          <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/maid" element={<MaidDashboard />} />
           <Route path="/senior-cleaner" element={<SeniorCleanerDashboard />} />
           <Route path="/salary" element={<SalaryHistory />} />

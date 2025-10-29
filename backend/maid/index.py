@@ -322,7 +322,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     a.verified_at,
                     a.salary,
                     ca.service_type,
-                    ca.area
+                    ca.area,
+                    a.paid
                 FROM assignments a
                 JOIN cleaning_addresses ca ON a.address_id = ca.id
                 WHERE a.maid_id = %s AND a.verified_at IS NOT NULL
@@ -345,7 +346,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'verified_at': str(row[5]) if row[5] else None,
                     'salary': salary,
                     'service_type': row[7],
-                    'area': row[8]
+                    'area': row[8],
+                    'paid': row[9] if row[9] else False
                 })
             
             cur.close()
