@@ -330,34 +330,40 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-black text-white">
       <AdminHeader user={user} onLogout={handleLogout} />
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex gap-4 mb-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <div className="flex flex-wrap gap-2 sm:gap-4 mb-4 sm:mb-6">
           <Button
             onClick={() => setActiveTab('addresses')}
-            className={activeTab === 'addresses' ? 'bg-yellow-400 text-black' : 'bg-gray-700 text-white'}
+            className={`h-9 sm:h-10 text-sm sm:text-base ${activeTab === 'addresses' ? 'bg-yellow-400 text-black' : 'bg-gray-700 text-white'}`}
+            size="sm"
           >
-            <Icon name="MapPin" size={20} className="mr-2" />
-            Адреса уборок
+            <Icon name="MapPin" size={16} className="sm:mr-2" />
+            <span className="hidden sm:inline ml-2">Адреса уборок</span>
+            <span className="sm:hidden ml-1">Адреса</span>
           </Button>
           <Button
             onClick={() => setActiveTab('maids')}
-            className={activeTab === 'maids' ? 'bg-yellow-400 text-black' : 'bg-gray-700 text-white'}
+            className={`h-9 sm:h-10 text-sm sm:text-base ${activeTab === 'maids' ? 'bg-yellow-400 text-black' : 'bg-gray-700 text-white'}`}
+            size="sm"
           >
-            <Icon name="Users" size={20} className="mr-2" />
-            Горничные
+            <Icon name="Users" size={16} className="sm:mr-2" />
+            <span className="hidden sm:inline ml-2">Горничные</span>
+            <span className="sm:hidden ml-1">Сотрудники</span>
           </Button>
         </div>
 
         {activeTab === 'addresses' && (
           <div>
-            <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-yellow-400">Адреса уборок</h2>
+            <div className="flex flex-wrap justify-between items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-yellow-400">Адреса уборок</h2>
               <Button
                 onClick={() => setShowAddressForm(!showAddressForm)}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black h-9 sm:h-10 text-sm sm:text-base"
+                size="sm"
               >
-                <Icon name="Plus" size={20} className="mr-2" />
-                Добавить адрес
+                <Icon name="Plus" size={16} className="sm:mr-2" />
+                <span className="hidden sm:inline ml-2">Добавить адрес</span>
+                <span className="sm:hidden ml-1">Добавить</span>
               </Button>
             </div>
 
@@ -368,8 +374,8 @@ const AdminDashboard = () => {
             />
 
             {showAddressForm && (
-              <div className="mb-6">
-                <h3 className="text-xl font-bold text-yellow-400 mb-4">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-bold text-yellow-400 mb-3 sm:mb-4">
                   {editingAddress ? 'Редактировать адрес' : 'Добавить новый адрес'}
                 </h3>
                 <AddressForm
@@ -395,11 +401,11 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {filteredAddresses.length === 0 && (
-                <div className="text-center py-12 text-gray-400">
-                  <Icon name="Search" size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>Нет адресов с выбранным статусом</p>
+                <div className="text-center py-8 sm:py-12 text-gray-400">
+                  <Icon name="Search" size={40} className="mx-auto mb-3 sm:mb-4 opacity-50" />
+                  <p className="text-sm sm:text-base">Нет адресов с выбранным статусом</p>
                 </div>
               )}
               {filteredAddresses.map((address) => (

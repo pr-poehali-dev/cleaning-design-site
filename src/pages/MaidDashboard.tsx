@@ -263,7 +263,7 @@ const MaidDashboard = () => {
         onLogout={handleLogout}
       />
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <StatsCards
           todayCount={todayAssignments.length}
           upcomingCount={upcomingAssignments.length}
@@ -271,9 +271,9 @@ const MaidDashboard = () => {
         />
 
         {todayAssignments.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-yellow-400 mb-4">Сегодня</h2>
-            <div className="space-y-4">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-3 sm:mb-4">Сегодня</h2>
+            <div className="space-y-3 sm:space-y-4">
               {todayAssignments.map((assignment) => (
                 <AssignmentCard
                   key={assignment.id}
@@ -301,9 +301,9 @@ const MaidDashboard = () => {
         )}
 
         {upcomingAssignments.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-yellow-400 mb-4">Предстоящие</h2>
-            <div className="space-y-4">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-yellow-400 mb-3 sm:mb-4">Предстоящие</h2>
+            <div className="space-y-3 sm:space-y-4">
               {upcomingAssignments.map((assignment) => (
                 <AssignmentCard
                   key={assignment.id}

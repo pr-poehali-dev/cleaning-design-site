@@ -92,14 +92,14 @@ const AssignmentCard = ({
 
   if (variant === 'past') {
     return (
-      <div className={`${bgClass} rounded-lg p-4 ${borderClass}`}>
+      <div className={`${bgClass} rounded-lg p-3 sm:p-4 ${borderClass}`}>
         <div className="flex justify-between items-center">
-          <div>
-            <h3 className="font-bold text-white">{assignment.address}</h3>
-            <p className="text-gray-400 text-sm">{assignment.scheduled_date}</p>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-white text-sm sm:text-base truncate">{assignment.address}</h3>
+            <p className="text-gray-400 text-xs sm:text-sm">{assignment.scheduled_date}</p>
           </div>
-          <div className="text-right">
-            <span className="text-green-400 text-sm">✓ Выполнено</span>
+          <div className="text-right ml-2 flex-shrink-0">
+            <span className="text-green-400 text-xs sm:text-sm">✓ Выполнено</span>
           </div>
         </div>
       </div>
@@ -107,17 +107,22 @@ const AssignmentCard = ({
   }
 
   return (
-    <div className={`${bgClass} rounded-lg p-6 ${borderClass}`}>
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className={`text-xl font-bold ${variant === 'today' ? 'text-yellow-400' : 'text-white'}`}>
+    <div className={`${bgClass} rounded-lg p-4 sm:p-6 ${borderClass}`}>
+      <div className="flex justify-between items-start mb-3 sm:mb-4 gap-2">
+        <div className="flex-1 min-w-0">
+          <h3 className={`text-lg sm:text-xl font-bold ${variant === 'today' ? 'text-yellow-400' : 'text-white'} break-words`}>
             {assignment.address}
           </h3>
-          <p className="text-gray-400">
-            Клиент: {assignment.client_name}{variant === 'today' && ` • ${assignment.client_phone}`}
+          <p className="text-gray-400 text-sm break-words">
+            Клиент: {assignment.client_name}
+            {variant === 'today' && (
+              <span className="block sm:inline sm:before:content-['•'] sm:before:mx-1">
+                {assignment.client_phone}
+              </span>
+            )}
           </p>
         </div>
-        <span className={`px-3 py-1 rounded text-sm ${
+        <span className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm flex-shrink-0 ${
           assignment.status === 'completed' ? 'bg-green-500/20 text-green-400' :
           assignment.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
           'bg-yellow-500/20 text-yellow-400'
@@ -126,37 +131,37 @@ const AssignmentCard = ({
         </span>
       </div>
 
-      <div className={`grid ${variant === 'today' ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 mb-4`}>
+      <div className={`grid grid-cols-2 ${variant === 'today' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3 sm:gap-4 mb-3 sm:mb-4`}>
         <div>
-          <span className="text-gray-400 text-sm">{variant === 'today' ? 'Тип уборки' : 'Тип'}</span>
-          <p className={`${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
+          <span className="text-gray-400 text-xs sm:text-sm">{variant === 'today' ? 'Тип уборки' : 'Тип'}</span>
+          <p className={`text-sm sm:text-base ${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
             {serviceTypeNames[assignment.service_type]}
           </p>
         </div>
         <div>
-          <span className="text-gray-400 text-sm">Площадь</span>
-          <p className={`${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
+          <span className="text-gray-400 text-xs sm:text-sm">Площадь</span>
+          <p className={`text-sm sm:text-base ${variant === 'today' ? 'text-white font-semibold' : 'text-white'}`}>
             {assignment.area} м²
           </p>
         </div>
         {variant === 'today' && (
-          <div>
-            <span className="text-gray-400 text-sm">Время</span>
-            <p className="text-white font-semibold">{assignment.scheduled_time}</p>
+          <div className="col-span-2 sm:col-span-1">
+            <span className="text-gray-400 text-xs sm:text-sm">Время</span>
+            <p className="text-sm sm:text-base text-white font-semibold">{assignment.scheduled_time}</p>
           </div>
         )}
       </div>
 
       {variant === 'upcoming' && (
-        <p className="text-gray-400 text-sm mb-4">
+        <p className="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">
           📅 {assignment.scheduled_date} в {assignment.scheduled_time}
         </p>
       )}
 
       {assignment.notes && variant === 'today' && (
-        <div className="mb-4 p-3 bg-gray-700 rounded">
-          <span className="text-gray-400 text-sm">Примечания:</span>
-          <p className="text-white">{assignment.notes}</p>
+        <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-gray-700 rounded">
+          <span className="text-gray-400 text-xs sm:text-sm">Примечания:</span>
+          <p className="text-white text-sm break-words">{assignment.notes}</p>
         </div>
       )}
 
@@ -171,17 +176,17 @@ const AssignmentCard = ({
       ) : (
         <>
           {(assignment.photo_before || assignment.photo_after) && variant === 'today' && (
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
               {assignment.photo_before && (
                 <div>
-                  <p className="text-gray-400 text-sm mb-2">Фото ДО уборки</p>
-                  <img src={assignment.photo_before} alt="До уборки" className="w-full h-48 object-cover rounded-lg" />
+                  <p className="text-gray-400 text-xs sm:text-sm mb-2">Фото ДО уборки</p>
+                  <img src={assignment.photo_before} alt="До уборки" className="w-full h-40 sm:h-48 object-cover rounded-lg" />
                 </div>
               )}
               {assignment.photo_after && (
                 <div>
-                  <p className="text-gray-400 text-sm mb-2">Фото ПОСЛЕ уборки</p>
-                  <img src={assignment.photo_after} alt="После уборки" className="w-full h-48 object-cover rounded-lg" />
+                  <p className="text-gray-400 text-xs sm:text-sm mb-2">Фото ПОСЛЕ уборки</p>
+                  <img src={assignment.photo_after} alt="После уборки" className="w-full h-40 sm:h-48 object-cover rounded-lg" />
                 </div>
               )}
             </div>
@@ -191,9 +196,10 @@ const AssignmentCard = ({
             {assignment.status === 'assigned' && (
               <Button
                 onClick={() => onUpdateStatus(assignment.id, 'in_progress')}
-                className="bg-blue-500 hover:bg-blue-600"
+                className="bg-blue-500 hover:bg-blue-600 h-9 sm:h-10 text-sm sm:text-base"
+                size="sm"
               >
-                <Icon name="Play" size={16} className="mr-2" />
+                <Icon name="Play" size={16} className="mr-1 sm:mr-2" />
                 Начать работу
               </Button>
             )}
@@ -201,61 +207,67 @@ const AssignmentCard = ({
             {assignment.status === 'in_progress' && checklist.length > 0 && (
               <Button
                 onClick={() => setShowChecklist(!showChecklist)}
-                className="bg-yellow-500 hover:bg-yellow-600"
+                className="bg-yellow-500 hover:bg-yellow-600 h-9 sm:h-10 text-sm sm:text-base"
+                size="sm"
               >
-                <Icon name="ClipboardCheck" size={16} className="mr-2" />
-                {showChecklist ? 'Скрыть чек-лист' : `Чек-лист (${progress}%)`}
+                <Icon name="ClipboardCheck" size={16} className="mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">{showChecklist ? 'Скрыть чек-лист' : `Чек-лист (${progress}%)`}</span>
+                <span className="sm:hidden">{progress}%</span>
               </Button>
             )}
 
             {assignment.status === 'in_progress' && allChecked && (
               <Button
                 onClick={() => onUpdateStatus(assignment.id, 'completed')}
-                className="bg-green-500 hover:bg-green-600"
+                className="bg-green-500 hover:bg-green-600 h-9 sm:h-10 text-sm sm:text-base"
+                size="sm"
               >
-                <Icon name="CheckCircle" size={16} className="mr-2" />
-                Завершить уборку
+                <Icon name="CheckCircle" size={16} className="mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Завершить уборку</span>
+                <span className="sm:hidden">Завершить</span>
               </Button>
             )}
 
             {(assignment.status === 'assigned' || assignment.status === 'in_progress') && (
               <Button
                 onClick={onStartUpload}
-                className="bg-purple-500 hover:bg-purple-600"
+                className="bg-purple-500 hover:bg-purple-600 h-9 sm:h-10 text-sm sm:text-base"
+                size="sm"
               >
-                <Icon name="Camera" size={16} className="mr-2" />
-                Загрузить фото
+                <Icon name="Camera" size={16} className="mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Загрузить фото</span>
+                <span className="sm:hidden">Фото</span>
               </Button>
             )}
 
           </div>
 
           {showChecklist && checklist.length > 0 && assignment.status === 'in_progress' && (
-            <div className="mt-6 bg-gray-700 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-lg font-semibold text-white">Прогресс выполнения</span>
-                <span className="text-2xl font-bold text-yellow-400">{progress}%</span>
+            <div className="mt-4 sm:mt-6 bg-gray-700 rounded-lg p-3 sm:p-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <span className="text-base sm:text-lg font-semibold text-white">Прогресс выполнения</span>
+                <span className="text-xl sm:text-2xl font-bold text-yellow-400">{progress}%</span>
               </div>
-              <div className="w-full h-3 bg-gray-600 rounded-full overflow-hidden mb-4">
+              <div className="w-full h-2 sm:h-3 bg-gray-600 rounded-full overflow-hidden mb-3 sm:mb-4">
                 <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-300"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <div className="text-sm text-gray-400 mb-4">
+              <div className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
                 Выполнено: {checklist.filter(i => i.checked).length} из {checklist.length}
               </div>
 
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-3 sm:space-y-4 max-h-80 sm:max-h-96 overflow-y-auto">
                 {categories.map(category => {
                   const categoryItems = checklist.filter(item => item.category === category);
                   const categoryChecked = categoryItems.filter(item => item.checked).length;
 
                   return (
-                    <div key={category} className="bg-gray-800 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-semibold text-yellow-400">{category}</h4>
-                        <span className="text-sm text-gray-400">
+                    <div key={category} className="bg-gray-800 rounded-lg p-3 sm:p-4">
+                      <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <h4 className="font-semibold text-sm sm:text-base text-yellow-400">{category}</h4>
+                        <span className="text-xs sm:text-sm text-gray-400">
                           {categoryChecked}/{categoryItems.length}
                         </span>
                       </div>
@@ -263,7 +275,7 @@ const AssignmentCard = ({
                         {categoryItems.map(item => (
                           <div
                             key={item.id}
-                            className="flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors"
+                            className="flex items-center space-x-2 sm:space-x-3 p-2 rounded hover:bg-gray-700 transition-colors"
                           >
                             <Checkbox
                               checked={item.checked}
@@ -272,7 +284,7 @@ const AssignmentCard = ({
                             />
                             <label
                               htmlFor={`item-${item.id}`}
-                              className={`flex-1 cursor-pointer text-sm ${
+                              className={`flex-1 cursor-pointer text-xs sm:text-sm ${
                                 item.checked ? 'line-through text-gray-500' : 'text-white'
                               }`}
                             >
