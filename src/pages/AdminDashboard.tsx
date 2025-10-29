@@ -130,9 +130,9 @@ const AdminDashboard = () => {
       });
 
       if (response.ok) {
-        toast({ title: 'Горничная добавлена', description: 'Новый сотрудник успешно добавлен' });
+        toast({ title: 'Сотрудник добавлен', description: 'Новый сотрудник успешно добавлен' });
         setShowMaidForm(false);
-        setNewMaid({ email: '', password: '', full_name: '', phone: '' });
+        setNewMaid({ email: '', password: '', full_name: '', phone: '', role: 'maid' });
         loadMaids();
       }
     } catch (error) {
