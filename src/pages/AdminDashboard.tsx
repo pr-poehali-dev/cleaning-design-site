@@ -122,6 +122,7 @@ const AdminDashboard = () => {
 
   const handleAddMaid = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Adding maid:', newMaid);
     try {
       const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=maids', {
         method: 'POST',
@@ -129,14 +130,20 @@ const AdminDashboard = () => {
         body: JSON.stringify(newMaid),
       });
 
+      const data = await response.json();
+      console.log('Response:', response.status, data);
+
       if (response.ok) {
         toast({ title: 'Сотрудник добавлен', description: 'Новый сотрудник успешно добавлен' });
         setShowMaidForm(false);
         setNewMaid({ email: '', password: '', full_name: '', phone: '', role: 'maid' });
         loadMaids();
+      } else {
+        toast({ title: 'Ошибка', description: data.error || 'Не удалось добавить сотрудника', variant: 'destructive' });
       }
     } catch (error) {
-      toast({ title: 'Ошибка', description: 'Не удалось добавить горничную', variant: 'destructive' });
+      console.error('Error adding maid:', error);
+      toast({ title: 'Ошибка', description: 'Не удалось добавить сотрудника', variant: 'destructive' });
     }
   };
 

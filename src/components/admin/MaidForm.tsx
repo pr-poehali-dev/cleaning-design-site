@@ -68,6 +68,7 @@ const MaidForm = ({ maid, isEditing = false, onMaidChange, onSubmit, onCancel }:
               <Select 
                 value={maid.role || 'maid'} 
                 onValueChange={(value) => onMaidChange({ ...maid, role: value })}
+                required
               >
                 <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                   <SelectValue placeholder="Выберите роль" />
@@ -77,6 +78,7 @@ const MaidForm = ({ maid, isEditing = false, onMaidChange, onSubmit, onCancel }:
                   <SelectItem value="senior_cleaner">Старший клинер</SelectItem>
                 </SelectContent>
               </Select>
+              <input type="hidden" name="role" value={maid.role || 'maid'} required />
             </div>
           )}
         </div>
