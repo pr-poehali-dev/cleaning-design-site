@@ -46,10 +46,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         ca.area, ca.price, ca.scheduled_date, ca.scheduled_time, ca.status, ca.notes, ca.created_at,
                         a.photo_before, a.photo_after, a.photos_uploaded_at,
                         u.full_name as assigned_maid_name,
-                        a.salary, a.verified_at
+                        a.salary, a.verified_at, sc.full_name as senior_cleaner_name,
+                        a.senior_cleaner_salary, a.inspection_completed_at
                     FROM cleaning_addresses ca
                     LEFT JOIN assignments a ON ca.id = a.address_id
                     LEFT JOIN users u ON a.maid_id = u.id
+                    LEFT JOIN users sc ON a.senior_cleaner_id = sc.id
                     ORDER BY ca.scheduled_date DESC, ca.scheduled_time DESC
                 """)
                 rows = cur.fetchall()
@@ -73,7 +75,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'photos_uploaded_at': str(row[14]) if row[14] else None,
                         'assigned_maid_name': row[15],
                         'salary': float(row[16]) if row[16] else None,
-                        'verified_at': str(row[17]) if row[17] else None
+                        'verified_at': str(row[17]) if row[17] else None,
+                        'senior_cleaner_name': row[18],
+                        'senior_cleaner_salary': float(row[19]) if row[19] else None,
+                        'inspection_completed_at': str(row[20]) if row[20] else None
                     })
                 
                 cur.close()
@@ -182,6 +187,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         u.full_name, 
                         u.email, 
                         u.phone,
+                        u.role,
                         COUNT(CASE WHEN ca.status = 'completed' THEN 1 END) as completed_count,
                         COUNT(CASE WHEN ca.status = 'in_progress' THEN 1 END) as in_progress_count,
                         COUNT(CASE WHEN ca.status = 'assigned' THEN 1 END) as assigned_count,
@@ -189,9 +195,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     FROM users u
                     LEFT JOIN assignments a ON u.id = a.maid_id
                     LEFT JOIN cleaning_addresses ca ON a.address_id = ca.id
-                    WHERE u.role = 'maid'
-                    GROUP BY u.id, u.full_name, u.email, u.phone
-                    ORDER BY u.full_name
+                    WHERE u.role IN ('maid', 'senior_cleaner')
+                    GROUP BY u.id, u.full_name, u.email, u.phone, u.role
+                    ORDER BY u.role, u.full_name
                 """)
                 rows = cur.fetchall()
                 maids = []
@@ -201,10 +207,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                         'full_name': row[1],
                         'email': row[2],
                         'phone': row[3],
-                        'completed_count': row[4],
-                        'in_progress_count': row[5],
-                        'assigned_count': row[6],
-                        'total_assignments': row[7]
+                        'role': row[4],
+                        'completed_count': row[5],
+                        'in_progress_count': row[6],
+                        'assigned_count': row[7],
+                        'total_assignments': row[8]
                     })
                 
                 cur.close()
@@ -221,7 +228,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 cur.execute("""
                     UPDATE users 
                     SET full_name = %s, email = %s, phone = %s, password_hash = %s
-                    WHERE id = %s AND role = 'maid'
+                    WHERE id = %s AND role IN ('maid', 'senior_cleaner')
                 """, (
                     body_data.get('full_name'),
                     body_data.get('email'),
@@ -243,7 +250,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 maid_id = body_data.get('id')
                 
                 cur.execute("DELETE FROM assignments WHERE maid_id = %s", (maid_id,))
-                cur.execute("DELETE FROM users WHERE id = %s AND role = 'maid'", (maid_id,))
+                cur.execute("DELETE FROM users WHERE id = %s AND role IN ('maid', 'senior_cleaner')", (maid_id,))
                 conn.commit()
                 cur.close()
                 conn.close()
@@ -255,15 +262,17 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             elif method == 'POST':
                 body_data = json.loads(event.get('body', '{}'))
+                role = body_data.get('role', 'maid')
                 cur.execute("""
                     INSERT INTO users (email, password_hash, full_name, phone, role)
-                    VALUES (%s, %s, %s, %s, 'maid')
+                    VALUES (%s, %s, %s, %s, %s)
                     RETURNING id
                 """, (
                     body_data.get('email'),
                     body_data.get('password'),
                     body_data.get('full_name'),
-                    body_data.get('phone')
+                    body_data.get('phone'),
+                    role
                 ))
                 new_id = cur.fetchone()[0]
                 conn.commit()
@@ -279,15 +288,17 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             body_data = json.loads(event.get('body', '{}'))
             address_id = body_data.get('address_id')
             maid_id = body_data.get('maid_id')
+            senior_cleaner_id = body_data.get('senior_cleaner_id')
             salary = body_data.get('salary', 5000)
+            senior_cleaner_salary = body_data.get('senior_cleaner_salary', 2000)
             
             cur.execute("""
-                INSERT INTO assignments (address_id, maid_id, salary, status)
-                VALUES (%s, %s, %s, 'assigned')
+                INSERT INTO assignments (address_id, maid_id, senior_cleaner_id, salary, senior_cleaner_salary, status)
+                VALUES (%s, %s, %s, %s, %s, 'assigned')
                 ON CONFLICT (address_id, maid_id) DO UPDATE 
-                SET salary = EXCLUDED.salary
+                SET salary = EXCLUDED.salary, senior_cleaner_id = EXCLUDED.senior_cleaner_id, senior_cleaner_salary = EXCLUDED.senior_cleaner_salary
                 RETURNING id
-            """, (address_id, maid_id, salary))
+            """, (address_id, maid_id, senior_cleaner_id, salary, senior_cleaner_salary))
             
             result = cur.fetchone()
             if result:

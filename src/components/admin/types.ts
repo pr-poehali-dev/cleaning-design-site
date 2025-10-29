@@ -33,6 +33,9 @@ export interface Address {
   verified_at?: string;
   checklist_data?: ChecklistItem[];
   checklist_started_at?: string;
+  senior_cleaner_name?: string;
+  senior_cleaner_salary?: number;
+  inspection_completed_at?: string;
 }
 
 export interface Maid {
@@ -40,6 +43,7 @@ export interface Maid {
   full_name: string;
   phone: string;
   email?: string;
+  role: string;
   completed_count?: number;
   in_progress_count?: number;
   assigned_count?: number;
@@ -57,6 +61,7 @@ export const statusNames: Record<string, string> = {
   pending: 'Ожидает',
   assigned: 'Назначена',
   in_progress: 'В работе',
-  completed: 'Выполнена',
+  completed: 'На проверке',
+  verified: 'Проверена',
   cancelled: 'Отменена',
 };

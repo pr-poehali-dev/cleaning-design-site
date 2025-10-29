@@ -8,7 +8,7 @@ interface AddressCardProps {
   address: Address;
   maids: Maid[];
   showAssignForm: boolean;
-  onAssign: (maidId: number, salary: number) => void;
+  onAssign: (maidId: number, salary: number, seniorCleanerId?: number, seniorCleanerSalary?: number) => void;
   onShowAssignForm: () => void;
   onCancelAssign: () => void;
   onVerify: (addressId: number) => void;
@@ -21,9 +21,14 @@ interface AddressCardProps {
 const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignForm, onCancelAssign, onVerify, onEdit, onDelete, onReassign, onCancel }: AddressCardProps) => {
   const [showPhotos, setShowPhotos] = useState(false);
   const [selectedMaidId, setSelectedMaidId] = useState<string>('');
+  const [selectedSeniorCleanerId, setSelectedSeniorCleanerId] = useState<string>('');
   const [salary, setSalary] = useState<number>(address.salary || 5000);
+  const [seniorCleanerSalary, setSeniorCleanerSalary] = useState<number>(address.senior_cleaner_salary || 2000);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  const regularMaids = maids.filter(m => m.role === 'maid');
+  const seniorCleaners = maids.filter(m => m.role === 'senior_cleaner');
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -34,9 +39,10 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
         </div>
         <div className="flex items-center gap-2">
           <span className={`px-3 py-1 rounded text-sm ${
-            address.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+            address.status === 'verified' ? 'bg-purple-500/20 text-purple-400' :
+            address.status === 'completed' ? 'bg-yellow-500/20 text-yellow-400' :
             address.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
-            address.status === 'assigned' ? 'bg-yellow-500/20 text-yellow-400' :
+            address.status === 'assigned' ? 'bg-orange-500/20 text-orange-400' :
             'bg-gray-500/20 text-gray-400'
           }`}>
             {statusNames[address.status]}
@@ -109,25 +115,36 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
       )}
 
       {address.assigned_maid_name && (
-        <div className="mb-4 p-3 bg-gray-700 rounded">
-          <div className="flex justify-between items-center">
-            <div>
-              <span className="text-gray-400 text-sm">Назначена горничная:</span>
-              <p className="text-white font-semibold">{address.assigned_maid_name}</p>
-              {address.salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.salary} ₽</p>}
+        <div className="mb-4 space-y-2">
+          <div className="p-3 bg-gray-700 rounded">
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="text-gray-400 text-sm">Назначена горничная:</span>
+                <p className="text-white font-semibold">{address.assigned_maid_name}</p>
+                {address.salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.salary} ₽</p>}
+              </div>
+              {!address.verified_at && (
+                <Button
+                  onClick={() => onReassign(address.id)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-400 hover:text-blue-300"
+                >
+                  <Icon name="UserCog" size={16} className="mr-1" />
+                  Изменить
+                </Button>
+              )}
             </div>
-            {!address.verified_at && (
-              <Button
-                onClick={() => onReassign(address.id)}
-                variant="ghost"
-                size="sm"
-                className="text-blue-400 hover:text-blue-300"
-              >
-                <Icon name="UserCog" size={16} className="mr-1" />
-                Изменить
-              </Button>
-            )}
           </div>
+          {address.senior_cleaner_name && (
+            <div className="p-3 bg-gray-700 rounded">
+              <div>
+                <span className="text-gray-400 text-sm">Старший клинер:</span>
+                <p className="text-white font-semibold">{address.senior_cleaner_name}</p>
+                {address.senior_cleaner_salary && <p className="text-yellow-400 text-sm mt-1">Зарплата: {address.senior_cleaner_salary} ₽</p>}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -173,13 +190,14 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
       
       {showAssignForm ? (
         <div className="space-y-3">
-          <div className="flex gap-2 items-center">
+          <div>
+            <label className="text-gray-400 text-sm mb-2 block">Горничная</label>
             <Select onValueChange={(value) => setSelectedMaidId(value)}>
               <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                 <SelectValue placeholder="Выберите горничную" />
               </SelectTrigger>
               <SelectContent>
-                {maids.map((maid) => (
+                {regularMaids.map((maid) => (
                   <SelectItem key={maid.id} value={maid.id.toString()}>
                     {maid.full_name}
                   </SelectItem>
@@ -188,7 +206,7 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
             </Select>
           </div>
           <div className="flex gap-2 items-center">
-            <label className="text-white text-sm">Зарплата:</label>
+            <label className="text-white text-sm">Зарплата горничной:</label>
             <input
               type="number"
               value={salary}
@@ -199,11 +217,45 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
             />
             <span className="text-gray-400">₽</span>
           </div>
+          <div>
+            <label className="text-gray-400 text-sm mb-2 block">Старший клинер (опционально)</label>
+            <Select onValueChange={(value) => setSelectedSeniorCleanerId(value)}>
+              <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                <SelectValue placeholder="Выберите старшего клинера" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Без старшего клинера</SelectItem>
+                {seniorCleaners.map((cleaner) => (
+                  <SelectItem key={cleaner.id} value={cleaner.id.toString()}>
+                    {cleaner.full_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          {selectedSeniorCleanerId && selectedSeniorCleanerId !== 'none' && (
+            <div className="flex gap-2 items-center">
+              <label className="text-white text-sm">Зарплата старшего клинера:</label>
+              <input
+                type="number"
+                value={seniorCleanerSalary}
+                onChange={(e) => setSeniorCleanerSalary(Number(e.target.value))}
+                className="bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded w-32"
+                min="0"
+                step="500"
+              />
+              <span className="text-gray-400">₽</span>
+            </div>
+          )}
           <div className="flex gap-2">
             <Button 
               onClick={() => {
                 if (selectedMaidId) {
-                  onAssign(parseInt(selectedMaidId), salary);
+                  const seniorId = selectedSeniorCleanerId && selectedSeniorCleanerId !== 'none' 
+                    ? parseInt(selectedSeniorCleanerId) 
+                    : undefined;
+                  const seniorSalary = seniorId ? seniorCleanerSalary : undefined;
+                  onAssign(parseInt(selectedMaidId), salary, seniorId, seniorSalary);
                 }
               }}
               disabled={!selectedMaidId}

@@ -10,6 +10,7 @@ import InspectionChecklist from "./pages/InspectionChecklist";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import MaidDashboard from "./pages/MaidDashboard";
+import SeniorCleanerDashboard from "./pages/SeniorCleanerDashboard";
 import SalaryHistory from "./pages/SalaryHistory";
 import AdminSalaryStats from "./pages/AdminSalaryStats";
 import NotFound from "./pages/NotFound";
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/salary-stats" element={<AdminSalaryStats />} />
           <Route path="/maid" element={<MaidDashboard />} />
+          <Route path="/senior-cleaner" element={<SeniorCleanerDashboard />} />
           <Route path="/salary" element={<SalaryHistory />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

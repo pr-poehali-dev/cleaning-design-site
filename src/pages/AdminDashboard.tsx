@@ -42,6 +42,7 @@ const AdminDashboard = () => {
     password: '',
     full_name: '',
     phone: '',
+    role: 'maid',
   });
 
   const [editingMaid, setEditingMaid] = useState<Maid & { password?: string } | null>(null);
@@ -139,16 +140,23 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleAssignMaid = async (addressId: number, maidId: number, salary: number) => {
+  const handleAssignMaid = async (addressId: number, maidId: number, salary: number, seniorCleanerId?: number, seniorCleanerSalary?: number) => {
     try {
       const response = await fetch('https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=assign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address_id: addressId, maid_id: maidId, salary }),
+        body: JSON.stringify({ 
+          address_id: addressId, 
+          maid_id: maidId, 
+          salary,
+          senior_cleaner_id: seniorCleanerId,
+          senior_cleaner_salary: seniorCleanerSalary
+        }),
       });
 
       if (response.ok) {
-        toast({ title: 'Назначено', description: `Горничная назначена на адрес. Зарплата: ${salary} ₽` });
+        const seniorMsg = seniorCleanerId ? ` + старший клинер (${seniorCleanerSalary} ₽)` : '';
+        toast({ title: 'Назначено', description: `Горничная назначена на адрес. Зарплата: ${salary} ₽${seniorMsg}` });
         setShowAssignForm(null);
         loadAddresses();
       }
@@ -166,7 +174,7 @@ const AdminDashboard = () => {
       });
 
       if (response.ok) {
-        toast({ title: 'Проверено', description: 'Зарплата начислена горничной' });
+        toast({ title: 'Проверено', description: 'Зарплаты начислены' });
         loadAddresses();
       }
     } catch (error) {
@@ -393,7 +401,7 @@ const AdminDashboard = () => {
                   address={address}
                   maids={maids}
                   showAssignForm={showAssignForm === address.id}
-                  onAssign={(maidId, salary) => handleAssignMaid(address.id, maidId, salary)}
+                  onAssign={(maidId, salary, seniorCleanerId, seniorCleanerSalary) => handleAssignMaid(address.id, maidId, salary, seniorCleanerId, seniorCleanerSalary)}
                   onShowAssignForm={() => setShowAssignForm(address.id)}
                   onCancelAssign={() => setShowAssignForm(null)}
                   onVerify={handleVerify}

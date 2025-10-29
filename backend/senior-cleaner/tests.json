@@ -1,0 +1,23 @@
+{
+  "tests": [
+    {
+      "name": "Get inspections without senior_cleaner_id",
+      "method": "GET",
+      "path": "/?action=inspections",
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "senior_cleaner_id required"
+      }
+    },
+    {
+      "name": "Get inspections with senior_cleaner_id",
+      "method": "GET",
+      "path": "/?action=inspections&senior_cleaner_id=1",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "inspections": "array"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

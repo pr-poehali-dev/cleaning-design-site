@@ -233,7 +233,8 @@ const MaidDashboard = () => {
     pending: 'Ожидает',
     assigned: 'Назначена',
     in_progress: 'В работе',
-    completed: 'Выполнена',
+    completed: 'На проверке',
+    verified: 'Проверена',
     cancelled: 'Отменена',
   };
 
