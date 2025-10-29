@@ -114,6 +114,7 @@ const SeniorCleanerDashboard = () => {
   };
 
   const handleCompleteInspection = async (assignmentId: number) => {
+    console.log('Completing inspection:', assignmentId);
     try {
       const response = await fetch('https://functions.poehali.dev/8e4bbd17-1246-4e91-9377-b1a02010a354?action=complete-inspection', {
         method: 'POST',
@@ -121,13 +122,19 @@ const SeniorCleanerDashboard = () => {
         body: JSON.stringify({ assignment_id: assignmentId }),
       });
 
+      const data = await response.json();
+      console.log('Complete inspection response:', response.status, data);
+
       if (response.ok) {
         toast({ title: 'Проверка завершена', description: 'Адрес помечен как проверенный' });
         if (user) {
           loadInspections(user.id);
         }
+      } else {
+        toast({ title: 'Ошибка', description: data.error || 'Не удалось завершить проверку', variant: 'destructive' });
       }
     } catch (error) {
+      console.error('Error completing inspection:', error);
       toast({ title: 'Ошибка', description: 'Не удалось завершить проверку', variant: 'destructive' });
     }
   };
@@ -291,6 +298,8 @@ const InspectionCard = ({
   const allChecked = checklist.length > 0 && checklist.every(item => item.checked);
   const progress = checklist.length > 0 ? Math.round((checklist.filter(i => i.checked).length / checklist.length) * 100) : 0;
   const categories = Array.from(new Set(checklist.map(item => item.category)));
+
+  console.log('Inspection', inspection.id, '- allChecked:', allChecked, 'checklist length:', checklist.length, 'completed_at:', inspection.inspection_completed_at);
 
   return (
     <div className="bg-gray-800 rounded-lg p-6 border-2 border-yellow-400">
