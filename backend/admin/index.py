@@ -497,6 +497,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         elif action == 'payments':
             if method == 'GET':
                 paid_filter = params.get('paid')
+                date_from = params.get('date_from')
+                date_to = params.get('date_to')
                 
                 query = """
                     SELECT 
@@ -525,6 +527,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     query += " AND a.paid = TRUE"
                 elif paid_filter == 'false':
                     query += " AND a.paid = FALSE"
+                
+                if date_from:
+                    query += f" AND COALESCE(a.verified_at, a.inspection_completed_at) >= '{date_from}'"
+                
+                if date_to:
+                    query += f" AND COALESCE(a.verified_at, a.inspection_completed_at) <= '{date_to} 23:59:59'"
                 
                 query += " ORDER BY COALESCE(a.verified_at, a.inspection_completed_at) DESC"
                 

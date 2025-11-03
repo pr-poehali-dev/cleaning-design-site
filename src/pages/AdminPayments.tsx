@@ -35,6 +35,8 @@ const AdminPayments = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [filter, setFilter] = useState<'all' | 'paid' | 'unpaid'>('unpaid');
   const [loading, setLoading] = useState(false);
+  const [dateFrom, setDateFrom] = useState<string>('');
+  const [dateTo, setDateTo] = useState<string>('');
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -56,7 +58,7 @@ const AdminPayments = () => {
     }
   }, [navigate]);
 
-  const loadPayments = async (filterValue: string) => {
+  const loadPayments = async (filterValue: string, fromDate?: string, toDate?: string) => {
     setLoading(true);
     try {
       let url = 'https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=payments';
@@ -64,6 +66,13 @@ const AdminPayments = () => {
         url += '&paid=true';
       } else if (filterValue === 'unpaid') {
         url += '&paid=false';
+      }
+      
+      if (fromDate) {
+        url += `&date_from=${fromDate}`;
+      }
+      if (toDate) {
+        url += `&date_to=${toDate}`;
       }
       
       const response = await fetch(url);
@@ -132,7 +141,17 @@ const AdminPayments = () => {
 
   const handleFilterChange = (newFilter: 'all' | 'paid' | 'unpaid') => {
     setFilter(newFilter);
-    loadPayments(newFilter);
+    loadPayments(newFilter, dateFrom, dateTo);
+  };
+
+  const handleDateFilter = () => {
+    loadPayments(filter, dateFrom, dateTo);
+  };
+
+  const handleClearDateFilter = () => {
+    setDateFrom('');
+    setDateTo('');
+    loadPayments(filter, '', '');
   };
 
   const serviceTypeNames: Record<string, string> = {
@@ -197,10 +216,11 @@ const AdminPayments = () => {
         </div>
 
         <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-          <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-            <h2 className="text-xl font-bold text-yellow-400">История выплат</h2>
-            
-            <div className="flex gap-2">
+          <div className="p-4 border-b border-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+              <h2 className="text-xl font-bold text-yellow-400">История выплат</h2>
+              
+              <div className="flex flex-wrap gap-2">
               <Button
                 onClick={() => handleFilterChange('unpaid')}
                 variant={filter === 'unpaid' ? 'default' : 'outline'}
@@ -227,6 +247,48 @@ const AdminPayments = () => {
                 <Icon name="List" size={16} className="mr-2" />
                 Все
               </Button>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-sm text-gray-400 mb-1">Дата от</label>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="w-full bg-gray-700 text-white border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-yellow-400"
+                />
+              </div>
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-sm text-gray-400 mb-1">Дата до</label>
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="w-full bg-gray-700 text-white border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-yellow-400"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleDateFilter}
+                  className="bg-yellow-600 hover:bg-yellow-700"
+                  size="sm"
+                >
+                  <Icon name="Filter" size={16} className="mr-1" />
+                  Применить
+                </Button>
+                {(dateFrom || dateTo) && (
+                  <Button
+                    onClick={handleClearDateFilter}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Icon name="X" size={16} className="mr-1" />
+                    Сбросить
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
 
