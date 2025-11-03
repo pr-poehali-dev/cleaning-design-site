@@ -110,7 +110,7 @@ const AdminPayments = () => {
     if (!confirm('Вы уверены, что хотите удалить эту запись оплаты?')) return;
 
     try {
-      const response = await fetch(`https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=salary-payments&id=${assignmentId}`, {
+      const response = await fetch(`https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=payments&id=${assignmentId}`, {
         method: 'DELETE'
       });
 
