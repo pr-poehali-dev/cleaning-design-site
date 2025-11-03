@@ -106,6 +106,30 @@ const AdminPayments = () => {
     }
   };
 
+  const deletePayment = async (assignmentId: number) => {
+    if (!confirm('Вы уверены, что хотите удалить эту запись оплаты?')) return;
+
+    try {
+      const response = await fetch(`https://functions.poehali.dev/aeb1b34e-b695-4397-aa18-2998082b0b2c?action=salary-payments&id=${assignmentId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        toast({ 
+          title: 'Удалено', 
+          description: 'Запись оплаты удалена' 
+        });
+        loadPayments(filter);
+      }
+    } catch (error) {
+      toast({ 
+        title: 'Ошибка', 
+        description: 'Не удалось удалить запись', 
+        variant: 'destructive' 
+      });
+    }
+  };
+
   const handleFilterChange = (newFilter: 'all' | 'paid' | 'unpaid') => {
     setFilter(newFilter);
     loadPayments(newFilter);
@@ -227,7 +251,7 @@ const AdminPayments = () => {
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Тип уборки</th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-gray-300">Сумма</th>
                     <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Статус</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Действие</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-300">Действия</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700">
@@ -283,16 +307,26 @@ const AdminPayments = () => {
                           )}
                         </td>
                         <td className="px-4 py-3 text-center">
-                          {!payment.paid && (
+                          <div className="flex items-center justify-center gap-2">
+                            {!payment.paid && (
+                              <Button
+                                onClick={() => markAsPaid(payment.id)}
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700"
+                              >
+                                <Icon name="CheckCircle" size={16} className="mr-1" />
+                                Выплачено
+                              </Button>
+                            )}
                             <Button
-                              onClick={() => markAsPaid(payment.id)}
+                              onClick={() => deletePayment(payment.id)}
                               size="sm"
-                              className="bg-green-600 hover:bg-green-700"
+                              variant="destructive"
+                              className="bg-red-600 hover:bg-red-700"
                             >
-                              <Icon name="CheckCircle" size={16} className="mr-1" />
-                              Выплачено
+                              <Icon name="Trash2" size={16} />
                             </Button>
-                          )}
+                          </div>
                         </td>
                       </tr>
                     );
