@@ -59,19 +59,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white flex items-center justify-center px-3 py-4 sm:px-4 sm:py-8">
       <div className="w-full max-w-md">
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-2">
+        <div className="text-center mb-6 sm:mb-8 animate-fade-in">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 mb-4 shadow-lg shadow-yellow-500/50">
+            <Icon name="Sparkles" size={32} className="text-black sm:w-10 sm:h-10" />
+          </div>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-2">
             p9 clean
           </h1>
-          <p className="text-sm sm:text-base text-gray-400">Вход в личный кабинет</p>
+          <p className="text-sm sm:text-base text-gray-400">Личный кабинет персонала</p>
         </div>
 
-        <div className="bg-gray-800 rounded-lg p-4 sm:p-8 border border-gray-700">
-          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6">
-            <div>
-              <Label htmlFor="email" className="text-sm sm:text-base font-semibold mb-2">
+        <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl p-5 sm:p-8 border border-gray-700/50 shadow-2xl">
+          <form onSubmit={handleLogin} className="space-y-5 sm:space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm sm:text-base font-semibold mb-2 flex items-center gap-2">
+                <Icon name="Mail" size={18} className="text-yellow-400" />
                 Email
               </Label>
               <Input
@@ -79,14 +83,17 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@p9clean.ru"
-                className="h-11 sm:h-12 bg-gray-700 border-gray-600 text-white text-base"
+                placeholder="ваш@email.ru"
+                className="h-12 sm:h-14 bg-gray-700/50 border-gray-600 text-white text-base sm:text-lg rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
+                autoComplete="email"
+                inputMode="email"
                 required
               />
             </div>
 
-            <div>
-              <Label htmlFor="password" className="text-sm sm:text-base font-semibold mb-2">
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm sm:text-base font-semibold mb-2 flex items-center gap-2">
+                <Icon name="Lock" size={18} className="text-yellow-400" />
                 Пароль
               </Label>
               <Input
@@ -94,8 +101,9 @@ const Login = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Введите пароль"
-                className="h-11 sm:h-12 bg-gray-700 border-gray-600 text-white text-base"
+                placeholder="••••••••"
+                className="h-12 sm:h-14 bg-gray-700/50 border-gray-600 text-white text-base sm:text-lg rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
+                autoComplete="current-password"
                 required
               />
             </div>
@@ -103,30 +111,30 @@ const Login = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 sm:h-12 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-semibold text-base sm:text-lg"
+              className="w-full h-12 sm:h-14 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:from-yellow-500 hover:to-yellow-600 font-bold text-base sm:text-lg rounded-xl shadow-lg shadow-yellow-500/30 hover:shadow-yellow-500/50 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <Icon name="Loader2" size={20} className="animate-spin mr-2" />
-                  Вход...
+                  <Icon name="Loader2" size={22} className="animate-spin mr-2" />
+                  <span>Вход...</span>
                 </>
               ) : (
                 <>
-                  <Icon name="LogIn" size={20} className="mr-2" />
-                  Войти
+                  <Icon name="LogIn" size={22} className="mr-2" />
+                  <span>Войти в систему</span>
                 </>
               )}
             </Button>
           </form>
 
-          <div className="mt-4 sm:mt-6 text-center">
+          <div className="mt-5 sm:mt-6 pt-4 border-t border-gray-700/50">
             <Button
               variant="ghost"
               onClick={() => navigate('/')}
-              className="text-gray-400 hover:text-yellow-400 text-sm sm:text-base"
+              className="w-full text-gray-400 hover:text-yellow-400 text-sm sm:text-base h-11 sm:h-12 rounded-xl hover:bg-gray-700/50 transition-all"
             >
-              <Icon name="ArrowLeft" size={16} className="mr-2" />
-              На главную
+              <Icon name="ArrowLeft" size={18} className="mr-2" />
+              Вернуться на главную
             </Button>
           </div>
         </div>
