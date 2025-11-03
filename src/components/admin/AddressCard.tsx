@@ -47,8 +47,8 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
           }`}>
             {statusNames[address.status]}
           </span>
-          {!address.verified_at && (
-            <div className="flex gap-1">
+          <div className="flex gap-1">
+            {!address.verified_at && (
               <Button
                 onClick={() => onEdit(address)}
                 variant="ghost"
@@ -57,16 +57,16 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
               >
                 <Icon name="Edit" size={16} />
               </Button>
-              <Button
-                onClick={() => setShowDeleteConfirm(true)}
-                variant="ghost"
-                size="sm"
-                className="text-red-400 hover:text-red-300"
-              >
-                <Icon name="Trash2" size={16} />
-              </Button>
-            </div>
-          )}
+            )}
+            <Button
+              onClick={() => setShowDeleteConfirm(true)}
+              variant="ghost"
+              size="sm"
+              className="text-red-400 hover:text-red-300"
+            >
+              <Icon name="Trash2" size={16} />
+            </Button>
+          </div>
         </div>
       </div>
 
