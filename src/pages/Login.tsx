@@ -129,12 +129,6 @@ const Login = () => {
               На главную
             </Button>
           </div>
-
-          <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-900 rounded border border-gray-700">
-            <p className="text-xs sm:text-sm text-gray-400 mb-2">Тестовый доступ:</p>
-            <p className="text-xs text-gray-500">Email: admin@p9clean.ru</p>
-            <p className="text-xs text-gray-500">Пароль: admin123</p>
-          </div>
         </div>
       </div>
     </div>
