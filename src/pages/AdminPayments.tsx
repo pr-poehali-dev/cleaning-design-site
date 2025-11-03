@@ -384,7 +384,8 @@ const AdminPayments = () => {
                               onClick={() => deletePayment(payment.id)}
                               size="sm"
                               variant="destructive"
-                              className="bg-red-600 hover:bg-red-700"
+                              className="bg-red-600 hover:bg-red-700 hover:scale-110 transition-all shadow-md hover:shadow-red-500/50"
+                              title="Удалить запись о выплате"
                             >
                               <Icon name="Trash2" size={16} />
                             </Button>

@@ -60,7 +60,8 @@ const MaidCard = ({ maid, onEdit, onDelete }: MaidCardProps) => {
           onClick={onDelete}
           size="sm"
           variant="destructive"
-          className="flex-1"
+          className="flex-1 hover:scale-105 transition-all shadow-md hover:shadow-red-500/50"
+          title="Удалить сотрудника"
         >
           <Icon name="Trash2" size={16} className="mr-1" />
           Удалить

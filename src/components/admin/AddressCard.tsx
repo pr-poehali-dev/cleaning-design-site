@@ -62,9 +62,10 @@ const AddressCard = ({ address, maids, showAssignForm, onAssign, onShowAssignFor
               onClick={() => setShowDeleteConfirm(true)}
               variant="ghost"
               size="sm"
-              className="text-red-400 hover:text-red-300"
+              className="text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-all hover:scale-110"
+              title="Удалить адрес"
             >
-              <Icon name="Trash2" size={16} />
+              <Icon name="Trash2" size={18} />
             </Button>
           </div>
         </div>
