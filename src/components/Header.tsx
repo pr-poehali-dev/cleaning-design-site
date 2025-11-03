@@ -71,9 +71,9 @@ const Header = ({
 
   return (
     <header className="bg-gray-700 border-b border-gray-600 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex items-center justify-between gap-6">
-          <h2 className="font-heading text-3xl font-bold shrink-0 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
+          <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-bold shrink-0 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
             p9 clean
           </h2>
 
@@ -136,16 +136,18 @@ const Header = ({
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
             <Button 
-              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-4 py-2 uppercase"
+              size="sm"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-2.5 sm:px-3 py-2 h-8 sm:h-9"
               onClick={() => setIsChatOpen(!isChatOpen)}
             >
-              <Icon name="MessageCircle" size={18} />
+              <Icon name="MessageCircle" size={16} className="sm:w-[18px] sm:h-[18px]" />
             </Button>
             
             <Button 
-              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold text-sm px-4 uppercase"
+              size="sm"
+              className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold text-xs sm:text-sm px-2.5 sm:px-4 py-2 h-8 sm:h-9 uppercase whitespace-nowrap"
               onClick={onBookingClick}
             >
               Записаться
@@ -153,10 +155,10 @@ const Header = ({
           </div>
         </div>
 
-        <div className="lg:hidden mt-3 flex flex-wrap items-center gap-2">
-          <div className="flex-1 min-w-[120px] bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+        <div className="lg:hidden mt-2 sm:mt-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <div className="flex-1 min-w-[100px] sm:min-w-[120px] bg-white/10 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-yellow-400/50 flex items-center gap-1 sm:gap-2">
             <Select value={serviceType} onValueChange={setServiceType}>
-              <SelectTrigger className="flex-1 border-0 bg-transparent text-white text-sm">
+              <SelectTrigger className="flex-1 border-0 bg-transparent text-white text-xs sm:text-sm h-7 sm:h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -170,36 +172,36 @@ const Header = ({
             <Button
               size="sm"
               variant="ghost"
-              className="h-6 w-6 p-0 text-yellow-400 hover:text-yellow-300"
+              className="h-5 w-5 sm:h-6 sm:w-6 p-0 text-yellow-400 hover:text-yellow-300 shrink-0"
               onClick={onInfoClick}
             >
-              <Icon name="Info" size={14} />
+              <Icon name="Info" size={12} className="sm:w-[14px] sm:h-[14px]" />
             </Button>
           </div>
           
-          <div className="bg-white/10 px-3 py-2 rounded-lg border border-yellow-400/50 flex items-center gap-2">
+          <div className="bg-white/10 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-yellow-400/50 flex items-center gap-1 sm:gap-2">
             <Input
               type="number"
               value={area}
               onChange={(e) => setArea(e.target.value)}
               min="20"
               max="500"
-              className="w-14 border-0 bg-transparent text-white text-center text-sm"
+              className="w-10 sm:w-14 border-0 bg-transparent text-white text-center text-xs sm:text-sm h-7 sm:h-8 p-0"
             />
-            <span className="text-yellow-400 text-sm">м²</span>
+            <span className="text-yellow-400 text-xs sm:text-sm">м²</span>
           </div>
 
-          <div className="bg-yellow-400 px-3 py-2 rounded-lg">
-            <div className="flex items-center gap-2">
-              <Icon name="Calculator" size={16} className="text-black" />
-              <span className="text-black font-bold">{calculatePrice()}₽</span>
+          <div className="bg-yellow-400 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Icon name="Calculator" size={14} className="text-black sm:w-4 sm:h-4 shrink-0" />
+              <span className="text-black font-bold text-sm sm:text-base whitespace-nowrap">{calculatePrice()}₽</span>
             </div>
           </div>
         </div>
       </div>
 
       {isChatOpen && (
-        <div className="absolute top-full right-4 mt-2 w-96 bg-white rounded-2xl shadow-2xl border-2 border-yellow-400 overflow-hidden animate-in slide-in-from-top-5 z-50">
+        <div className="fixed sm:absolute top-full left-3 right-3 sm:left-auto sm:right-4 mt-2 w-auto sm:w-96 max-w-[calc(100vw-24px)] sm:max-w-96 bg-white rounded-2xl shadow-2xl border-2 border-yellow-400 overflow-hidden animate-in slide-in-from-top-5 z-50">
           <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

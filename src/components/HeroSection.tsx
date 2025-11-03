@@ -6,48 +6,48 @@ const HeroSection = () => {
   const navigate = useNavigate();
   
   return (
-    <section className="relative overflow-hidden text-white py-20 px-4">
+    <section className="relative overflow-hidden text-white py-12 sm:py-16 md:py-20 px-3 sm:px-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-20"></div>
       
       <div className="max-w-6xl mx-auto relative">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="text-center md:text-left relative z-10 animate-fade-in">
-            <h1 className="font-heading text-3xl md:text-4xl font-bold mb-6 hero-title-gradient leading-tight">
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 hero-title-gradient leading-tight">
               ГАРАНТИРУЕМ КАЧЕСТВЕННУЮ УБОРКУ
             </h1>
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center justify-center md:justify-start gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle">
-                  <Icon name="ClipboardCheck" size={28} className="text-black" />
+            <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+              <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle shrink-0">
+                  <Icon name="ClipboardCheck" size={24} className="text-black sm:w-7 sm:h-7" />
                 </div>
-                <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 text-left">
                   Проверка на чистоту по чек-листу
                 </p>
               </div>
               
-              <div className="flex items-center justify-center md:justify-start gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle" style={{ animationDelay: '0.2s' }}>
-                  <Icon name="ShieldCheck" size={28} className="text-black" />
+              <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-lg flex items-center justify-center shadow-lg animate-bounce-subtle shrink-0" style={{ animationDelay: '0.2s' }}>
+                  <Icon name="ShieldCheck" size={24} className="text-black sm:w-7 sm:h-7" />
                 </div>
-                <p className="text-lg md:text-xl text-gray-300 whitespace-nowrap">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 text-left">
                   Не устроила уборка — Не возьмем деньги
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center md:justify-start">
               <Button
                 onClick={() => navigate('/checklist')}
-                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-6 py-3 uppercase"
+                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm uppercase w-full sm:w-auto"
               >
-                <Icon name="ClipboardCheck" size={20} />
+                <Icon name="ClipboardCheck" size={18} className="shrink-0" />
                 <span className="ml-2">Чек-лист уборки</span>
               </Button>
               <Button
                 onClick={() => navigate('/inspection')}
-                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-6 py-3 uppercase"
+                className="btn-shine bg-transparent text-white hover:bg-transparent font-semibold px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm uppercase w-full sm:w-auto"
               >
-                <Icon name="Search" size={20} />
+                <Icon name="Search" size={18} className="shrink-0" />
                 <span className="ml-2">Чек-лист проверки</span>
               </Button>
             </div>
