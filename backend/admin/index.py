@@ -331,6 +331,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             result = cur.fetchone()
             if result:
+                cur.execute("""
+                    UPDATE cleaning_addresses
+                    SET status = 'verified'
+                    WHERE id = %s
+                """, (address_id,))
                 conn.commit()
             
             cur.close()
